@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import uuid from 'uuid/v4';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ToolKit from './toolkit/Toolkit';
+import Canvas from './canvas/Canvas';
 // import PropTypes from 'prop-types';
+
+// TODO:
+// REVISAR PORQUE AGREGAR CANVAS AL ESTADO COMO INDICE
 
 // HELPER FUNCTIONS FOR DRAG AND DROP
 /** 
@@ -19,7 +23,6 @@ const reorder = (list, startIndex, endIndex) => {
  * Moves an item from one list to another list.
  */
 const copy = (source, destination, droppableSource, droppableDestination) => {
-    console.log('==> dest', destination);
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const item = sourceClone[droppableSource.index];
@@ -38,6 +41,12 @@ const move = (source, destination, droppableSource, droppableDestination) => {
     return result;
 };
 // FINISH HELPER FUNCTIONS
+
+// FORM SCHEMA
+const formSchema = [{
+    formProps: {}
+}];
+const elementsSchema = [];
 
 // Toolkit Elements
 const ToolkitElements = [
@@ -111,11 +120,15 @@ const ToolkitElements = [
 ];
 
 const Formbuilder = props => {
+    const [formState, setFormState] = useState({
+
+    });
 
     const onDragEnd = result => {
         const { source, destination } = result;
 
         console.log('==> result', result);
+        console.log(source, destination);
 
         // dropped outside the list
         if (!destination) {
@@ -124,29 +137,29 @@ const Formbuilder = props => {
 
         switch (source.droppableId) {
             case destination.droppableId:
-                this.setState({
+                setFormState({
                     [destination.droppableId]: reorder(
-                        this.state[source.droppableId],
+                        formState[source.droppableId],
                         source.index,
                         destination.index
                     )
                 });
                 break;
-            case 'ITEMS':
-                this.setState({
+            case 'ToolkitItems':
+                setFormState({
                     [destination.droppableId]: copy(
                         ToolkitElements,
-                        this.state[destination.droppableId],
+                        formState,
                         source,
                         destination
                     )
                 });
                 break;
             default:
-                this.setState(
+                setFormState(
                     move(
-                        this.state[source.droppableId],
-                        this.state[destination.droppableId],
+                        formState[source.droppableId],
+                        formState[destination.droppableId],
                         source,
                         destination
                     )
@@ -156,8 +169,9 @@ const Formbuilder = props => {
     };
 
     return (
-        <div id="formbuilder" class="container">
+        <div id="formbuilder" className="container">
             <DragDropContext onDragEnd={onDragEnd}>
+                <Canvas formState={formState} />
                 <ToolKit toolkitElements={ToolkitElements} />
             </DragDropContext>
         </div>
