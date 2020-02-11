@@ -31,7 +31,7 @@ const ToolkitElement = ({ item, index }) => {
 
     return (
         <Draggable
-            // key={item.id}
+            key={item.id}
             draggableId={item.id}
             index={index}>
             {(provided, snapshot) => (
@@ -40,16 +40,12 @@ const ToolkitElement = ({ item, index }) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        isDragging={snapshot.isDragging}
-                        style={
-                            provided.draggableProps
-                                .style
-                        }>
+                    >
                         <Icon />
                         {item.name}
                     </div>
                     {snapshot.isDragging && (
-                        <div class="tolkit-item">
+                        <div className="tolkit-item">
                             <Icon />
                             {item.name}
                         </div>
@@ -58,11 +54,11 @@ const ToolkitElement = ({ item, index }) => {
             )}
         </Draggable>
     )
-}
+};
 
 ToolkitElement.propTypes = {
     item: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
-}
+};
 
 export default ToolkitElement
