@@ -153,11 +153,11 @@ select {
 
 /* TOOLKIT */
 #formbuilder #formbuilder-toolkit {
+  flex: 1;
   background: #fafafa;
-  padding: 1rem;
-  width: 250px;
   border: #ddd 1px solid;
   border-radius: 3px;
+  padding: 1rem;
 }
 
 #formbuilder #formbuilder-toolkit .tolkit-item {
@@ -173,6 +173,7 @@ select {
 
 /* FORMBUILDER CANVAS */
 #formbuilder #formbuilder-canvas {
+  flex: 3;
   background: #fafafa;
   border: #ddd 1px solid;
   border-radius: 3px;
@@ -194,11 +195,23 @@ select {
 #formbuilder-canvas .form-group .form-heading {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
 }
 
 #formbuilder-canvas .form-group .btn-primary {
   cursor: default;
+}
+
+#formbuilder-canvas .notice {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  border: 1px dashed #aaa;
+  border-radius: 3px;
+  color: #aaa;
 }
 
 #formelementedit {
