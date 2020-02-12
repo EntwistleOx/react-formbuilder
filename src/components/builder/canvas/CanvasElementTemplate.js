@@ -1,5 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 const CanvasElementTemplate = ({
     id, classNames, label, help, required, description, errors, children
@@ -11,9 +12,11 @@ const CanvasElementTemplate = ({
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <label htmlFor={id}>{label}{required ? "*" : null}</label>
                         <div>
-                            <i className="fas fa-edit"></i>
+                            <Link to='edit-form-element/:id'>
+                                <i className="fas fa-edit"></i>
+                            </Link>
                             <i className="fas fa-trash-alt"></i>
-                            <i className="fas fa-arrows-alt"></i>
+                            <i /*{...provided.dragHandleProps}*/ className="fas fa-arrows-alt"></i>
                         </div>
                     </div>
                     : ''
