@@ -42,12 +42,6 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 };
 // FINISH HELPER FUNCTIONS
 
-// FORM SCHEMA
-const formSchema = [{
-    formProps: {}
-}];
-const elementsSchema = [];
-
 // Toolkit Elements
 const ToolkitElements = [
     {
@@ -121,14 +115,16 @@ const ToolkitElements = [
 
 const Formbuilder = props => {
     const [formState, setFormState] = useState({
-
+        Canvas: []
     });
+
+    console.log(formState['Canvas'])
 
     const onDragEnd = result => {
         const { source, destination } = result;
 
-        console.log('==> result', result);
-        console.log(source, destination);
+        // console.log('==> result', result);
+        // console.log(source, destination);
 
         // dropped outside the list
         if (!destination) {
@@ -149,7 +145,7 @@ const Formbuilder = props => {
                 setFormState({
                     [destination.droppableId]: copy(
                         ToolkitElements,
-                        formState,
+                        formState[destination.droppableId],
                         source,
                         destination
                     )
@@ -171,7 +167,7 @@ const Formbuilder = props => {
     return (
         <div id="formbuilder" className="container">
             <DragDropContext onDragEnd={onDragEnd}>
-                <Canvas formState={formState} />
+                <Canvas canvas={formState['Canvas']} />
                 <ToolKit toolkitElements={ToolkitElements} />
             </DragDropContext>
         </div>
