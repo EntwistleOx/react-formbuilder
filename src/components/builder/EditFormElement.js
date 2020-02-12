@@ -4,7 +4,7 @@ import React from 'react'
 const EditFormElement = props => {
     return (
         <div>
-            <h1>Edit Form Element</h1>
+            <h2>Edit Form Element</h2>
         </div>
     )
 }
