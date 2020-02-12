@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import uuid from 'uuid/v4';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 import ToolKit from './toolkit/Toolkit';
 import Canvas from './canvas/Canvas';
 // import PropTypes from 'prop-types';

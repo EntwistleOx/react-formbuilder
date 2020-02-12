@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types'
 

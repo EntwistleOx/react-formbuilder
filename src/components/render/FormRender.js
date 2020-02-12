@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 const Formrender = props => {
     return (
@@ -9,8 +9,8 @@ const Formrender = props => {
     )
 }
 
-Formrender.propTypes = {
+// Formrender.propTypes = {
 
-}
+// }
 
 export default Formrender

@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 const EditFormElement = props => {
     return (
@@ -9,8 +9,8 @@ const EditFormElement = props => {
     )
 }
 
-EditFormElement.propTypes = {
+// EditFormElement.propTypes = {
 
-}
+// }
 
 export default EditFormElement

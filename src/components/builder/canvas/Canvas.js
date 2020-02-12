@@ -74,7 +74,7 @@ const Canvas = ({ canvas }) => {
 }
 
 Canvas.propTypes = {
-
+    canvas: PropTypes.array.isRequired,
 }
 
 export default Canvas
