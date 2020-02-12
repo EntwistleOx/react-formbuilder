@@ -3,14 +3,14 @@ import { Droppable } from 'react-beautiful-dnd';
 import ToolkitElement from './ToolkitElement';
 import PropTypes from 'prop-types';
 
-const Toolkit = ({ toolkitElements }) => {
+const Toolkit = ({ toolkitSchema }) => {
     return (
         <Droppable key="ToolkitItems" droppableId="ToolkitItems" isDropDisabled={true}>
             {(provided, snapshot) => (
                 <div id="formbuilder-toolkit"
                     ref={provided.innerRef}
                 >
-                    {toolkitElements.map((item, index) => (
+                    {toolkitSchema.map((item, index) => (
                         <ToolkitElement key={item.id} item={item} index={index} />
                     ))}
                     {provided.placeholder}
@@ -21,7 +21,7 @@ const Toolkit = ({ toolkitElements }) => {
 }
 
 Toolkit.propTypes = {
-    toolkitElements: PropTypes.array.isRequired,
+    toolkitSchema: PropTypes.array.isRequired,
 }
 
 export default Toolkit
