@@ -4,7 +4,7 @@ import React from 'react'
 const Formrender = props => {
     return (
         <div>
-            <h1>Form Render</h1>
+            <h2>Render</h2>
         </div>
     )
 }

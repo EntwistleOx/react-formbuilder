@@ -4,7 +4,7 @@ import React from 'react'
 const Forms = props => {
     return (
         <div>
-            <h1>All Forms</h1>
+            <h2>Forms</h2>
         </div>
     )
 }
