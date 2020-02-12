@@ -5,9 +5,11 @@ import Form from "react-jsonschema-form";
 import PropTypes from 'prop-types';
 
 // TODO:
+// Edit option on form title
+// Edit option on form description
 // Style borders on drag action
 
-const Canvas = ({ schema, uiSchema }) => {
+const Canvas = ({ schema, uiSchema, formData }) => {
     return (
         <Droppable key="Canvas" droppableId="Canvas">
             {(provided, snapshot) => (
@@ -18,10 +20,16 @@ const Canvas = ({ schema, uiSchema }) => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                         >
-
-                            {schema.properties ?
+                            {schema.properties &&
+                                Object.keys(schema.properties).length > 0 ?
                                 (
-                                    <Form schema={schema} uiSchema={uiSchema} FieldTemplate={CanvasElementTemplate} disabled={true}>
+                                    <Form
+                                        schema={schema}
+                                        uiSchema={uiSchema}
+                                        formData={formData}
+                                        FieldTemplate={CanvasElementTemplate}
+                                        disabled={true}
+                                    >
                                         <div></div>
                                     </Form>
                                 )
@@ -44,6 +52,7 @@ const Canvas = ({ schema, uiSchema }) => {
 Canvas.propTypes = {
     schema: PropTypes.object.isRequired,
     uiSchema: PropTypes.object,
+    formData: PropTypes.object,
 }
 
 export default Canvas
