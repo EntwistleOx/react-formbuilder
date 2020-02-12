@@ -5,6 +5,7 @@ import Forms from './components/forms/Forms';
 import FormRender from './components/render/FormRender';
 import FormBuilder from './components/builder/FormBuilder';
 import EditFormElement from './components/builder/EditFormElement';
+import TestSchema from './components/TestSchema';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/formbuilder" component={FormBuilder} />
         <Route exact path="/formrender" component={FormRender} />
         <Route exact path="/edit-form-element/:id" component={EditFormElement} />
+        <Route exact path="/test-schema" component={TestSchema} />
       </Switch>
     </Router>
   );
