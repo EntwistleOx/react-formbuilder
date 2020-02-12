@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import uuid from 'uuid/v4';
 import { DragDropContext } from 'react-beautiful-dnd';
 import ToolKit from './toolkit/Toolkit';
@@ -46,13 +46,6 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 const ToolkitElements = [
     {
         id: uuid(),
-        key: 'button',
-        name: 'Boton',
-        icon: 'far fa-square',
-
-    },
-    {
-        id: uuid(),
         key: 'checkbox',
         name: 'Checkbox',
         icon: 'fas fa-check-square',
@@ -95,12 +88,6 @@ const ToolkitElements = [
     },
     {
         id: uuid(),
-        key: 'submit',
-        name: 'Submit',
-        icon: 'fas fa-paper-plane'
-    },
-    {
-        id: uuid(),
         key: 'textarea',
         name: 'Textarea',
         icon: 'fa-stack textarea-icon'
@@ -113,12 +100,89 @@ const ToolkitElements = [
     },
 ];
 
-const Formbuilder = props => {
-    const [formState, setFormState] = useState({
-        Canvas: []
-    });
+const schema =
+{
+    "title": "Form Elements",
+    "description": "List All Elements.",
+    "type": "object",
+    "required": [
+        "text"
+    ],
+    "properties": {
+        "checkbox": {
+            "type": "boolean",
+            "title": " Checkbox",
+            "default": false
+        },
+        "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email",
+        },
+        "date": {
+            "type": "string",
+            "title": "Fecha",
+            "format": "date"
+        },
+        "number": {
+            "type": "number",
+            "title": "Numero"
+        },
+        "paragraph": {
+            "title": "Parrafo",
+            "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.Quod vero magnam quibusdam assumenda, voluptatem quo quos perferendis totam consequatur voluptates.",
+            "type": "null"
+        },
+        "radio": {
+            "type": "boolean",
+            "title": "Radio"
+        },
+        "select": {
+            "title": "Select",
+            "type": "string",
+            "enum": [
+                "foo",
+                "bar"
+            ],
+            "enumNames": [
+                "Foo",
+                "Bar"
+            ]
+        },
+        "textarea": {
+            "type": "string",
+            "title": "Textarea"
+        },
+        "text": {
+            "type": "string",
+            "title": "Texto"
+        },
+    }
+};
 
-    console.log(formState['Canvas'])
+const ui = {
+    "radio": {
+        "ui:widget": "radio"
+    },
+    "select": {
+        "ui:placeholder": "Seleciona"
+    },
+    "textarea": {
+        "ui:widget": "textarea"
+    },
+
+};
+
+const Formbuilder = props => {
+    const [schemaState, setSchemaState] = useState(
+        [schema]
+    );
+
+    const [formState, setFormState] = useState(
+        [schema]
+    );
+
+    console.log(formState)
 
     const onDragEnd = result => {
         const { source, destination } = result;
@@ -165,12 +229,15 @@ const Formbuilder = props => {
     };
 
     return (
-        <div id="formbuilder" className="container">
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Canvas canvas={formState['Canvas']} />
-                <ToolKit toolkitElements={ToolkitElements} />
-            </DragDropContext>
-        </div>
+        <Fragment>
+            <h2>Builder</h2>
+            <div id="formbuilder" className="container">
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Canvas schema={schema} ui={ui} />
+                    <ToolKit toolkitElements={ToolkitElements} />
+                </DragDropContext>
+            </div>
+        </Fragment>
     )
 };
 
