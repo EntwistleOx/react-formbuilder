@@ -5,8 +5,13 @@ import ToolKit from './toolkit/Toolkit';
 import Canvas from './canvas/Canvas';
 // import PropTypes from 'prop-types';
 
-// TODO:
-// REVISAR PORQUE AGREGAR CANVAS AL ESTADO COMO INDICE
+import toolkitSchema from './toolkit/toolkitSchema';
+
+
+//TODO:
+// SET STATE WITH COPY, MOVE AND REORDER FUNCTIONS
+
+
 
 // HELPER FUNCTIONS FOR DRAG AND DROP
 /** 
@@ -23,11 +28,23 @@ const reorder = (list, startIndex, endIndex) => {
  * Moves an item from one list to another list.
  */
 const copy = (source, destination, droppableSource, droppableDestination) => {
-    const sourceClone = Array.from(source);
-    const destClone = Array.from(destination);
-    const item = sourceClone[droppableSource.index];
-    destClone.splice(droppableDestination.index, 0, { ...item, id: uuid() });
-    return destClone;
+    // const sourceClone = Array.from(source);
+    // const destClone = Array.from(destination);
+    // const item = sourceClone[droppableSource.index];
+    // destClone.splice(destination.index, 0, { ...item, id: uuid() });
+
+    console.log(source[droppableSource.index].id)
+    console.log(source[droppableSource.index].key)
+    console.log(source[droppableSource.index].name)
+
+    console.log(destination)
+    destination.properties = {
+        [uuid()]: {
+            "title": source[droppableSource.index].name,
+            "type": source[droppableSource.index].type
+        }
+    }
+    return destination;
 };
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -42,147 +59,45 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 };
 // FINISH HELPER FUNCTIONS
 
-// Toolkit Elements
-const ToolkitElements = [
-    {
-        id: uuid(),
-        key: 'checkbox',
-        name: 'Checkbox',
-        icon: 'fas fa-check-square',
-    },
-    {
-        id: uuid(),
-        key: 'email',
-        name: 'Email',
-        icon: 'fas fa-at',
-    },
-    {
-        id: uuid(),
-        key: 'date',
-        name: 'Fecha',
-        icon: 'fas fa-calendar-alt'
-    },
-    {
-        id: uuid(),
-        key: 'number',
-        name: 'Number',
-        icon: 'fa-stack fa-1x number-icon'
-    },
-    {
-        id: uuid(),
-        key: 'paragraph',
-        name: 'Parrafo',
-        icon: 'fas fa-paragraph'
-    },
-    {
-        id: uuid(),
-        key: 'radio',
-        name: 'Radio',
-        icon: 'fas fa-dot-circle'
-    },
-    {
-        id: uuid(),
-        key: 'select',
-        name: 'Select',
-        icon: 'fas fa-angle-down'
-    },
-    {
-        id: uuid(),
-        key: 'textarea',
-        name: 'Textarea',
-        icon: 'fa-stack textarea-icon'
-    },
-    {
-        id: uuid(),
-        key: 'text',
-        name: 'Texto',
-        icon: 'fas fa-font'
-    },
-];
 
-const schema =
-{
-    "title": "Form Elements",
-    "description": "List All Elements.",
-    "type": "object",
-    "required": [
-        "text"
-    ],
-    "properties": {
-        "checkbox": {
-            "type": "boolean",
-            "title": " Checkbox",
-            "default": false
-        },
-        "email": {
-            "type": "string",
-            "format": "email",
-            "title": "Email",
-        },
-        "date": {
-            "type": "string",
-            "title": "Fecha",
-            "format": "date"
-        },
-        "number": {
-            "type": "number",
-            "title": "Numero"
-        },
-        "paragraph": {
-            "title": "Parrafo",
-            "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.Quod vero magnam quibusdam assumenda, voluptatem quo quos perferendis totam consequatur voluptates.",
-            "type": "null"
-        },
-        "radio": {
-            "type": "boolean",
-            "title": "Radio"
-        },
-        "select": {
-            "title": "Select",
-            "type": "string",
-            "enum": [
-                "foo",
-                "bar"
-            ],
-            "enumNames": [
-                "Foo",
-                "Bar"
-            ]
-        },
-        "textarea": {
-            "type": "string",
-            "title": "Textarea"
-        },
-        "text": {
-            "type": "string",
-            "title": "Texto"
-        },
-    }
-};
-
-const ui = {
-    "radio": {
-        "ui:widget": "radio"
-    },
-    "select": {
-        "ui:placeholder": "Seleciona"
-    },
-    "textarea": {
-        "ui:widget": "textarea"
-    },
-
-};
 
 const Formbuilder = props => {
     const [schemaState, setSchemaState] = useState(
-        [schema]
+        {
+            "title": "Titulo del Formulario",
+            "description": "Descripcion del Formulario.",
+            "type": "object",
+            "required": [],
+            "properties": {
+                "checkbox": {
+                    "type": "boolean",
+                    "title": " Checkbox",
+                    "default": false
+                },
+            }
+        }
     );
 
-    const [formState, setFormState] = useState(
-        [schema]
+    const [uiState, setUiState] = useState(
+        {
+            "radio": {
+                "ui:widget": "radio"
+            },
+            "select": {
+                "ui:placeholder": "Seleciona"
+            },
+            "textarea": {
+                "ui:widget": "textarea"
+            },
+        }
     );
 
-    console.log(formState)
+    const [formDataState, setFormDataState] = useState({});
+
+    // console.log(schemaState)
+    console.log(schemaState)
+    // console.log(uiState)
+    // console.log(formDataState)
 
     const onDragEnd = result => {
         const { source, destination } = result;
@@ -197,29 +112,39 @@ const Formbuilder = props => {
 
         switch (source.droppableId) {
             case destination.droppableId:
-                setFormState({
+                setSchemaState({
                     [destination.droppableId]: reorder(
-                        formState[source.droppableId],
+                        schemaState[source.droppableId],
                         source.index,
                         destination.index
                     )
                 });
                 break;
             case 'ToolkitItems':
-                setFormState({
-                    [destination.droppableId]: copy(
-                        ToolkitElements,
-                        formState[destination.droppableId],
-                        source,
-                        destination
-                    )
-                });
+
+                setSchemaState(
+                    {
+                        ...schemaState.properties,
+                        [uuid()]: {
+                            "title": null,
+                            "type": null
+                        }
+
+                    }
+                    // copy(
+                    //     toolkitSchema,
+                    //     schemaState,
+                    //     source,
+                    //     destination)
+
+                );
+
                 break;
             default:
-                setFormState(
+                setSchemaState(
                     move(
-                        formState[source.droppableId],
-                        formState[destination.droppableId],
+                        schemaState[source.droppableId],
+                        schemaState[destination.droppableId],
                         source,
                         destination
                     )
@@ -233,8 +158,8 @@ const Formbuilder = props => {
             <h2>Builder</h2>
             <div id="formbuilder" className="container">
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <Canvas schema={schema} ui={ui} />
-                    <ToolKit toolkitElements={ToolkitElements} />
+                    <Canvas schema={schemaState} uiSchema={uiState} formData={formDataState} />
+                    <ToolKit toolkitSchema={toolkitSchema} />
                 </DragDropContext>
             </div>
         </Fragment>
