@@ -38,11 +38,11 @@ export const moveElement = () => dispatch => {
 }
 
 // delete element
-export const deleteElement = () => dispatch => {
+export const deleteElement = (id) => dispatch => {
     try {
         dispatch({
             type: DELETE_ELEMENT,
-            payload: 'delete ok'
+            payload: id
         });
     } catch (error) {
         dispatch({
