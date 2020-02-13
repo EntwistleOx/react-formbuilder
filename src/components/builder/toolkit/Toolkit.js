@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const Toolkit = ({ toolkitSchema }) => {
     return (
-        <Droppable key="ToolkitItems" droppableId="ToolkitItems" isDropDisabled={true}>
+        <Droppable key="ToolkitItems" droppableId="ToolkitItems" isDropDisabled={true} type="builder">
             {(provided, snapshot) => (
                 <div id="formbuilder-toolkit"
                     ref={provided.innerRef}
