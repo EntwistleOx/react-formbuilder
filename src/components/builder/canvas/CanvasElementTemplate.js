@@ -6,11 +6,14 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 const CanvasElementTemplate = ({
-    id, classNames, label, help, required, description, errors, children, deleteElement
+    id, classNames, label, help, required, description, errors, children, deleteElement, propertiesState
 }) => {
     const elementId = id.split('_')[1];
+    const elements = Object.keys(propertiesState)
+    const index = elements.indexOf(elementId)
+
     return (
-        <Draggable index={0} draggableId={id}>
+        <Draggable index={index} draggableId={id}>
             {(provided, snapshot) => (
                 <div
                     className={classNames}
@@ -55,13 +58,18 @@ CanvasElementTemplate.propTypes = {
     errors: PropTypes.object.isRequired,
     children: PropTypes.array.isRequired,
     deleteElement: PropTypes.func.isRequired,
+    propertiesState: PropTypes.object.isRequired,
 };
+
+const mapStateToProps = state => ({
+    propertiesState: state.form.schema.properties
+})
 
 // export default connect(null, { deleteElement })(CanvasElementTemplate);
 
 // Add a wrapped to return a class component to prevent warning
 // Source: https://github.com/rjsf-team/react-jsonschema-form/issues/1309
-var ReduxWrapped = connect(null, { deleteElement })(CanvasElementTemplate);
+var ReduxWrapped = connect(mapStateToProps, { deleteElement })(CanvasElementTemplate);
 class CanvasElementTemplateWrapper extends React.Component {
     render() {
         return (
