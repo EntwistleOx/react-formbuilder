@@ -9,9 +9,8 @@ import toolkitSchema from './toolkit/toolkitSchema';
 
 
 //TODO:
-// SET STATE WITH COPY, MOVE AND REORDER FUNCTIONS
-
-
+// Add move button in toolkit
+// SET STATE WITH MOVE AND REORDER FUNCTIONS
 
 // HELPER FUNCTIONS FOR DRAG AND DROP
 /** 
@@ -22,29 +21,6 @@ const reorder = (list, startIndex, endIndex) => {
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
-};
-
-/**
- * Moves an item from one list to another list.
- */
-const copy = (source, destination, droppableSource, droppableDestination) => {
-    // const sourceClone = Array.from(source);
-    // const destClone = Array.from(destination);
-    // const item = sourceClone[droppableSource.index];
-    // destClone.splice(destination.index, 0, { ...item, id: uuid() });
-
-    console.log(source[droppableSource.index].id)
-    console.log(source[droppableSource.index].key)
-    console.log(source[droppableSource.index].name)
-
-    console.log(destination)
-    destination.properties = {
-        [uuid()]: {
-            "title": source[droppableSource.index].name,
-            "type": source[droppableSource.index].type
-        }
-    }
-    return destination;
 };
 
 const move = (source, destination, droppableSource, droppableDestination) => {
@@ -59,8 +35,6 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 };
 // FINISH HELPER FUNCTIONS
 
-
-
 const Formbuilder = props => {
     const [schemaState, setSchemaState] = useState(
         {
@@ -68,36 +42,17 @@ const Formbuilder = props => {
             "description": "Descripcion del Formulario.",
             "type": "object",
             "required": [],
-            "properties": {
-                "checkbox": {
-                    "type": "boolean",
-                    "title": " Checkbox",
-                    "default": false
-                },
-            }
+            "properties": {}
         }
     );
 
-    const [uiState, setUiState] = useState(
-        {
-            "radio": {
-                "ui:widget": "radio"
-            },
-            "select": {
-                "ui:placeholder": "Seleciona"
-            },
-            "textarea": {
-                "ui:widget": "textarea"
-            },
-        }
-    );
+    const [uiState, setUiState] = useState({});
 
     const [formDataState, setFormDataState] = useState({});
 
-    // console.log(schemaState)
     console.log(schemaState)
-    // console.log(uiState)
-    // console.log(formDataState)
+    console.log(uiState)
+    console.log(formDataState)
 
     const onDragEnd = result => {
         const { source, destination } = result;
@@ -121,23 +76,68 @@ const Formbuilder = props => {
                 });
                 break;
             case 'ToolkitItems':
+                const newElementId = uuid();
+
+                // All fields
+                const title = toolkitSchema[source.index].name
+                const type = toolkitSchema[source.index].type
+
+                // Radio, Checkbox
+                const defaultVal = toolkitSchema[source.index].default
+
+                // Date, Email
+                const format = toolkitSchema[source.index].format
+
+                // Paragraph
+                const description = toolkitSchema[source.index].description
+
+                // Select
+                const enumVal = toolkitSchema[source.index].enum
+                const enumNames = toolkitSchema[source.index].enumNames
+
+                // Create a new object depending if values exists
+                const newElement = {
+                    ...(title && { title }),
+                    ...(type && { type }),
+                    ...(format && { format }),
+                    ...(description && { description }),
+                    ...(defaultVal && { default: defaultVal }),
+                    ...(format && { format }),
+                    ...(enumVal && { enum: enumVal }),
+                    ...(enumNames && { enumNames })
+                }
 
                 setSchemaState(
                     {
-                        ...schemaState.properties,
-                        [uuid()]: {
-                            "title": null,
-                            "type": null
+                        ...schemaState,
+                        properties: {
+                            ...schemaState.properties,
+                            [newElementId]: newElement
                         }
-
                     }
-                    // copy(
-                    //     toolkitSchema,
-                    //     schemaState,
-                    //     source,
-                    //     destination)
-
                 );
+
+                // Radio, Select and Textarea fields need to set a new uiState
+                const key = toolkitSchema[source.index].key
+                if (key === 'select' || key === 'radio' || key === 'textarea') {
+                    const newWidget = () => {
+                        switch (key) {
+                            case 'select':
+                                return { "ui:placeholder": "Seleciona" }
+                            case 'radio':
+                                return { "ui:widget": "radio" }
+                            case 'textarea':
+                                return { "ui:widget": "textarea" }
+                            default:
+                                break;
+                        }
+                    };
+
+                    setUiState({
+                        ...uiState,
+                        [newElementId]: newWidget()
+                    });
+                };
 
                 break;
             default:
