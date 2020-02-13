@@ -5,15 +5,23 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
+// TODO:
+// check if root element and disable drag
+
 const CanvasElementTemplate = ({
     id, classNames, label, help, required, description, errors, children, deleteElement, propertiesState
 }) => {
-    const elementId = id.split('_')[1];
+    // Get prop id and split 'root_'
+    const element = id.split('_');
+    const elementType = element[0]
+    const elementId = element[1]
+
+    // Get properties state keys and get the index
     const elements = Object.keys(propertiesState)
     const index = elements.indexOf(elementId)
 
     return (
-        <Draggable index={index} draggableId={id}>
+        <Draggable index={index} draggableId={id} isDragDisabled={elementType !== 'root' ? true : false}>
             {(provided, snapshot) => (
                 <div
                     className={classNames}

@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 const Canvas = ({ schema, uiSchema, formData }) => {
     return (
-        <Droppable key="Canvas" droppableId="Canvas">
+        <Droppable key="Canvas" droppableId="Canvas" type="builder">
             {(provided, snapshot) => (
                 <div id="formbuilder-canvas">
                     <div className="form-wrap">
