@@ -1,5 +1,9 @@
 import { ADD_ELEMENT, MOVE_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from '../actions/types';
 
+// TODO: 
+// add / delete ui schema
+// add / delete formdata schema
+
 const initial_state = {
     schema: {
         type: "object",
@@ -31,15 +35,26 @@ export default function (state = initial_state, action) {
                 ...state
             }
         case DELETE_ELEMENT:
-            return {
-                ...state
+            const newState = {
+                ...state,
+                schema: {
+                    ...state.schema,
+                    properties: {
+                        ...state.schema.properties
+                    }
+                }
             }
+            delete newState.schema.properties[payload];
+            return newState;
+
         case ELEMENT_ERROR:
             return {
-                ...state
+                ...state,
+                error: payload,
             }
         default:
             return state;
     }
-
 }
+
+
