@@ -37,6 +37,7 @@ import uuid from 'uuid/v4';
 // FINISH HELPER FUNCTIONS
 
 const Formbuilder = ({ form, addElement }) => {
+
     const onDragEnd = result => {
         const { source, destination } = result;
 
@@ -56,7 +57,6 @@ const Formbuilder = ({ form, addElement }) => {
                 // });
                 break;
             case 'ToolkitItems':
-
                 const elementId = uuid();
 
                 // All fields
