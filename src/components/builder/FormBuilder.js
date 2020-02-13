@@ -40,9 +40,6 @@ const Formbuilder = ({ form, addElement }) => {
     const onDragEnd = result => {
         const { source, destination } = result;
 
-        // console.log('==> result', result);
-        // console.log(source, destination);
-
         // dropped outside the list
         if (!destination) {
             return;
