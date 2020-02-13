@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { addElement } from '../../actions/form';
+import { addElement, reorderElement } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
 import ToolKit from './toolkit/Toolkit';
 import Canvas from './canvas/Canvas';
@@ -9,8 +9,6 @@ import toolkitSchema from './toolkit/toolkitSchema';
 import uuid from 'uuid/v4';
 
 //TODO:
-// move button in element tools
-// delete button in element tools
 // SET STATE WITH MOVE AND REORDER FUNCTIONS
 
 // HELPER FUNCTIONS FOR DRAG AND DROP
@@ -36,7 +34,7 @@ import uuid from 'uuid/v4';
 // };
 // FINISH HELPER FUNCTIONS
 
-const Formbuilder = ({ form, addElement }) => {
+const Formbuilder = ({ addElement, reorderElement }) => {
 
     const onDragEnd = result => {
         const { source, destination } = result;
@@ -47,7 +45,8 @@ const Formbuilder = ({ form, addElement }) => {
         }
 
         switch (source.droppableId) {
-            case destination.droppableId:
+            case 'Canvas':
+
                 // setSchemaState({
                 //     [destination.droppableId]: reorder(
                 //         schemaState[source.droppableId],
@@ -55,6 +54,15 @@ const Formbuilder = ({ form, addElement }) => {
                 //         destination.index
                 //     )
                 // });
+
+                // const reorder = (list, startIndex, endIndex) => {
+                //     const result = Array.from(list);
+                //     const [removed] = result.splice(startIndex, 1);
+                //     result.splice(endIndex, 0, removed);
+                //     return result;
+                // };
+
+                reorderElement(source.index, destination.index)
                 break;
             case 'ToolkitItems':
                 const elementId = uuid();
@@ -105,15 +113,7 @@ const Formbuilder = ({ form, addElement }) => {
                 addElement(newElement, newWidget());
                 break;
             default:
-            // setSchemaState(
-            //     move(
-            //         schemaState[source.droppableId],
-            //         schemaState[destination.droppableId],
-            //         source,
-            //         destination
-            //     )
-            // );
-            // break;
+                break;
         }
     };
 
@@ -131,12 +131,8 @@ const Formbuilder = ({ form, addElement }) => {
 };
 
 Formbuilder.propTypes = {
-    form: PropTypes.object.isRequired,
     addElement: PropTypes.func.isRequired,
+    reorderElement: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-    form: state.form
-});
-
-export default connect(mapStateToProps, { addElement })(Formbuilder);
+export default connect(null, { addElement, reorderElement })(Formbuilder);
