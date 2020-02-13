@@ -19,6 +19,7 @@ export const addElement = (newElement, newWidget) => dispatch => {
         });
     }
 }
+
 // move element, reorder element
 export const moveElement = () => dispatch => {
     try {
