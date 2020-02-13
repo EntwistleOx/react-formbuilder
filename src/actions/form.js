@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4';
-import { ADD_ELEMENT, MOVE_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from './types';
+import { ADD_ELEMENT, REORDER_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from './types';
 
 // add element to form
 export const addElement = (newElement, newWidget) => dispatch => {
@@ -20,14 +20,15 @@ export const addElement = (newElement, newWidget) => dispatch => {
     }
 }
 
-// move element, reorder element
-export const moveElement = () => dispatch => {
+// reorder element
+export const reorderElement = (sourceIndex, destinationIndex) => dispatch => {
     try {
         dispatch({
-            type: MOVE_ELEMENT,
-            payload: 'move ok'
+            type: REORDER_ELEMENT,
+            payload: { sourceIndex, destinationIndex }
         });
     } catch (error) {
+        console.log(error)
         dispatch({
             type: ELEMENT_ERROR,
             payload: {
