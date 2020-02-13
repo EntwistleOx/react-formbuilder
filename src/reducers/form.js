@@ -1,6 +1,7 @@
-import { ADD_ELEMENT, MOVE_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from '../actions/types';
+import { ADD_ELEMENT, REORDER_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from '../actions/types';
 
 // TODO: 
+// REORDER!!!!!!!!!!
 // add / delete ui schema
 // add / delete formdata schema
 
@@ -30,10 +31,22 @@ export default function (state = initial_state, action) {
                     }
                 }
             }
-        case MOVE_ELEMENT:
+        case REORDER_ELEMENT:
+
+            const reorderState = Object.entries(state.schema.properties);
+            const [removed] = reorderState.splice(payload.sourceIndex, 1);
+            reorderState.splice(payload.destinationIndex, 0, removed);
+            const newOrder = Object.fromEntries(reorderState)
             return {
-                ...state
+                ...state,
+                schema: {
+                    ...state.schema,
+                    properties: {
+                        ...newOrder
+                    }
+                }
             }
+
         case DELETE_ELEMENT:
             const newState = {
                 ...state,
