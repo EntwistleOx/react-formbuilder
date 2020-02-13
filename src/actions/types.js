@@ -1,0 +1,4 @@
+export const ADD_ELEMENT = 'ADD_ELEMENT';
+export const MOVE_ELEMENT = 'MOVE_ELEMENT';
+export const DELETE_ELEMENT = 'DELETE_ELEMENT';
+export const ELEMENT_ERROR = 'ELEMENT_ERROR';
