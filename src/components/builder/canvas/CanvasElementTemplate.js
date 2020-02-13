@@ -1,10 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { deleteElement } from '../../../actions/form';
 import { Draggable } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 const CanvasElementTemplate = ({
-    id, classNames, label, help, required, description, errors, children
+    id, classNames, label, help, required, description, errors, children, deleteElement
 }) => {
     const elementId = id.split('_')[1];
     return (
@@ -26,7 +28,7 @@ const CanvasElementTemplate = ({
                                     </Link>
 
                                     <Link to="#!">
-                                        <i onClick={(e) => alert(elementId)} className="fas fa-trash-alt"></i>
+                                        <i onClick={(e) => deleteElement(elementId)} className="fas fa-trash-alt"></i>
                                     </Link>
 
                                     <i {...provided.dragHandleProps} className="fas fa-arrows-alt"></i>
@@ -52,6 +54,19 @@ CanvasElementTemplate.propTypes = {
     description: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     children: PropTypes.array.isRequired,
-}
+    deleteElement: PropTypes.func.isRequired,
+};
 
-export default CanvasElementTemplate
+// export default connect(null, { deleteElement })(CanvasElementTemplate);
+
+// Add a wrapped to return a class component to prevent warning
+// Source: https://github.com/rjsf-team/react-jsonschema-form/issues/1309
+var ReduxWrapped = connect(null, { deleteElement })(CanvasElementTemplate);
+class CanvasElementTemplateWrapper extends React.Component {
+    render() {
+        return (
+            <ReduxWrapped {...this.props} />
+        )
+    }
+}
+export default CanvasElementTemplateWrapper
