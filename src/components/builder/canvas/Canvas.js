@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
+import CanvasElementTemplate from './CanvasElementTemplate'
 import { connect } from 'react-redux';
 import { Droppable } from 'react-beautiful-dnd';
-import CanvasElementTemplate from './CanvasElementTemplate'
 import Form from "react-jsonschema-form";
 import PropTypes from 'prop-types';
 
@@ -52,8 +52,8 @@ const Canvas = ({ schema, uiSchema, formData }) => {
 
 Canvas.propTypes = {
     schema: PropTypes.object.isRequired,
-    uiSchema: PropTypes.object,
-    formData: PropTypes.object,
+    uiSchema: PropTypes.object.isRequired,
+    formData: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
