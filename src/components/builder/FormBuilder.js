@@ -8,32 +8,6 @@ import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
 import uuid from 'uuid/v4';
 
-//TODO:
-// SET STATE WITH MOVE AND REORDER FUNCTIONS
-
-// HELPER FUNCTIONS FOR DRAG AND DROP
-/** 
- * Reorder the result
- */
-// const reorder = (list, startIndex, endIndex) => {
-//     const result = Array.from(list);
-//     const [removed] = result.splice(startIndex, 1);
-//     result.splice(endIndex, 0, removed);
-//     return result;
-// };
-
-// const move = (source, destination, droppableSource, droppableDestination) => {
-//     const sourceClone = Array.from(source);
-//     const destClone = Array.from(destination);
-//     const [removed] = sourceClone.splice(droppableSource.index, 1);
-//     destClone.splice(droppableDestination.index, 0, removed);
-//     const result = {};
-//     result[droppableSource.droppableId] = sourceClone;
-//     result[droppableDestination.droppableId] = destClone;
-//     return result;
-// };
-// FINISH HELPER FUNCTIONS
-
 const Formbuilder = ({ addElement, reorderElement }) => {
 
     const onDragEnd = result => {
@@ -46,22 +20,6 @@ const Formbuilder = ({ addElement, reorderElement }) => {
 
         switch (source.droppableId) {
             case 'Canvas':
-
-                // setSchemaState({
-                //     [destination.droppableId]: reorder(
-                //         schemaState[source.droppableId],
-                //         source.index,
-                //         destination.index
-                //     )
-                // });
-
-                // const reorder = (list, startIndex, endIndex) => {
-                //     const result = Array.from(list);
-                //     const [removed] = result.splice(startIndex, 1);
-                //     result.splice(endIndex, 0, removed);
-                //     return result;
-                // };
-
                 reorderElement(source.index, destination.index)
                 break;
             case 'ToolkitItems':
