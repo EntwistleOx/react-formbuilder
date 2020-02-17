@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import CanvasElementTemplate from './CanvasElementTemplate'
+// import ObjectFieldTemplate from './ObjectFieldTemplate'
 import { connect } from 'react-redux';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from "react-jsonschema-form";
@@ -8,41 +9,37 @@ import PropTypes from 'prop-types';
 // TODO:
 // Edit option on form title
 // Edit option on form description
-// Style borders on drag action
 
 const Canvas = ({ schema, uiSchema, formData }) => {
     return (
         <Droppable key="Canvas" droppableId="Canvas" type="builder">
             {(provided, snapshot) => (
-                <div id="formbuilder-canvas">
+                <div id="formbuilder-canvas" ref={provided.innerRef}>
                     <div className="form-wrap">
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                        >
-                            {schema.properties &&
-                                Object.keys(schema.properties).length > 0 ?
-                                (
-                                    <Form
-                                        schema={schema}
-                                        uiSchema={uiSchema}
-                                        formData={formData}
-                                        FieldTemplate={CanvasElementTemplate}
-                                        disabled={true}
-                                    >
-                                        <div></div>
-                                    </Form>
-                                )
-                                : (
-                                    <Fragment>
-                                        <div className="notice">
-                                            Arrastra los elementos del menu aca
-                                            </div>
-                                    </Fragment>
-                                )}
-                            {provided.placeholder}
-                        </div>
+
+                        {schema.properties &&
+                            Object.keys(schema.properties).length > 0 ?
+                            (
+                                <Form
+                                    schema={schema}
+                                    uiSchema={uiSchema}
+                                    formData={formData}
+                                    FieldTemplate={CanvasElementTemplate}
+                                    // ObjectFieldTemplate={ObjectFieldTemplate}
+                                    disabled={true}
+                                >
+                                    <div></div>
+                                </Form>
+                            )
+                            : (
+                                <Fragment>
+                                    <div className="notice">
+                                        Arrastra los elementos del menu aca
+                                        </div>
+                                </Fragment>
+                            )}
+                        {provided.placeholder}
+
                     </div>
                 </div>
             )}
