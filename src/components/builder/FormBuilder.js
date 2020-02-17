@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { addElement, reorderElement } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -6,7 +6,6 @@ import ToolKit from './toolkit/Toolkit';
 import Canvas from './canvas/Canvas';
 import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
-import uuid from 'uuid/v4';
 
 const Formbuilder = ({ addElement, reorderElement }) => {
 
@@ -23,7 +22,6 @@ const Formbuilder = ({ addElement, reorderElement }) => {
                 reorderElement(source.index, destination.index)
                 break;
             case 'ToolkitItems':
-                const elementId = uuid();
 
                 // All fields
                 const title = toolkitSchema[source.index].name
@@ -68,6 +66,7 @@ const Formbuilder = ({ addElement, reorderElement }) => {
                             break;
                     }
                 };
+
                 addElement(newElement, newWidget());
                 break;
             default:
