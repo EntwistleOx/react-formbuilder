@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { deleteElement } from '../../../actions/form';
 import { Draggable } from 'react-beautiful-dnd';
@@ -6,33 +6,46 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 // TODO:
-// check if root element and disable drag
+// Delete from ui:schema with element ID
+// fix reorder
 
-const CanvasElementTemplate = ({
-    id, classNames, label, help, required, description, errors, children, deleteElement, propertiesState
-}) => {
+const CanvasElementTemplate = (
+    props
+) => {
+
+    const {
+        id,
+        classNames,
+        label,
+        required,
+        description,
+        children,
+        deleteElement,
+        uiState
+    } = props
+
     // Get prop id and split 'root_'
     const element = id.split('_');
-    const elementType = element[0]
-    const elementId = element[1]
+    const elementId = element[1];
 
-    // Get properties state keys and get the index
-    const elements = Object.keys(propertiesState)
-    const index = elements.indexOf(elementId)
+    const [order, setOrder] = useState(-1);
+
+    useEffect(() => {
+        setOrder(uiState.findIndex(el => el === elementId))
+    }, [uiState, elementId])
 
     return (
-        <Draggable index={index} draggableId={id} isDragDisabled={elementType !== 'root' ? true : false}>
+        <Draggable index={order} draggableId={id} isDragDisabled={id === 'root' ? true : false}>
             {(provided, snapshot) => (
                 <div
                     className={classNames}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    {...provided.dragHandleProps}
                 >
                     {
                         id !== 'root' ?
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <label htmlFor={id}>{label}{required ? "*" : null}</label>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', userSelect: 'none' }}>
+                                <label htmlFor={id}>{label} {id} {required ? "*" : null}</label>
                                 <div>
                                     <Link to={`edit-form-element/${elementId}`}>
                                         <i className="fas fa-edit"></i>
@@ -41,6 +54,7 @@ const CanvasElementTemplate = ({
                                     <Link to="#!">
                                         <i onClick={(e) => deleteElement(elementId)} className="fas fa-trash-alt"></i>
                                     </Link>
+
 
                                     <i {...provided.dragHandleProps} className="fas fa-arrows-alt"></i>
                                 </div>
@@ -66,11 +80,11 @@ CanvasElementTemplate.propTypes = {
     errors: PropTypes.object.isRequired,
     children: PropTypes.array.isRequired,
     deleteElement: PropTypes.func.isRequired,
-    propertiesState: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
-    propertiesState: state.form.schema.properties
+    propertiesState: state.form.schema.properties,
+    uiState: state.form.uiSchema["ui:order"]
 })
 
 // export default connect(null, { deleteElement })(CanvasElementTemplate);
