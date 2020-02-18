@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import CanvasElementTemplate from './CanvasElementTemplate'
-import ObjectFieldTemplate from './ObjectFieldTemplate'
+// import ObjectFieldTemplate from './ObjectFieldTemplate'
 import { connect } from 'react-redux';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from "react-jsonschema-form";
