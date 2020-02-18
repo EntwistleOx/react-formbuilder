@@ -111,10 +111,10 @@ select {
   padding: 0.55rem;
 }
 
-.form-wrap .form-group input[type='checkbox'],
+/* .form-wrap .form-group input[type='checkbox'],
 span {
   font-size: 0.9rem;
-}
+} */
 
 /* .form-wrap .form-group .form-group-row {
   display: flex;
