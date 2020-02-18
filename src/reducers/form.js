@@ -6,17 +6,21 @@ import {
     DELETE_ELEMENT,
     DELETE_UI_ORDER,
     DELETE_WIDGET,
-    ELEMENT_ERROR
+    EDIT_ELEMENT,
+    ELEMENT_ERROR,
+    GET_ELEMENT
 } from '../actions/types';
 
 // TODO: 
-// add / delete formdata schema
+// refactor required field in edit element
+
 
 const initial_state = {
     schema: {
         type: "object",
         title: "Titulo del Formulario",
         description: "Descripcion del Formulario.",
+        required: [],
         properties: {}
     },
     uiSchema: {
@@ -38,7 +42,11 @@ export default function (state = initial_state, action) {
                     properties: {
                         ...state.schema.properties,
                         [payload.id]: payload.newElement
-                    }
+                    },
+                    required: [
+                        ...state.schema.required,
+                        payload.id
+                    ]
                 }
             };
 
@@ -74,8 +82,7 @@ export default function (state = initial_state, action) {
                     ...state.uiSchema,
                     "ui:order": result
                 }
-
-            }
+            };
 
         case DELETE_ELEMENT:
             const newState = {
@@ -84,7 +91,8 @@ export default function (state = initial_state, action) {
                     ...state.schema,
                     properties: {
                         ...state.schema.properties
-                    }
+                    },
+                    required: state.schema.required.filter((item) => item !== payload)
                 }
             };
             delete newState.schema.properties[payload];
@@ -109,11 +117,35 @@ export default function (state = initial_state, action) {
             delete newWidgetState.uiSchema[payload];
             return newWidgetState;
 
+        case GET_ELEMENT:
+            return state.schema.properties[payload];
+
+        case EDIT_ELEMENT:
+            const stateIndex = state.schema.required.findIndex(element => element === payload.id);
+            return {
+                ...state,
+                schema: {
+                    ...state.schema,
+                    properties: {
+                        ...state.schema.properties,
+                        [payload.id]: {
+                            ...state.schema.properties[payload.id],
+                            title: payload.formData.title
+                        }
+                    },
+                    required: payload.formData.required === true ?
+                        (
+                            state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
+                        ) : (
+                            state.schema.required.filter((item) => item !== payload.id))
+                }
+            };
+
         case ELEMENT_ERROR:
             return {
                 ...state,
                 error: payload,
-            }
+            };
         default:
             return state;
     }
