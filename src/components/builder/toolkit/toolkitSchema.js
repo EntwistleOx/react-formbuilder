@@ -9,6 +9,7 @@ const toolkitSchema = [
         type: 'boolean',
         default: false,
         icon: 'fas fa-check-square',
+        required: true
     },
     {
         id: uuid(),
@@ -17,6 +18,7 @@ const toolkitSchema = [
         type: 'string',
         format: 'email',
         icon: 'fas fa-at',
+        required: true
     },
     {
         id: uuid(),
@@ -24,14 +26,16 @@ const toolkitSchema = [
         name: 'Fecha',
         type: 'string',
         format: 'date',
-        icon: 'fas fa-calendar-alt'
+        icon: 'fas fa-calendar-alt',
+        required: true
     },
     {
         id: uuid(),
         key: 'number',
         name: 'Number',
         type: 'number',
-        icon: 'fa-stack fa-1x number-icon'
+        icon: 'fa-stack fa-1x number-icon',
+        required: true
     },
     {
         id: uuid(),
@@ -39,7 +43,8 @@ const toolkitSchema = [
         name: 'Parrafo',
         type: 'null',
         description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit.Quod vero magnam quibusdam assumenda, voluptatem quo quos perferendis totam consequatur voluptates.',
-        icon: 'fas fa-paragraph'
+        icon: 'fas fa-paragraph',
+        required: true
     },
     {
         id: uuid(),
@@ -47,7 +52,8 @@ const toolkitSchema = [
         name: 'Radio',
         type: 'boolean',
         default: false,
-        icon: 'fas fa-dot-circle'
+        icon: 'fas fa-dot-circle',
+        required: true
     },
     {
         id: uuid(),
@@ -62,21 +68,24 @@ const toolkitSchema = [
             'Opcion 1',
             'Opcion 2'
         ],
-        icon: 'fas fa-angle-down'
+        icon: 'fas fa-angle-down',
+        required: true
     },
     {
         id: uuid(),
         key: 'textarea',
         name: 'Textarea',
         type: 'string',
-        icon: 'fa-stack textarea-icon'
+        icon: 'fa-stack textarea-icon',
+        required: true
     },
     {
         id: uuid(),
         key: 'text',
         name: 'Texto',
         type: 'string',
-        icon: 'fas fa-font'
+        icon: 'fas fa-font',
+        required: true
     },
 ];
 
