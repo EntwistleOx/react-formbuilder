@@ -15,6 +15,7 @@ const CanvasElementTemplate = (
         label,
         required,
         children,
+        description,
         deleteElement,
         deleteUiOrder,
         deleteWidget,
@@ -64,6 +65,7 @@ const CanvasElementTemplate = (
                                 </div>
                             </div>
                             {children}
+                            {description && description}
                         </div>
                     )
                     }
