@@ -5,4 +5,6 @@ export const REORDER_ELEMENT = 'REORDER_ELEMENT';
 export const DELETE_ELEMENT = 'DELETE_ELEMENT';
 export const DELETE_UI_ORDER = 'DELETE_UI_ORDER';
 export const DELETE_WIDGET = 'DELETE_WIDGET';
+export const GET_ELEMENT = 'GET_ELEMENT';
+export const EDIT_ELEMENT = 'EDIT_ELEMENT';
 export const ELEMENT_ERROR = 'ELEMENT_ERROR';

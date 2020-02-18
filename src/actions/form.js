@@ -6,7 +6,9 @@ import {
     DELETE_ELEMENT,
     DELETE_UI_ORDER,
     DELETE_WIDGET,
-    ELEMENT_ERROR
+    ELEMENT_ERROR,
+    EDIT_ELEMENT,
+    GET_ELEMENT
 } from './types';
 
 // add element to form
@@ -105,6 +107,42 @@ export const deleteUiOrder = (id) => dispatch => {
         dispatch({
             type: DELETE_UI_ORDER,
             payload: id
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// get element by id 
+export const getElement = (id) => dispatch => {
+    try {
+        dispatch({
+            type: GET_ELEMENT,
+            payload: id
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error,
+                status: error
+            }
+        });
+    }
+}
+
+// edit element 
+export const editElement = (id, formData) => dispatch => {
+    try {
+        dispatch({
+            type: EDIT_ELEMENT,
+            payload: { id, formData }
         });
     } catch (error) {
         dispatch({
