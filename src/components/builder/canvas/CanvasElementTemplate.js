@@ -5,10 +5,6 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
-// TODO:
-// Delete from ui:schema with element ID
-// fix reorder
-
 const CanvasElementTemplate = (
     props
 ) => {
@@ -18,8 +14,6 @@ const CanvasElementTemplate = (
         classNames,
         label,
         required,
-        description,
-        rawDescription,
         children,
         deleteElement,
         uiState
@@ -29,9 +23,7 @@ const CanvasElementTemplate = (
     const element = id.split('_');
     const elementId = element[1];
 
-    console.log(props)
-
-    const [order, setOrder] = useState(-1);
+    const [order, setOrder] = useState(0);
 
     useEffect(() => {
         setOrder(uiState.findIndex(el => el === elementId))
@@ -85,7 +77,6 @@ CanvasElementTemplate.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    propertiesState: state.form.schema.properties,
     uiState: state.form.uiSchema["ui:order"]
 })
 
