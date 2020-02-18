@@ -58,11 +58,17 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 const newWidget = () => {
                     switch (key) {
                         case 'select':
-                            return { "ui:placeholder": "Seleciona" }
+                            return { "ui:placeholder": "...seleciona" }
+                        case 'text':
+                            return { "ui:placeholder": "...campo de texto" }
+                        case 'number':
+                            return { "ui:placeholder": "...12345" }
+                        case 'email':
+                            return { "ui:placeholder": "...my@email.cl" }
                         case 'radio':
                             return { "ui:widget": "radio" }
                         case 'textarea':
-                            return { "ui:widget": "textarea" }
+                            return { "ui:widget": "textarea", "ui:placeholder": "...area de texto" }
                         default:
                             break;
                     }
