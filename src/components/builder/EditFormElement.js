@@ -12,6 +12,8 @@ const EditFormElement = (props) => {
 
     const { element, required, editElement } = props;
 
+    console.log(props)
+
     const [schema, setSchema] = useState({
         title: "Editar Elemento",
         type: "object",
@@ -23,13 +25,24 @@ const EditFormElement = (props) => {
             required: {
                 type: "boolean",
                 title: "Requerido"
-            }
+            },
+            options: {
+                "type": "array",
+                "title": "Opciones",
+                "items": {
+                    "type": "string",
+                }
+            },
         }
     });
 
+    const [uiSchema, setuiSchema] = useState({
+
+    })
     const [formData, setFormData] = useState({
         title: '',
-        required: false
+        required: false,
+        options: []
     });
 
     useEffect(() => {
@@ -42,6 +55,7 @@ const EditFormElement = (props) => {
         setFormData({
             title: element[id].title ? element[id].title : '...titulo del elemento',
             required: isRequired ? true : false,
+            options: element[id].enum ? element[id].enum : [],
         });
     }, [element, id, props, required])
 
@@ -50,10 +64,13 @@ const EditFormElement = (props) => {
         return props.history.push(`/formbuilder`);
     }
 
+    console.log(schema)
+    console.log(formData)
     return (
         <div id="editFormElement" className="container">
             <Form
                 schema={schema}
+                uiSchema={uiSchema}
                 formData={formData}
                 onSubmit={onSubmit}
             />
