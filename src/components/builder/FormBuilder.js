@@ -8,6 +8,9 @@ import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
 import uuid from 'uuid/v4';
 
+// TODO:
+// Maybe add placeholders in toolkit objects
+
 const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
 
     const onDragEnd = result => {
