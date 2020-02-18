@@ -54,7 +54,7 @@ const CanvasElementTemplate = (
                             <div style={{ display: 'flex', justifyContent: 'space-between', userSelect: 'none' }}>
                                 <label htmlFor={id}>{label} {required ? "*" : null}</label>
                                 <div>
-                                    <Link to={`edit-form-element/${elementId}`}>
+                                    <Link to={`/${elementId}`}>
                                         <i className="fas fa-edit"></i>
                                     </Link>
 
