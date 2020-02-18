@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { deleteElement } from '../../../actions/form';
 import { Draggable } from 'react-beautiful-dnd';
