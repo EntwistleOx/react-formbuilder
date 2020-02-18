@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { deleteElement } from '../../../actions/form';
+import { deleteElement, deleteUiOrder, deleteWidget } from '../../../actions/form';
 import { Draggable } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
@@ -16,6 +16,8 @@ const CanvasElementTemplate = (
         required,
         children,
         deleteElement,
+        deleteUiOrder,
+        deleteWidget,
         uiState
     } = props
 
@@ -28,6 +30,12 @@ const CanvasElementTemplate = (
     useEffect(() => {
         setOrder(uiState.findIndex(el => el === elementId))
     }, [uiState, elementId])
+
+    const onDelete = () => {
+        deleteElement(elementId);
+        deleteUiOrder(elementId);
+        deleteWidget(elementId);
+    }
 
     return (
         (id === 'root') ? (
@@ -50,7 +58,7 @@ const CanvasElementTemplate = (
                                     </Link>
 
                                     <Link to="#!">
-                                        <i onClick={(e) => deleteElement(elementId)} className="fas fa-trash-alt"></i>
+                                        <i onClick={onDelete} className="fas fa-trash-alt"></i>
                                     </Link>
                                     <i {...provided.dragHandleProps} className="fas fa-arrows-alt"></i>
                                 </div>
@@ -74,6 +82,8 @@ CanvasElementTemplate.propTypes = {
     errors: PropTypes.object.isRequired,
     children: PropTypes.array.isRequired,
     deleteElement: PropTypes.func.isRequired,
+    deleteUiOrder: PropTypes.func.isRequired,
+    deleteWidget: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -84,7 +94,7 @@ const mapStateToProps = state => ({
 
 // Add a wrapped to return a class component to prevent warning
 // Source: https://github.com/rjsf-team/react-jsonschema-form/issues/1309
-var ReduxWrapped = connect(mapStateToProps, { deleteElement })(CanvasElementTemplate);
+var ReduxWrapped = connect(mapStateToProps, { deleteElement, deleteUiOrder, deleteWidget })(CanvasElementTemplate);
 class CanvasElementTemplateWrapper extends React.Component {
     render() {
         return (

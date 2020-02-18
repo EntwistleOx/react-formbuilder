@@ -1,4 +1,13 @@
-import { ADD_ELEMENT, ADD_UI_ORDER, ADD_WIDGET, REORDER_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from '../actions/types';
+import {
+    ADD_ELEMENT,
+    ADD_UI_ORDER,
+    ADD_WIDGET,
+    REORDER_ELEMENT,
+    DELETE_ELEMENT,
+    DELETE_UI_ORDER,
+    DELETE_WIDGET,
+    ELEMENT_ERROR
+} from '../actions/types';
 
 // TODO: 
 // add / delete formdata schema
@@ -69,9 +78,6 @@ export default function (state = initial_state, action) {
             }
 
         case DELETE_ELEMENT:
-            let oldUiOrder = state.uiSchema[uiOrderKey].slice();
-            const newUiOrder = oldUiOrder.filter((item) => item !== payload);
-
             const newState = {
                 ...state,
                 schema: {
@@ -79,14 +85,29 @@ export default function (state = initial_state, action) {
                     properties: {
                         ...state.schema.properties
                     }
-                },
-                uiSchema: {
-                    ...state.uiSchema,
-                    "ui:order": newUiOrder
                 }
-            }
+            };
             delete newState.schema.properties[payload];
             return newState;
+
+        case DELETE_UI_ORDER:
+            return {
+                ...state,
+                uiSchema: {
+                    ...state.uiSchema,
+                    "ui:order": state.uiSchema[uiOrderKey].filter((item) => item !== payload)
+                }
+            };
+
+        case DELETE_WIDGET:
+            const newWidgetState = {
+                ...state,
+                uiSchema: {
+                    ...state.uiSchema
+                }
+            };
+            delete newWidgetState.uiSchema[payload];
+            return newWidgetState;
 
         case ELEMENT_ERROR:
             return {

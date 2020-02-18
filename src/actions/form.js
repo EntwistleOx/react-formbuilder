@@ -4,6 +4,8 @@ import {
     ADD_WIDGET,
     REORDER_ELEMENT,
     DELETE_ELEMENT,
+    DELETE_UI_ORDER,
+    DELETE_WIDGET,
     ELEMENT_ERROR
 } from './types';
 
@@ -84,6 +86,42 @@ export const deleteElement = (id) => dispatch => {
     try {
         dispatch({
             type: DELETE_ELEMENT,
+            payload: id
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// delete ui order 
+export const deleteUiOrder = (id) => dispatch => {
+    try {
+        dispatch({
+            type: DELETE_UI_ORDER,
+            payload: id
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// delete widget 
+export const deleteWidget = (id) => dispatch => {
+    try {
+        dispatch({
+            type: DELETE_WIDGET,
             payload: id
         });
     } catch (error) {
