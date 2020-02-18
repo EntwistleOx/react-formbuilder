@@ -35,7 +35,7 @@ const Canvas = ({ schema, uiSchema, formData }) => {
                                 <Fragment>
                                     <div className="notice">
                                         Arrastra los elementos del menu aca
-                                        </div>
+                                    </div>
                                 </Fragment>
                             )}
                         {provided.placeholder}
