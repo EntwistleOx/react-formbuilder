@@ -30,7 +30,7 @@ const ObjectFieldTemplate = ({
                         >
                             {
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <label htmlFor={element.name}>{element.name}{element.required ? "*" : null}</label>
+                                    <label htmlFor={element.name}>{element.required ? "*" : null}</label>
                                     <div>
                                         <Link to={`edit-form-element/${element.content.key}`}>
                                             <i className="fas fa-edit"></i>
