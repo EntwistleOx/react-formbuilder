@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { deleteElement } from '../../../actions/form';
 import { Draggable } from 'react-beautiful-dnd';
@@ -19,6 +19,7 @@ const CanvasElementTemplate = (
         label,
         required,
         description,
+        rawDescription,
         children,
         deleteElement,
         uiState
@@ -28,6 +29,8 @@ const CanvasElementTemplate = (
     const element = id.split('_');
     const elementId = element[1];
 
+    console.log(props)
+
     const [order, setOrder] = useState(-1);
 
     useEffect(() => {
@@ -35,17 +38,20 @@ const CanvasElementTemplate = (
     }, [uiState, elementId])
 
     return (
-        <Draggable index={order} draggableId={id} isDragDisabled={id === 'root' ? true : false}>
-            {(provided, snapshot) => (
-                <div
-                    className={classNames}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                >
-                    {
-                        id !== 'root' ?
+        (id === 'root') ? (
+            <Fragment>
+                {children}
+            </Fragment>
+        ) : (
+                <Draggable index={order} draggableId={id} isDragDisabled={id === 'root' ? true : false}>
+                    {(provided, snapshot) => (
+                        <div
+                            className={classNames}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                        >
                             <div style={{ display: 'flex', justifyContent: 'space-between', userSelect: 'none' }}>
-                                <label htmlFor={id}>{label} {id} {required ? "*" : null}</label>
+                                <label htmlFor={id}>{label} {required ? "*" : null}</label>
                                 <div>
                                     <Link to={`edit-form-element/${elementId}`}>
                                         <i className="fas fa-edit"></i>
@@ -54,19 +60,15 @@ const CanvasElementTemplate = (
                                     <Link to="#!">
                                         <i onClick={(e) => deleteElement(elementId)} className="fas fa-trash-alt"></i>
                                     </Link>
-
-
                                     <i {...provided.dragHandleProps} className="fas fa-arrows-alt"></i>
                                 </div>
                             </div>
-                            : ''
+                            {children}
+                        </div>
+                    )
                     }
-                    {children}
-                    {id !== 'root' ? description : ''}
-                </div>
+                </Draggable >
             )
-            }
-        </Draggable >
     )
 };
 
