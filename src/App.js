@@ -24,7 +24,7 @@ function App() {
         <Switch>
           <Route exact path="/formbuilder" component={FormBuilder} />
           <Route exact path="/formrender" component={FormRender} />
-          <Route exact path="/edit-form-element/:id" component={EditFormElement} />
+          <Route exact path="/:id" component={EditFormElement} />
           <Route exact path="/test-schema" component={TestSchema} />
         </Switch>
       </Router>
