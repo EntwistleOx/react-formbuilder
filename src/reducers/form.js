@@ -1,7 +1,6 @@
 import { ADD_ELEMENT, REORDER_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from '../actions/types';
 
 // TODO: 
-// add / delete ui schema
 // add / delete formdata schema
 
 const initial_state = {
@@ -24,10 +23,8 @@ export default function (state = initial_state, action) {
 
     switch (type) {
         case ADD_ELEMENT:
-
-            let order = state.uiSchema[key].slice()
-            order.splice(order.length, 0, payload.elementId)
-
+            let uiOrder = state.uiSchema[key].slice();
+            uiOrder.splice(uiOrder.length, 0, payload.elementId);
             return {
                 ...state,
                 schema: {
@@ -39,14 +36,12 @@ export default function (state = initial_state, action) {
                 },
                 uiSchema: {
                     ...state.uiSchema,
-                    "ui:order": order
+                    "ui:order": uiOrder
                 }
             };
 
         case REORDER_ELEMENT:
-
             const result = state.uiSchema[key].slice();
-            console.log(result)
             const [removed] = result.splice(payload.sourceIndex, 1);
             result.splice(payload.destinationIndex, 0, removed);
 
@@ -60,6 +55,10 @@ export default function (state = initial_state, action) {
             }
 
         case DELETE_ELEMENT:
+            let oldUiOrder = state.uiSchema[key].slice();
+            const newUiOrder = oldUiOrder.filter((item) => item !== payload);
+
+            console.log('aers ', newUiOrder)
             const newState = {
                 ...state,
                 schema: {
@@ -67,6 +66,10 @@ export default function (state = initial_state, action) {
                     properties: {
                         ...state.schema.properties
                     }
+                },
+                uiSchema: {
+                    ...state.uiSchema,
+                    "ui:order": newUiOrder
                 }
             }
             delete newState.schema.properties[payload];
