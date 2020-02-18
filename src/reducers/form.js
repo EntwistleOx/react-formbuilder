@@ -1,4 +1,4 @@
-import { ADD_ELEMENT, REORDER_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from '../actions/types';
+import { ADD_ELEMENT, ADD_UI_ORDER, ADD_WIDGET, REORDER_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from '../actions/types';
 
 // TODO: 
 // add / delete formdata schema
@@ -18,30 +18,44 @@ const initial_state = {
 
 export default function (state = initial_state, action) {
     const { type, payload } = action;
-
-    const key = "ui:order";
+    const uiOrderKey = "ui:order";
 
     switch (type) {
         case ADD_ELEMENT:
-            let uiOrder = state.uiSchema[key].slice();
-            uiOrder.splice(uiOrder.length, 0, payload.elementId);
             return {
                 ...state,
                 schema: {
                     ...state.schema,
                     properties: {
                         ...state.schema.properties,
-                        [payload.elementId]: payload.newElement
+                        [payload.id]: payload.newElement
                     }
-                },
+                }
+            };
+
+        case ADD_UI_ORDER:
+            return {
+                ...state,
                 uiSchema: {
                     ...state.uiSchema,
-                    "ui:order": uiOrder
+                    "ui:order": [
+                        ...state.uiSchema[uiOrderKey],
+                        payload.id
+                    ]
+                }
+            };
+
+        case ADD_WIDGET:
+            return {
+                ...state,
+                uiSchema: {
+                    ...state.uiSchema,
+                    [payload.id]: payload.newWidget,
                 }
             };
 
         case REORDER_ELEMENT:
-            const result = state.uiSchema[key].slice();
+            const result = state.uiSchema[uiOrderKey].slice();
             const [removed] = result.splice(payload.sourceIndex, 1);
             result.splice(payload.destinationIndex, 0, removed);
 
@@ -55,10 +69,9 @@ export default function (state = initial_state, action) {
             }
 
         case DELETE_ELEMENT:
-            let oldUiOrder = state.uiSchema[key].slice();
+            let oldUiOrder = state.uiSchema[uiOrderKey].slice();
             const newUiOrder = oldUiOrder.filter((item) => item !== payload);
 
-            console.log('aers ', newUiOrder)
             const newState = {
                 ...state,
                 schema: {

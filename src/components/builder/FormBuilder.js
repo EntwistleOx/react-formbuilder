@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { addElement, reorderElement } from '../../actions/form';
+import { addElement, addUiOrder, addWidget, reorderElement } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
 import ToolKit from './toolkit/Toolkit';
 import Canvas from './canvas/Canvas';
 import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
+import uuid from 'uuid/v4';
 
-const Formbuilder = ({ addElement, reorderElement }) => {
+const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
 
     const onDragEnd = result => {
         const { source, destination } = result;
@@ -67,7 +68,12 @@ const Formbuilder = ({ addElement, reorderElement }) => {
                     }
                 };
 
-                addElement(newElement, newWidget());
+                const id = uuid();
+                addElement(id, newElement);
+                addUiOrder(id, newElement);
+                if (newWidget()) {
+                    addWidget(id, newWidget());
+                }
                 break;
             default:
                 break;
@@ -89,7 +95,9 @@ const Formbuilder = ({ addElement, reorderElement }) => {
 
 Formbuilder.propTypes = {
     addElement: PropTypes.func.isRequired,
+    addUiOrder: PropTypes.func.isRequired,
+    addWidget: PropTypes.func.isRequired,
     reorderElement: PropTypes.func.isRequired,
 };
 
-export default connect(null, { addElement, reorderElement })(Formbuilder);
+export default connect(null, { addElement, addUiOrder, addWidget, reorderElement })(Formbuilder);

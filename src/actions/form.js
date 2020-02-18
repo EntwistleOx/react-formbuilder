@@ -1,13 +1,54 @@
-import uuid from 'uuid/v4';
-import { ADD_ELEMENT, REORDER_ELEMENT, DELETE_ELEMENT, ELEMENT_ERROR } from './types';
+import {
+    ADD_ELEMENT,
+    ADD_UI_ORDER,
+    ADD_WIDGET,
+    REORDER_ELEMENT,
+    DELETE_ELEMENT,
+    ELEMENT_ERROR
+} from './types';
 
 // add element to form
-export const addElement = (newElement, newWidget) => dispatch => {
-    const elementId = uuid();
+export const addElement = (id, newElement) => dispatch => {
     try {
         dispatch({
             type: ADD_ELEMENT,
-            payload: { elementId, newElement, newWidget }
+            payload: { id, newElement }
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// add element order in ui schema
+export const addUiOrder = (id, newElement) => dispatch => {
+    try {
+        dispatch({
+            type: ADD_UI_ORDER,
+            payload: { id, newElement }
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// add new widget if any
+export const addWidget = (id, newWidget) => dispatch => {
+    try {
+        dispatch({
+            type: ADD_WIDGET,
+            payload: { id, newWidget }
         });
     } catch (error) {
         dispatch({
@@ -28,7 +69,6 @@ export const reorderElement = (sourceIndex, destinationIndex) => dispatch => {
             payload: { sourceIndex, destinationIndex }
         });
     } catch (error) {
-        console.log(error)
         dispatch({
             type: ELEMENT_ERROR,
             payload: {
