@@ -9,6 +9,7 @@ const Formrender = ({ formSchema }) => {
     const onSubmit = (e) => {
         console.log(e)
     }
+
     return (
         <Fragment>
             <h2>render</h2>
@@ -16,7 +17,10 @@ const Formrender = ({ formSchema }) => {
                 <Form
                     schema={formSchema.schema}
                     uiSchema={formSchema.uiSchema}
-                    formData={formSchema.formData}
+                    // formData={formSchema.formData}
+                    onSubmit={onSubmit}
+                    noHtml5Validate={true}
+                // liveValidate={true}
                 >
                 </Form>
             </div>
