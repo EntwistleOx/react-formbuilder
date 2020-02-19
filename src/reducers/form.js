@@ -17,7 +17,7 @@ import {
 
 const initial_state = {
     schema: {
-        "$id": "Form",
+        // "$id": "Form", -> stop the validation if schema change
         title: "Titulo del Formulario",
         description: "Descripcion del Formulario.",
         type: "object",
@@ -34,6 +34,11 @@ export default function (state = initial_state, action) {
     const { type, payload } = action;
     const uiOrderKey = "ui:order";
 
+    // formdata initial states:
+    // checkbox -> false
+    // checkboxes -> []
+    // email -> undefined
+    // number, date -> ''
 
     switch (type) {
         case ADD_ELEMENT:
@@ -47,10 +52,6 @@ export default function (state = initial_state, action) {
                             [payload.id]: payload.newElement
                         },
                     },
-                    formData: {
-                        ...state.formData,
-                        [payload.id]: ''
-                    }
                 };
             } else {
                 return {
@@ -66,10 +67,6 @@ export default function (state = initial_state, action) {
                             payload.id
                         ]
                     },
-                    formData: {
-                        ...state.formData,
-                        [payload.id]: ''
-                    }
                 };
             }
 
