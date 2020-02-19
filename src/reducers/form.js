@@ -122,24 +122,75 @@ export default function (state = initial_state, action) {
 
         case EDIT_ELEMENT:
             const stateIndex = state.schema.required.findIndex(element => element === payload.id);
-            return {
-                ...state,
-                schema: {
-                    ...state.schema,
-                    properties: {
-                        ...state.schema.properties,
-                        [payload.id]: {
-                            ...state.schema.properties[payload.id],
-                            title: payload.formData.title
-                        }
-                    },
-                    required: payload.formData.required === true ?
-                        (
-                            state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
-                        ) : (
-                            state.schema.required.filter((item) => item !== payload.id))
-                }
-            };
+            const keys = payload.formData.options ? payload.formData.options.map((i) => i.key) : ''
+            const values = payload.formData.options ? payload.formData.options.map((i) => i.value) : ''
+            const items = payload.formData.items ? payload.formData.items : ''
+
+            if (items) {
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        properties: {
+                            ...state.schema.properties,
+                            [payload.id]: {
+                                ...state.schema.properties[payload.id],
+                                title: payload.formData.title,
+                                items: {
+                                    ...state.schema.properties[payload.id].items,
+                                    enum: items
+                                }
+                            }
+                        },
+                        required: payload.formData.required === true ?
+                            (
+                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
+                            ) : (
+                                state.schema.required.filter((item) => item !== payload.id))
+                    }
+                };
+            } else if (keys || values) {
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        properties: {
+                            ...state.schema.properties,
+                            [payload.id]: {
+                                ...state.schema.properties[payload.id],
+                                title: payload.formData.title,
+                                enum: keys,
+                                enumNames: values,
+                            }
+                        },
+                        required: payload.formData.required === true ?
+                            (
+                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
+                            ) : (
+                                state.schema.required.filter((item) => item !== payload.id))
+                    }
+                };
+            } else {
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        properties: {
+                            ...state.schema.properties,
+                            [payload.id]: {
+                                ...state.schema.properties[payload.id],
+                                title: payload.formData.title,
+                            }
+                        },
+                        required: payload.formData.required === true ?
+                            (
+                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
+                            ) : (
+                                state.schema.required.filter((item) => item !== payload.id))
+                    }
+                };
+
+            }
 
         case ELEMENT_ERROR:
             return {
