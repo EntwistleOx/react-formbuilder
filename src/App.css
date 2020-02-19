@@ -178,6 +178,12 @@ select {
   border-radius: 3px;
 }
 
+#formbuilder-canvas .form-wrap .form-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* Every Form Element in form canvas */
 #formbuilder-canvas .form-group {
   border: #ddd 1px solid;
