@@ -4,31 +4,43 @@ import CanvasElementTemplate from './CanvasElementTemplate'
 import { connect } from 'react-redux';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from "react-jsonschema-form";
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // TODO:
 // Edit option on form title
 // Edit option on form description
 
-const Canvas = ({ schema, uiSchema, formData }) => {
+const Canvas = ({ formSchema }) => {
+
+    const onSave = () => {
+        console.log(formSchema)
+    }
+
     return (
         <Droppable key="Canvas" droppableId="Canvas" type="builder">
             {(provided, snapshot) => (
                 <div id="formbuilder-canvas" ref={provided.innerRef}>
                     <div className="form-wrap">
 
-                        {schema.properties &&
-                            Object.keys(schema.properties).length > 0 ?
+                        {formSchema.schema.properties &&
+                            Object.keys(formSchema.schema.properties).length > 0 ?
                             (
                                 <Form
-                                    schema={schema}
-                                    uiSchema={uiSchema}
-                                    formData={formData}
+                                    schema={formSchema.schema}
+                                    uiSchema={formSchema.uiSchema}
+                                    // formData={formSchema.formData}
                                     // ObjectFieldTemplate={ObjectFieldTemplate}
                                     FieldTemplate={CanvasElementTemplate}
                                     disabled={true}
                                 >
-                                    <div></div>
+                                    <div className='form-buttons'>
+                                        <Link to='/formrender' className="btn btn-info">Probar</Link>
+                                        {/* <button type="button" className="btn btn-info" onClick={onClick}>Probar</button> */}
+
+                                        <button type="button" className="btn btn-success" onClick={onSave}>Guardar</button>
+                                    </div>
+
                                 </Form>
                             )
                             : (
@@ -48,15 +60,11 @@ const Canvas = ({ schema, uiSchema, formData }) => {
 }
 
 Canvas.propTypes = {
-    schema: PropTypes.object.isRequired,
-    uiSchema: PropTypes.object.isRequired,
-    formData: PropTypes.object.isRequired,
+    formSchema: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-    schema: state.form.schema,
-    uiSchema: state.form.uiSchema,
-    formData: state.form.formData
+    formSchema: state.form,
 })
 
 export default connect(mapStateToProps)(Canvas);
