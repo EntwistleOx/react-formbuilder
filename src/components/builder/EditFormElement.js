@@ -27,6 +27,7 @@ const EditFormElement = props => {
         type: 'boolean',
         title: 'Requerido'
       },
+
     }
   });
 
@@ -37,16 +38,50 @@ const EditFormElement = props => {
   const [formData, setFormData] = useState({
     title: '',
     required: false,
-    options: []
   });
 
   useEffect(() => {
     if (!Object.keys(element).length) {
       return props.history.push(`/formbuilder`);
     }
+    // Required Field
     const isRequired = required.find(element => element === id);
+
     let options;
-    if (element[id].enum) {
+    let items;
+    let radioItems;
+    let description;
+
+    //Paragraph field
+    if (element[id].description && element[id].type === 'null') {
+      // add description to schema
+      setSchema({
+        ...schema,
+        properties: {
+          ...schema.properties,
+          description: {
+            "type": "string",
+            "title": "Description"
+          },
+        }
+      });
+
+      // textarea widget 
+      setUiSchema({
+        description: {
+          "ui:widget": "textarea",
+          "ui:options": {
+            "rows": 4
+          }
+        },
+      });
+
+      // description
+      description = element[id].description;
+    };
+
+    // Select Field
+    if (element[id].enum && element[id].enumNames && element[id].type === 'string') {
       // add options to schema
       setSchema({
         ...schema,
@@ -71,6 +106,7 @@ const EditFormElement = props => {
           }
         }
       });
+
       // Options objects
       const keys = element[id].enum;
       const values = element[id].enumNames;
@@ -79,9 +115,41 @@ const EditFormElement = props => {
       }));
     };
 
-    let items;
-    if (element[id].items) {
+    // Radio Field
+    if (element[id].enumNames && element[id].type === 'boolean') {
       // add options to schema
+      setSchema({
+        ...schema,
+        properties: {
+          ...schema.properties,
+          radioItems: {
+            type: "array",
+            title: "Opciones",
+            items: {
+              type: "string",
+            }
+          },
+        }
+      });
+
+      // disabled buttons on uiSchema
+      setUiSchema({
+        radioItems: {
+          "ui:options": {
+            "addable": false,
+            "orderable": false,
+            "removable": false
+          }
+        },
+      });
+
+      // Options objects
+      radioItems = element[id].enumNames;
+    };
+
+    // Checkboxes Field
+    if (element[id].items && element[id].type === 'array') {
+      // add items to schema
       setSchema({
         ...schema,
         properties: {
@@ -95,6 +163,8 @@ const EditFormElement = props => {
           },
         }
       });
+
+      // Items array
       items = element[id].items.enum;
     }
 
@@ -103,7 +173,9 @@ const EditFormElement = props => {
       title: element[id].title ? element[id].title : '...titulo del elemento',
       required: isRequired ? true : false,
       options,
-      items
+      items,
+      radioItems,
+      description
     });
   }, [element, id, props, required]);
 
@@ -111,6 +183,8 @@ const EditFormElement = props => {
     editElement(id, e.formData);
     return props.history.push(`/formbuilder`);
   };
+
+  console.log(uiSchema)
 
   return (
     <div id='editFormElement' className='container'>
