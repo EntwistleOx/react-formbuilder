@@ -78,6 +78,14 @@ const toolkitSchema = [
   },
   {
     id: uuid(),
+    key: 'rut',
+    name: 'Rut',
+    type: 'string',
+    icon: 'fa-stack rut-icon',
+    required: true
+  },
+  {
+    id: uuid(),
     key: 'select',
     name: 'Select',
     type: 'string',

@@ -13,14 +13,20 @@ const ToolkitElement = ({ item, index }) => {
                 <span className="fa-stack fa-1x number-icon">
                     <strong className="fa-stack-1x">123</strong>
                 </span>
-            )
-        } else if (item.key === 'textarea')
+            );
+        } else if (item.key === 'textarea') {
             return (
                 <span className="fa-stack textarea-icon">
                     <i className="far fa-square fa-stack-2x"></i>
                     <i className="fas fa-align-justify fa-stack-1x"></i>
                 </span>
-            )
+            );
+        } else if (item.key === 'rut')
+            return (
+                <span className="fa-stack fa-1x rut-icon">
+                    <strong className="fa-stack-1x">RUT</strong>
+                </span>
+            );
         else {
             return (
                 <i className={item.icon}></i>
