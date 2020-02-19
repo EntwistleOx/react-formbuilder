@@ -17,6 +17,19 @@ const EditFormElement = props => {
   const [schema, setSchema] = useState({
     title: 'Editar Elemento',
     type: 'object',
+    definitions: {
+      option: {
+        type: 'object',
+        properties: {
+          key: {
+            type: 'string'
+          },
+          value: {
+            type: 'string'
+          }
+        }
+      }
+    },
     properties: {
       title: {
         type: 'string',
@@ -28,13 +41,13 @@ const EditFormElement = props => {
       },
       options: {
         type: 'array',
-        title: 'Opciones',
-        items: {
-          type: 'array',
-          //   title: 'Inner list',
-          items: {
-            type: 'string'
+        items: [
+          {
+            $ref: '#/definitions/option'
           }
+        ],
+        additionalItems: {
+          $ref: '#/definitions/option'
         }
       }
     }
@@ -44,7 +57,10 @@ const EditFormElement = props => {
   const [formData, setFormData] = useState({
     title: '',
     required: false,
-    options: [['key', 'value']]
+    options: [
+      ['key', 'value'],
+      ['key1', 'value2']
+    ]
   });
 
   //   useEffect(() => {
