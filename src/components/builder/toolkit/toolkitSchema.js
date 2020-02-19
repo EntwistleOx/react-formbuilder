@@ -63,8 +63,8 @@ const toolkitSchema = [
     type: 'null',
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit.Quod vero magnam quibusdam assumenda, voluptatem quo quos perferendis totam consequatur voluptates.',
+    required: false,
     icon: 'fas fa-paragraph',
-    required: false
   },
   {
     id: uuid(),
@@ -73,7 +73,8 @@ const toolkitSchema = [
     type: 'boolean',
     default: false,
     icon: 'fas fa-dot-circle',
-    required: true
+    required: true,
+    enumNames: ['Opcion Si', 'Opcion No'],
   },
   {
     id: uuid(),
