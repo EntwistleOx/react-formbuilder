@@ -7,7 +7,7 @@ const Navbar = () => {
         <ol className="breadcrumb">
             <li className="breadcrumb-item"><Link to='/forms'>Forms</Link></li>
             <li className="breadcrumb-item"><Link to='/formbuilder'>Form Builder</Link></li>
-            <li className="breadcrumb-item"><Link to='/formrender'>Form Render</Link></li>
+            {/* <li className="breadcrumb-item"><Link to='/formrender'>Form Render</Link></li> */}
         </ol>
     );
 
