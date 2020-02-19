@@ -6,30 +6,18 @@ import PropTypes from 'prop-types';
 
 //TODO:
 // do something when id not exist
+// refactor setformdata on useeffect
+// check effect dependencies
 
 const EditFormElement = props => {
   const id = props.match.params.id;
-
   const { element, required, editElement } = props;
-
   console.log(props);
 
+  // Schema state
   const [schema, setSchema] = useState({
     title: 'Editar Elemento',
     type: 'object',
-    definitions: {
-      option: {
-        type: 'object',
-        properties: {
-          key: {
-            type: 'string'
-          },
-          value: {
-            type: 'string'
-          }
-        }
-      }
-    },
     properties: {
       title: {
         type: 'string',
@@ -39,59 +27,90 @@ const EditFormElement = props => {
         type: 'boolean',
         title: 'Requerido'
       },
-      options: {
-        type: 'array',
-        items: [
-          {
-            $ref: '#/definitions/option'
-          }
-        ],
-        additionalItems: {
-          $ref: '#/definitions/option'
-        }
-      }
     }
   });
 
-  const [uiSchema, setuiSchema] = useState({});
+  // UI state
+  const [uiSchema, setUiSchema] = useState({});
+
+  // Formdata state
   const [formData, setFormData] = useState({
     title: '',
     required: false,
-    options: [
-      ['key', 'value'],
-      ['key1', 'value2']
-    ]
+    options: []
   });
-
-  //   useEffect(() => {
-  //     if (!Object.keys(element).length) {
-  //       return props.history.push(`/formbuilder`);
-  //     }
-  //     const keys = element[id].enum;
-  //     const values = element[id].enumNames;
-  //     setFormData(Object.fromEntries(keys.map((_, i) => [keys[i], values[i]])));
-  //   }, [element, id]);
 
   useEffect(() => {
     if (!Object.keys(element).length) {
       return props.history.push(`/formbuilder`);
     }
     const isRequired = required.find(element => element === id);
+    let options;
+    if (element[id].enum) {
+      // add options to schema
+      setSchema({
+        ...schema,
+        properties: {
+          ...schema.properties,
+          options: {
+            type: 'array',
+            title: 'Options',
+            items: {
+              type: 'object',
+              properties: {
+                key: {
+                  "type": "string",
+                  "title": "Key",
+                },
+                value: {
+                  "type": "string",
+                  "title": "Value",
+                },
+              }
+            }
+          }
+        }
+      });
+      // Options objects
+      const keys = element[id].enum;
+      const values = element[id].enumNames;
+      options = (keys.map((_, i) => {
+        return { key: keys[i], value: values[i] }
+      }));
+    };
+
+    let items;
+    if (element[id].items) {
+      // add options to schema
+      setSchema({
+        ...schema,
+        properties: {
+          ...schema.properties,
+          items: {
+            type: "array",
+            title: "Opciones",
+            items: {
+              type: "string",
+            }
+          },
+        }
+      });
+      items = element[id].items.enum;
+    }
+
     setFormData({
       ...formData,
       title: element[id].title ? element[id].title : '...titulo del elemento',
-      required: isRequired ? true : false
+      required: isRequired ? true : false,
+      options,
+      items
     });
   }, [element, id, props, required]);
 
   const onSubmit = e => {
-    console.log(e.formData);
     editElement(id, e.formData);
     return props.history.push(`/formbuilder`);
   };
-
-  console.log(schema);
-  console.log(formData);
 
   return (
     <div id='editFormElement' className='container'>
