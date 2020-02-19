@@ -8,8 +8,27 @@ const toolkitSchema = [
     name: 'Checkbox',
     type: 'boolean',
     default: false,
-    icon: 'fas fa-check-square',
-    required: true
+    icon: 'fas fa-check',
+    required: true,
+  },
+  {
+    id: uuid(),
+    key: 'checkboxes',
+    name: 'Checkboxes',
+    type: 'array',
+    default: false,
+    icon: 'fas fa-check-double',
+    required: true,
+    items: {
+      type: "string",
+      enum: [
+        "option 1",
+        "option 2",
+        "option 3",
+        "option 4"
+      ]
+    },
+    uniqueItems: true
   },
   {
     id: uuid(),
@@ -45,7 +64,7 @@ const toolkitSchema = [
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit.Quod vero magnam quibusdam assumenda, voluptatem quo quos perferendis totam consequatur voluptates.',
     icon: 'fas fa-paragraph',
-    required: true
+    required: false
   },
   {
     id: uuid(),
