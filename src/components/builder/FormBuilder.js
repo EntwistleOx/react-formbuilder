@@ -36,10 +36,12 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
 
                 // Radio, Checkbox
                 const defaultVal = toolkitSchema[source.index].default
+                const constAttr = toolkitSchema[source.index].const
 
                 // Checkboxes
                 const items = toolkitSchema[source.index].items
                 const uniqueItems = toolkitSchema[source.index].uniqueItems
+                const minItems = toolkitSchema[source.index].minItems
 
                 // Date, Email
                 const format = toolkitSchema[source.index].format
@@ -55,7 +57,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 const newElement = {
                     ...(title && { title }),
                     ...(type && { type }),
-                    // ...(required && { required }),
+                    ...(constAttr && { const: constAttr }),
                     ...(format && { format }),
                     ...(description && { description }),
                     ...(defaultVal && { default: defaultVal }),
@@ -64,6 +66,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                     ...(enumNames && { enumNames }),
                     ...(items && { items }),
                     ...(uniqueItems && { uniqueItems }),
+                    ...(minItems && { minItems }),
                 }
 
                 // Radio, Select and Textarea fields need to set a new uiState
