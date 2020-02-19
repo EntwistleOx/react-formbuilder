@@ -65,8 +65,9 @@ a {
 
 /* FONT AWESOME STACKING ICONS */
 .fa-stack {
-  margin-left: -6px;
-  font-size: 0.6rem;
+  margin-left: -4px;
+  font-size: 0.8rem;
+  width: 2.2rem;
 }
 
 /* FORM STYLES */
