@@ -18,7 +18,7 @@ const toolkitSchema = [
     type: 'array',
     default: false,
     icon: 'fas fa-check-double',
-    required: true,
+    // minItems: 1,
     items: {
       type: "string",
       enum: [
@@ -26,7 +26,7 @@ const toolkitSchema = [
         "option 2",
         "option 3",
         "option 4"
-      ]
+      ],
     },
     uniqueItems: true
   },
