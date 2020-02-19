@@ -36,8 +36,6 @@ const Canvas = ({ formSchema }) => {
                                 >
                                     <div className='form-buttons'>
                                         <Link to='/formrender' className="btn btn-info">Probar</Link>
-                                        {/* <button type="button" className="btn btn-info" onClick={onClick}>Probar</button> */}
-
                                         <button type="button" className="btn btn-success" onClick={onSave}>Guardar</button>
                                     </div>
 
