@@ -55,7 +55,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 const newElement = {
                     ...(title && { title }),
                     ...(type && { type }),
-                    ...(required && { required }),
+                    // ...(required && { required }),
                     ...(format && { format }),
                     ...(description && { description }),
                     ...(defaultVal && { default: defaultVal }),
