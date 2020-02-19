@@ -17,9 +17,10 @@ import {
 
 const initial_state = {
     schema: {
-        type: "object",
+        "$id": "Form",
         title: "Titulo del Formulario",
         description: "Descripcion del Formulario.",
+        type: "object",
         required: [],
         properties: {}
     },
@@ -45,6 +46,10 @@ export default function (state = initial_state, action) {
                             ...state.schema.properties,
                             [payload.id]: payload.newElement
                         },
+                    },
+                    formData: {
+                        ...state.formData,
+                        [payload.id]: ''
                     }
                 };
             } else {
@@ -60,6 +65,10 @@ export default function (state = initial_state, action) {
                             ...state.schema.required,
                             payload.id
                         ]
+                    },
+                    formData: {
+                        ...state.formData,
+                        [payload.id]: ''
                     }
                 };
             }
