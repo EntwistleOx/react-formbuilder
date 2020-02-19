@@ -10,6 +10,8 @@ import uuid from 'uuid/v4';
 
 // TODO:
 // Maybe add placeholders in toolkit objects
+// RUT INPUT
+// EMAIL AUTOSUGEST
 
 const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
 
@@ -30,6 +32,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 // All fields
                 const title = toolkitSchema[source.index].name
                 const type = toolkitSchema[source.index].type
+                const required = toolkitSchema[source.index].required
 
                 // Radio, Checkbox
                 const defaultVal = toolkitSchema[source.index].default
@@ -52,6 +55,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 const newElement = {
                     ...(title && { title }),
                     ...(type && { type }),
+                    ...(required && { required }),
                     ...(format && { format }),
                     ...(description && { description }),
                     ...(defaultVal && { default: defaultVal }),
@@ -59,7 +63,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                     ...(enumVal && { enum: enumVal }),
                     ...(enumNames && { enumNames }),
                     ...(items && { items }),
-                    ...(uniqueItems && { uniqueItems })
+                    ...(uniqueItems && { uniqueItems }),
                 }
 
                 // Radio, Select and Textarea fields need to set a new uiState
