@@ -33,22 +33,36 @@ export default function (state = initial_state, action) {
     const { type, payload } = action;
     const uiOrderKey = "ui:order";
 
+
     switch (type) {
         case ADD_ELEMENT:
-            return {
-                ...state,
-                schema: {
-                    ...state.schema,
-                    properties: {
-                        ...state.schema.properties,
-                        [payload.id]: payload.newElement
-                    },
-                    required: [
-                        ...state.schema.required,
-                        payload.id
-                    ]
-                }
-            };
+            if (payload.newElement.type === 'null') {
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        properties: {
+                            ...state.schema.properties,
+                            [payload.id]: payload.newElement
+                        },
+                    }
+                };
+            } else {
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        properties: {
+                            ...state.schema.properties,
+                            [payload.id]: payload.newElement
+                        },
+                        required: [
+                            ...state.schema.required,
+                            payload.id
+                        ]
+                    }
+                };
+            }
 
         case ADD_UI_ORDER:
             return {
@@ -122,11 +136,13 @@ export default function (state = initial_state, action) {
 
         case EDIT_ELEMENT:
             const stateIndex = state.schema.required.findIndex(element => element === payload.id);
-            const keys = payload.formData.options ? payload.formData.options.map((i) => i.key) : ''
-            const values = payload.formData.options ? payload.formData.options.map((i) => i.value) : ''
-            const items = payload.formData.items ? payload.formData.items : ''
+            const keys = payload.formData.options ? payload.formData.options.map((i) => i.key) : undefined;
+            const values = payload.formData.options ? payload.formData.options.map((i) => i.value) : undefined;
+            const items = payload.formData.items ? payload.formData.items : undefined;
+            const radioItems = payload.formData.radioItems ? payload.formData.radioItems : undefined;
+            const description = payload.formData.description ? payload.formData.description : undefined;
 
-            if (items) {
+            if (items !== undefined) {
                 return {
                     ...state,
                     schema: {
@@ -149,7 +165,50 @@ export default function (state = initial_state, action) {
                                 state.schema.required.filter((item) => item !== payload.id))
                     }
                 };
-            } else if (keys || values) {
+
+            } else if (radioItems !== undefined) {
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        properties: {
+                            ...state.schema.properties,
+                            [payload.id]: {
+                                ...state.schema.properties[payload.id],
+                                title: payload.formData.title,
+                                enumNames: radioItems
+                            }
+                        },
+                        required: payload.formData.required === true ?
+                            (
+                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
+                            ) : (
+                                state.schema.required.filter((item) => item !== payload.id))
+                    }
+                };
+
+            } else if (description !== undefined) {
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        properties: {
+                            ...state.schema.properties,
+                            [payload.id]: {
+                                ...state.schema.properties[payload.id],
+                                title: payload.formData.title,
+                                description
+                            }
+                        },
+                        required: payload.formData.required === true ?
+                            (
+                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
+                            ) : (
+                                state.schema.required.filter((item) => item !== payload.id))
+                    }
+                };
+
+            } else if (keys !== undefined && values !== undefined) {
                 return {
                     ...state,
                     schema: {
@@ -170,6 +229,7 @@ export default function (state = initial_state, action) {
                                 state.schema.required.filter((item) => item !== payload.id))
                     }
                 };
+
             } else {
                 return {
                     ...state,
@@ -189,8 +249,7 @@ export default function (state = initial_state, action) {
                                 state.schema.required.filter((item) => item !== payload.id))
                     }
                 };
-
-            }
+            };
 
         case ELEMENT_ERROR:
             return {
