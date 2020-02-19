@@ -78,6 +78,8 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                             return { "ui:placeholder": "...12345" }
                         case 'email':
                             return { "ui:placeholder": "...my@email.cl" }
+                        case 'rut':
+                            return { "ui:placeholder": "...12.444.555-0" }
                         case 'radio':
                             return { "ui:widget": "radio" }
                         case 'textarea':
