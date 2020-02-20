@@ -22,7 +22,6 @@ const CanvasElementTemplate = (
         deleteElement,
         deleteUiOrder,
         deleteWidget,
-        rawDescription,
         uiState
     } = props
 
@@ -42,7 +41,6 @@ const CanvasElementTemplate = (
         deleteWidget(elementId);
     }
 
-    console.log(props)
     return (
         (id === 'root') ? (
             <Fragment>
