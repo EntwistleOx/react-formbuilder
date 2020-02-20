@@ -6,7 +6,7 @@ import ToolKit from './toolkit/Toolkit';
 import Canvas from './canvas/Canvas';
 import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
-import uuid from 'uuid/v4';
+import shortid from 'shortid';
 
 // TODO:
 // Maybe add placeholders in toolkit objects
@@ -92,7 +92,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                     }
                 };
 
-                const id = uuid();
+                const id = shortid.generate();
                 addElement(id, newElement);
                 addUiOrder(id, newElement);
                 if (newWidget()) {
