@@ -5,6 +5,9 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
+// TODO:
+// Move inline css to styles
+
 const CanvasElementTemplate = (
     props
 ) => {
@@ -50,7 +53,7 @@ const CanvasElementTemplate = (
                     marginTop: '-2rem'
                 }}>
                     <div>
-                        <Link to={`/${id}`}>
+                        <Link to={`/formRoot`}>
                             <i className="fas fa-edit"></i>
                         </Link>
                     </div>
