@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import Form from "react-jsonschema-form";
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const Formrender = ({ formSchema }) => {
@@ -17,12 +16,11 @@ const Formrender = ({ formSchema }) => {
                 <Form
                     schema={formSchema.schema}
                     uiSchema={formSchema.uiSchema}
-                    // formData={formSchema.formData}
                     onSubmit={onSubmit}
+                    // formData={formSchema.formData}
+                    // liveValidate={true}
                     noHtml5Validate={true}
-                // liveValidate={true}
-                >
-                </Form>
+                />
             </div>
         </Fragment>
     )
