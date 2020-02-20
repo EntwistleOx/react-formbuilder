@@ -142,13 +142,27 @@ export default function (state = initial_state, action) {
 
         case EDIT_ELEMENT:
             const stateIndex = state.schema.required.findIndex(element => element === payload.id);
+            const key = payload.formData.key ? payload.formData.key : undefined;
+            const title = payload.formData.title ? payload.formData.title : undefined;
+            const description = payload.formData.description ? payload.formData.description : undefined;
+
             const keys = payload.formData.options ? payload.formData.options.map((i) => i.key) : undefined;
             const values = payload.formData.options ? payload.formData.options.map((i) => i.value) : undefined;
             const items = payload.formData.items ? payload.formData.items : undefined;
-            const radioItems = payload.formData.radioItems ? payload.formData.radioItems : undefined;
-            const description = payload.formData.description ? payload.formData.description : undefined;
 
-            if (items !== undefined) {
+            if (key === 'formRoot') {
+                // Form Title & Description
+                return {
+                    ...state,
+                    schema: {
+                        ...state.schema,
+                        title,
+                        description
+                    }
+                };
+
+            } else if (key === 'checkboxes') {
+                // Checkboxes List
                 return {
                     ...state,
                     schema: {
@@ -172,7 +186,8 @@ export default function (state = initial_state, action) {
                     }
                 };
 
-            } else if (radioItems !== undefined) {
+            } else if (key === 'radio') {
+                // Radio Field
                 return {
                     ...state,
                     schema: {
@@ -182,7 +197,7 @@ export default function (state = initial_state, action) {
                             [payload.id]: {
                                 ...state.schema.properties[payload.id],
                                 title: payload.formData.title,
-                                enumNames: radioItems
+                                enumNames: items
                             }
                         },
                         required: payload.formData.required === true ?
@@ -193,7 +208,8 @@ export default function (state = initial_state, action) {
                     }
                 };
 
-            } else if (description !== undefined) {
+            } else if (key === 'paragraph') {
+                // Paragraph
                 return {
                     ...state,
                     schema: {
@@ -202,19 +218,14 @@ export default function (state = initial_state, action) {
                             ...state.schema.properties,
                             [payload.id]: {
                                 ...state.schema.properties[payload.id],
-                                title: payload.formData.title,
                                 description
                             }
-                        },
-                        required: payload.formData.required === true ?
-                            (
-                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
-                            ) : (
-                                state.schema.required.filter((item) => item !== payload.id))
+                        }
                     }
                 };
 
-            } else if (keys !== undefined && values !== undefined) {
+            } else if (key === 'select') {
+                // Select List
                 return {
                     ...state,
                     schema: {
