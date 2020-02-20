@@ -18,7 +18,6 @@ const toolkitSchema = [
     type: 'array',
     default: false,
     icon: 'fas fa-check-double',
-    // minItems: 1,
     items: {
       type: "string",
       enum: [
