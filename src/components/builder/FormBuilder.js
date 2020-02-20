@@ -32,7 +32,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 // All fields
                 const title = toolkitSchema[source.index].name
                 const type = toolkitSchema[source.index].type
-                const required = toolkitSchema[source.index].required
+                const key = toolkitSchema[source.index].key
 
                 // Radio, Checkbox
                 const defaultVal = toolkitSchema[source.index].default
@@ -41,7 +41,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 // Checkboxes
                 const items = toolkitSchema[source.index].items
                 const uniqueItems = toolkitSchema[source.index].uniqueItems
-                const minItems = toolkitSchema[source.index].minItems
+                // const minItems = toolkitSchema[source.index].minItems
 
                 // Date, Email
                 const format = toolkitSchema[source.index].format
@@ -57,20 +57,18 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
                 const newElement = {
                     ...(title && { title }),
                     ...(type && { type }),
-                    ...(constAttr && { const: constAttr }),
-                    ...(format && { format }),
-                    ...(description && { description }),
+                    ...(key && { key }),
                     ...(defaultVal && { default: defaultVal }),
-                    ...(format && { format }),
-                    ...(enumVal && { enum: enumVal }),
-                    ...(enumNames && { enumNames }),
+                    ...(constAttr && { const: constAttr }),
                     ...(items && { items }),
                     ...(uniqueItems && { uniqueItems }),
-                    ...(minItems && { minItems }),
+                    ...(format && { format }),
+                    ...(description && { description }),
+                    ...(enumVal && { enum: enumVal }),
+                    ...(enumNames && { enumNames }),
                 }
 
                 // Radio, Select and Textarea fields need to set a new uiState
-                const key = toolkitSchema[source.index].key
                 const newWidget = () => {
                     switch (key) {
                         case 'select':
