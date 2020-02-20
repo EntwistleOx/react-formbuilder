@@ -19,6 +19,7 @@ const CanvasElementTemplate = (
         deleteElement,
         deleteUiOrder,
         deleteWidget,
+        rawDescription,
         uiState
     } = props
 
@@ -38,9 +39,22 @@ const CanvasElementTemplate = (
         deleteWidget(elementId);
     }
 
+    console.log(props)
     return (
         (id === 'root') ? (
             <Fragment>
+                <div style={{
+                    position: 'relative',
+                    marginLeft: '97%',
+                    top: '26px',
+                    marginTop: '-2rem'
+                }}>
+                    <div>
+                        <Link to={`/${id}`}>
+                            <i className="fas fa-edit"></i>
+                        </Link>
+                    </div>
+                </div>
                 {children}
             </Fragment>
         ) : (
