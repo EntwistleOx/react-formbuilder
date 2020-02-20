@@ -266,8 +266,6 @@ const EditFormElement = props => {
     return props.history.push(`/formbuilder`);
   };
 
-  console.log('edit', root)
-
   return (
     <div id='editFormElement' className='container'>
       <Form

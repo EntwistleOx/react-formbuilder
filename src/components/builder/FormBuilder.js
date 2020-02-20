@@ -10,7 +10,6 @@ import shortid from 'shortid';
 
 // TODO:
 // Maybe add placeholders in toolkit objects
-// RUT INPUT
 // EMAIL AUTOSUGEST
 
 const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
@@ -106,7 +105,6 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
 
     return (
         <Fragment>
-            <h2>Builder</h2>
             <div id="formbuilder" className="container">
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Canvas />

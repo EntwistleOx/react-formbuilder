@@ -121,7 +121,6 @@ const Formrender = ({ formSchema }) => {
 
     return (
         <Fragment>
-            <h2>render</h2>
             <div className="container">
                 <Form
                     schema={formSchema.schema}
