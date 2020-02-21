@@ -45,7 +45,7 @@ const Formrender = ({ formSchema }) => {
     //     16003145-0
     //     16158088-1
 
-    Object.keys(formData).forEach(function(item) {
+    Object.keys(formData).forEach(function (item) {
       // console.log(item); // key
       // console.log(formData[item]); // value
 
@@ -131,14 +131,16 @@ const Formrender = ({ formSchema }) => {
         <Form
           schema={formSchema.schema}
           uiSchema={formSchema.uiSchema}
-          onSubmit={onSubmit}
+          // onSubmit={onSubmit}
           // formData={formSchema.formData}
           // liveValidate={true}
           transformErrors={transformErrors}
           validate={validate}
           showErrorList={false}
           noHtml5Validate={true}
-        />
+        >
+          <button type="submit" className="btn btn-success">Enviar</button>
+        </Form>
       </div>
     </Fragment>
   );
