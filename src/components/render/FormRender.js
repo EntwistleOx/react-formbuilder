@@ -126,6 +126,7 @@ const Formrender = ({ formSchema }) => {
           // formData={formSchema.formData}
           // liveValidate={true}
           validate={validate}
+          showErrorList={false}
           noHtml5Validate={true}
         />
       </div>
