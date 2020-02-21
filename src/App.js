@@ -19,14 +19,16 @@ function App() {
     <Provider store={store}>
       <Router>
         <Navbar />
-        <Route exact path="/" component={Forms} />
-        <Route exact path="/forms" component={Forms} />
-        <Switch>
-          <Route exact path="/formbuilder" component={FormBuilder} />
-          <Route exact path="/formbuilder/:id" component={EditFormElement} />
-          <Route exact path="/formrender" component={FormRender} />
-          <Route exact path="/test-schema" component={TestSchema} />
-        </Switch>
+        <div className='container'>
+          <Route exact path="/" component={Forms} />
+          <Route exact path="/forms" component={Forms} />
+          <Switch>
+            <Route exact path="/formbuilder" component={FormBuilder} />
+            <Route exact path="/formbuilder/:id" component={EditFormElement} />
+            <Route exact path="/formrender" component={FormRender} />
+            <Route exact path="/test-schema" component={TestSchema} />
+          </Switch>
+        </div>
       </Router>
     </Provider>
   );
