@@ -17,7 +17,6 @@ const Canvas = ({ formSchema }) => {
             {(provided, snapshot) => (
                 <div id="formbuilder-canvas" ref={provided.innerRef}>
                     <div className="form-wrap">
-
                         {formSchema.schema.properties &&
                             Object.keys(formSchema.schema.properties).length > 0 ?
                             (
@@ -29,7 +28,7 @@ const Canvas = ({ formSchema }) => {
                                     disabled={true}
                                 >
                                     <div className='form-buttons'>
-                                        <Link to='/formrender' className="btn btn-info">Probar</Link>
+                                        <Link to='/formrender' className="btn btn-default">Probar</Link>
                                         <button type="button" className="btn btn-success" onClick={onSave}>Guardar</button>
                                     </div>
 
