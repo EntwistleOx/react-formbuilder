@@ -267,13 +267,15 @@ const EditFormElement = props => {
   };
 
   return (
-    <div id='editFormElement' className='container'>
+    <div id='editFormElement'>
       <Form
         schema={schema}
         uiSchema={uiSchema}
         formData={formData}
-        onSubmit={onSubmit}
-      />
+      // onSubmit={onSubmit}
+      >
+        <button type="submit" className="btn btn-success">Enviar</button>
+      </Form>
     </div>
   );
 };
