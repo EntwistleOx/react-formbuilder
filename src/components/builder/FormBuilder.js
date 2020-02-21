@@ -1,6 +1,11 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { addElement, addUiOrder, addWidget, reorderElement } from '../../actions/form';
+import {
+  addElement,
+  addUiOrder,
+  addWidget,
+  reorderElement
+} from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
 import ToolKit from './toolkit/Toolkit';
 import Canvas from './canvas/Canvas';
@@ -13,113 +18,122 @@ import shortid from 'shortid';
 // EMAIL AUTOSUGEST
 
 const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
+  const onDragEnd = result => {
+    const { source, destination } = result;
 
-    const onDragEnd = result => {
-        const { source, destination } = result;
+    // dropped outside the list
+    if (!destination) {
+      return;
+    }
 
-        // dropped outside the list
-        if (!destination) {
-            return;
-        }
+    switch (source.droppableId) {
+      case 'Canvas':
+        reorderElement(source.index, destination.index);
+        break;
+      case 'ToolkitItems':
+        // All fields
+        const title = toolkitSchema[source.index].name;
+        const type = toolkitSchema[source.index].type;
+        const key = toolkitSchema[source.index].key;
 
-        switch (source.droppableId) {
-            case 'Canvas':
-                reorderElement(source.index, destination.index)
-                break;
-            case 'ToolkitItems':
+        // Radio, Checkbox
+        const defaultVal = toolkitSchema[source.index].default;
+        const constAttr = toolkitSchema[source.index].const;
 
-                // All fields
-                const title = toolkitSchema[source.index].name
-                const type = toolkitSchema[source.index].type
-                const key = toolkitSchema[source.index].key
+        // Checkboxes
+        const items = toolkitSchema[source.index].items;
+        const uniqueItems = toolkitSchema[source.index].uniqueItems;
+        // const minItems = toolkitSchema[source.index].minItems
 
-                // Radio, Checkbox
-                const defaultVal = toolkitSchema[source.index].default
-                const constAttr = toolkitSchema[source.index].const
+        // Date, Email
+        const format = toolkitSchema[source.index].format;
 
-                // Checkboxes
-                const items = toolkitSchema[source.index].items
-                const uniqueItems = toolkitSchema[source.index].uniqueItems
-                // const minItems = toolkitSchema[source.index].minItems
+        // Paragraph
+        const description = toolkitSchema[source.index].description;
 
-                // Date, Email
-                const format = toolkitSchema[source.index].format
+        // Select
+        const enumVal = toolkitSchema[source.index].enum;
+        const enumNames = toolkitSchema[source.index].enumNames;
 
-                // Paragraph
-                const description = toolkitSchema[source.index].description
+        // Create a new object depending if values exists
+        const newElement = {
+          ...(title && { title }),
+          ...(type && { type }),
+          ...(key && { key }),
+          ...(defaultVal && { default: defaultVal }),
+          ...(constAttr && { const: constAttr }),
+          ...(items && { items }),
+          ...(uniqueItems && { uniqueItems }),
+          ...(format && { format }),
+          ...(description && { description }),
+          ...(enumVal && { enum: enumVal }),
+          ...(enumNames && { enumNames })
+        };
 
-                // Select
-                const enumVal = toolkitSchema[source.index].enum
-                const enumNames = toolkitSchema[source.index].enumNames
-
-                // Create a new object depending if values exists
-                const newElement = {
-                    ...(title && { title }),
-                    ...(type && { type }),
-                    ...(key && { key }),
-                    ...(defaultVal && { default: defaultVal }),
-                    ...(constAttr && { const: constAttr }),
-                    ...(items && { items }),
-                    ...(uniqueItems && { uniqueItems }),
-                    ...(format && { format }),
-                    ...(description && { description }),
-                    ...(enumVal && { enum: enumVal }),
-                    ...(enumNames && { enumNames }),
-                }
-
-                // Radio, Select and Textarea fields need to set a new uiState
-                const newWidget = () => {
-                    switch (key) {
-                        case 'select':
-                            return { "ui:placeholder": "...seleciona" }
-                        case 'text':
-                            return { "ui:placeholder": "...campo de texto" }
-                        case 'number':
-                            return { "ui:placeholder": "...12345" }
-                        case 'email':
-                            return { "ui:placeholder": "...my@email.cl" }
-                        case 'rut':
-                            return { "ui:placeholder": "...12.444.555-0" }
-                        case 'radio':
-                            return { "ui:widget": "radio" }
-                        case 'textarea':
-                            return { "ui:widget": "textarea", "ui:placeholder": "...area de texto" }
-                        case 'checkboxes':
-                            return { "ui:widget": "checkboxes" }
-                        default:
-                            break;
-                    }
-                };
-
-                const id = shortid.generate();
-                addElement(id, newElement);
-                addUiOrder(id, newElement);
-                if (newWidget()) {
-                    addWidget(id, newWidget());
-                }
-                break;
+        // Radio, Select and Textarea fields need to set a new uiState
+        const newWidget = () => {
+          switch (key) {
+            case 'select':
+              return { 'ui:placeholder': '...seleciona' };
+            case 'text':
+              return { 'ui:placeholder': '...campo de texto' };
+            case 'number':
+              return { 'ui:placeholder': '...12345' };
+            case 'email':
+              return { 'ui:placeholder': '...my@email.cl' };
+            case 'rut':
+              return { 'ui:placeholder': '...12.444.555-0' };
+            case 'radio':
+              return { 'ui:widget': 'radio' };
+            case 'textarea':
+              return {
+                'ui:widget': 'textarea',
+                'ui:placeholder': '...area de texto'
+              };
+            case 'checkboxes':
+              return { 'ui:widget': 'checkboxes' };
             default:
-                break;
-        }
-    };
+              break;
+          }
+        };
 
-    return (
-        <Fragment>
-            <div id="formbuilder" className="container">
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Canvas />
-                    <ToolKit toolkitSchema={toolkitSchema} />
-                </DragDropContext>
-            </div>
-        </Fragment>
-    )
+        shortid.characters(
+          '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
+        );
+        const id = shortid.generate();
+        addElement(id, newElement);
+        addUiOrder(id, newElement);
+        if (newWidget()) {
+          addWidget(id, newWidget());
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  return (
+    <Fragment>
+      <div id='formbuilder' className='container'>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Canvas />
+          <ToolKit toolkitSchema={toolkitSchema} />
+        </DragDropContext>
+      </div>
+    </Fragment>
+  );
 };
 
 Formbuilder.propTypes = {
-    addElement: PropTypes.func.isRequired,
-    addUiOrder: PropTypes.func.isRequired,
-    addWidget: PropTypes.func.isRequired,
-    reorderElement: PropTypes.func.isRequired,
+  addElement: PropTypes.func.isRequired,
+  addUiOrder: PropTypes.func.isRequired,
+  addWidget: PropTypes.func.isRequired,
+  reorderElement: PropTypes.func.isRequired
 };
 
-export default connect(null, { addElement, addUiOrder, addWidget, reorderElement })(Formbuilder);
+export default connect(null, {
+  addElement,
+  addUiOrder,
+  addWidget,
+  reorderElement
+})(Formbuilder);
