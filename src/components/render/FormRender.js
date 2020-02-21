@@ -1,9 +1,20 @@
-import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
 
-const Formrender = ({ formSchema }) => {
+// TODO: 
+// set initial state in correct way 
+// load form state correctly
+
+const FormRender = ({ form, goBack }) => {
+
+  const [renderState, setRenderState] = useState({});
+
+  useEffect(() => {
+    setRenderState(form)
+  }, [])
+
   function transformErrors(errors) {
     return errors.map(error => {
       if (error.name === 'required') {
@@ -16,63 +27,42 @@ const Formrender = ({ formSchema }) => {
   const validate = (formData, errors) => {
     // RUT validos
     //     10864629-2
-    //     11726111-5
-    //     13067971-4
-    //     15223952-1
-    //     15496120-8
-    //     16003145-k
     //     16158088-0
-    //     16931829-8
-    //     17577561-7
-    //     19791795-4
-    //     20181773-0
-    //     20309424-8
-    //     21705755-8
     //     23023518-k
-    //     23559651-2
-    //     24261604-9
-    //     24901269-6
     //     6709127-2
-    //     8139919-0
-    //     8702020-7
 
     // RUT invalidos
     //     10864629-1
     //     11726111-6
-    //     13067971-6
-    //     15223952-2
-    //     15496120-9
     //     16003145-0
     //     16158088-1
 
     Object.keys(formData).forEach(function (item) {
-      // console.log(item); // key
-      // console.log(formData[item]); // value
 
       const key = item;
       const val = formData[item];
 
-      if (formSchema.schema.properties[item].key === 'rut') {
+      if (renderState && renderState.schema.properties[item].key === 'rut') {
         if (val === undefined) {
           return;
         }
 
         if (!val || val.trim().length < 3) {
-          errors[key].addError('Rut invalido');
+          errors[key].addError('Rut invalido.');
           return;
         }
 
         const rutLimpio = val.replace(/[^0-9kK-]/g, '');
 
         if (rutLimpio.length < 3) {
-          errors[key].addError('Rut invalido');
+          errors[key].addError('Rut invalido.');
           return;
         }
 
         const split = rutLimpio.split('-');
 
         if (split.length !== 2) {
-          errors[key].addError('Rut invalido');
+          errors[key].addError('Rut invalido.');
           return;
         }
 
@@ -114,7 +104,7 @@ const Formrender = ({ formSchema }) => {
         if (dvCalc == dgv) {
           return errors;
         } else {
-          errors[key].addError('Rut invalido');
+          errors[key].addError('Rut invalido.');
         }
       }
     });
@@ -129,8 +119,8 @@ const Formrender = ({ formSchema }) => {
     <Fragment>
       <div className='container'>
         <Form
-          schema={formSchema.schema}
-          uiSchema={formSchema.uiSchema}
+          schema={renderState.schema ? renderState.schema : {}}
+          uiSchema={renderState.uiSchema ? renderState.uiSchema : {}}
           // onSubmit={onSubmit}
           // formData={formSchema.formData}
           // liveValidate={true}
@@ -139,19 +129,19 @@ const Formrender = ({ formSchema }) => {
           showErrorList={false}
           noHtml5Validate={true}
         >
-          <button type="submit" className="btn btn-success">Enviar</button>
+          <div className='form-buttons'>
+            <Link to={goBack} className="btn btn-default">Volver</Link>
+            <button type="submit" className="btn btn-success">Enviar</button>
+          </div>
         </Form>
       </div>
     </Fragment>
   );
 };
 
-Formrender.propTypes = {
-  formSchema: PropTypes.object.isRequired
-};
+FormRender.propTypes = {
+  form: PropTypes.object.isRequired,
+  goBack: PropTypes.string.isRequired,
+}
 
-const mapStateToProps = state => ({
-  formSchema: state.form
-});
-
-export default connect(mapStateToProps)(Formrender);
+export default FormRender;
