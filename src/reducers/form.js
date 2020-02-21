@@ -1,3 +1,4 @@
+import shortid from 'shortid';
 import {
     ADD_ELEMENT,
     ADD_UI_ORDER,
@@ -8,39 +9,55 @@ import {
     DELETE_WIDGET,
     EDIT_ELEMENT,
     ELEMENT_ERROR,
-    GET_ELEMENT
+    GET_ELEMENT,
+    CLEAR_FORM,
+    CREATE_FORM,
+    LOAD_FORM
 } from '../actions/types';
+
+shortid.characters(
+    '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
+);
 
 // TODO: 
 // refactor required field in edit element
+// put short id in utils file
 
-
-const initial_state = {
-    schema: {
-        // "$id": "Form", -> stop the validation if schema change
-        title: "Titulo del Formulario",
-        description: "Descripcion del Formulario.",
-        type: "object",
-        required: [],
-        properties: {}
-    },
-    uiSchema: {
-        "ui:order": []
-    },
-    formData: {},
-};
+const initial_state = {};
 
 export default function (state = initial_state, action) {
     const { type, payload } = action;
     const uiOrderKey = "ui:order";
 
-    // formdata initial states:
-    // checkbox -> false
-    // checkboxes -> []
-    // email -> undefined
-    // number, date -> ''
-
     switch (type) {
+        case CLEAR_FORM:
+            return {}
+
+        case LOAD_FORM:
+            return {
+                ...state,
+                schema: payload.schema,
+                uiSchema: payload.uiSchema,
+                formData: payload.formData,
+            }
+
+        case CREATE_FORM:
+            return {
+                ...state,
+                schema: {
+                    idPrefix: shortid.generate(),
+                    title: "Titulo del Formulario",
+                    description: "Descripcion del Formulario.",
+                    type: "object",
+                    required: [],
+                    properties: {}
+                },
+                uiSchema: {
+                    "ui:order": []
+                },
+                formData: {},
+            }
+
         case ADD_ELEMENT:
             if (payload.newElement.type === 'null') {
                 return {
