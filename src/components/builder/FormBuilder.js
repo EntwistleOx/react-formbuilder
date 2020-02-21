@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
+  createForm,
   addElement,
   addUiOrder,
   addWidget,
@@ -13,11 +14,25 @@ import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
 import shortid from 'shortid';
 
+shortid.characters(
+  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
+);
+
 // TODO:
+// action must be a prop
+// do something when dnd an element before dnd a form
 // Maybe add placeholders in toolkit objects
 // EMAIL AUTOSUGEST
 
-const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
+const Formbuilder = ({
+  form,
+  createForm,
+  addElement,
+  addUiOrder,
+  addWidget,
+  reorderElement
+}) => {
+
   const onDragEnd = result => {
     const { source, destination } = result;
 
@@ -97,14 +112,15 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
           }
         };
 
-        shortid.characters(
-          '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
-        );
-        const id = shortid.generate();
-        addElement(id, newElement);
-        addUiOrder(id, newElement);
-        if (newWidget()) {
-          addWidget(id, newWidget());
+        if (key === 'form') {
+          createForm();
+        } else {
+          const id = shortid.generate();
+          addElement(id, newElement);
+          addUiOrder(id, newElement);
+          if (newWidget()) {
+            addWidget(id, newWidget());
+          }
         }
         break;
       default:
@@ -116,7 +132,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
     <Fragment>
       <div id='formbuilder'>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Canvas />
+          <Canvas form={form} action={'add'} />
           <ToolKit toolkitSchema={toolkitSchema} />
         </DragDropContext>
       </div>
@@ -131,7 +147,12 @@ Formbuilder.propTypes = {
   reorderElement: PropTypes.func.isRequired
 };
 
-export default connect(null, {
+const mapStateToProps = (state) => ({
+  form: state.form
+})
+
+export default connect(mapStateToProps, {
+  createForm,
   addElement,
   addUiOrder,
   addWidget,
