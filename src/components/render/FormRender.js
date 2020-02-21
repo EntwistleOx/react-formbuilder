@@ -4,6 +4,15 @@ import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
 
 const Formrender = ({ formSchema }) => {
+  function transformErrors(errors) {
+    return errors.map(error => {
+      if (error.name === 'required') {
+        error.message = 'El campo es requerido.';
+      }
+      return error;
+    });
+  }
+
   const validate = (formData, errors) => {
     // RUT validos
     //     10864629-2
@@ -125,6 +134,7 @@ const Formrender = ({ formSchema }) => {
           onSubmit={onSubmit}
           // formData={formSchema.formData}
           // liveValidate={true}
+          transformErrors={transformErrors}
           validate={validate}
           showErrorList={false}
           noHtml5Validate={true}
