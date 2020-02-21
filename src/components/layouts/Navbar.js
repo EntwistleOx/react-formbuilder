@@ -3,16 +3,19 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
 
-    const links = (
-        <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link to='/forms'>Forms</Link></li>
-            <li className="breadcrumb-item"><Link to='/formbuilder'>Form Builder</Link></li>
-        </ol>
-    );
-
     return (
-        <nav className="navbar">
-            {links}
+        <nav className="navbar navbar-default">
+            <div className="container-fluid">
+                <div className="navbar-header">
+                    <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span className="sr-only">Toggle navigation</span>
+                        <span className="icon-bar"></span>
+                        <span className="icon-bar"></span>
+                        <span className="icon-bar"></span>
+                    </button>
+                    <Link to='/forms' className="navbar-brand">Formularios</Link>
+                </div>
+            </div>
         </nav>
     )
 }
