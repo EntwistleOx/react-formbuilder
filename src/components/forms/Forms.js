@@ -1,9 +1,20 @@
-import React, { Fragment } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { clearForm } from '../../actions/form';
+import FormItem from './FormItem';
+import PropTypes from 'prop-types';
 
-// import PropTypes from 'prop-types'
+// TODO:
+// edit form by id
+// view form by id
 
-const Forms = props => {
+const Forms = ({ forms, clearForm }) => {
+
+    useEffect(() => {
+        clearForm()
+    }, [])
+
     return (
         <Fragment>
             <div className="page-header" style={{
@@ -12,99 +23,51 @@ const Forms = props => {
                 alignItems: "center"
             }}>
                 <h1 >Formularios</h1>
-                <Link to="/formbuilder" class="btn btn-default">Crear</Link>
+                <Link to="/formbuilder" className="btn btn-default">Crear</Link>
             </div>
-            <table class="table table-striped table-hover  form-list">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Titulo</th>
-                        <th>Descripcion</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>
-                            <Link to={`/formrender/id`}>
-                                <i class="far fa-eye"></i>
-                            </Link>
 
-                            <Link to={`/formbuilder/id`}>
-                                <i className="fas fa-edit"></i>
-                            </Link>
-
-                            <Link to="#!">
-                                <i onClick={''} className="fas fa-trash-alt"></i>
-                            </Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>
-                            <Link to={`/formrender/id`}>
-                                <i class="far fa-eye"></i>
-                            </Link>
-
-                            <Link to={`/formbuilder/id`}>
-                                <i className="fas fa-edit"></i>
-                            </Link>
-
-                            <Link to="#!">
-                                <i onClick={''} className="fas fa-trash-alt"></i>
-                            </Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>
-                            <Link to={`/formrender/id`}>
-                                <i class="far fa-eye"></i>
-                            </Link>
-
-                            <Link to={`/formbuilder/id`}>
-                                <i className="fas fa-edit"></i>
-                            </Link>
-
-                            <Link to="#!">
-                                <i onClick={''} className="fas fa-trash-alt"></i>
-                            </Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Column content</td>
-                        <td>Column content</td>
-                        <td>
-                            <Link to={`/formrender/id`}>
-                                <i class="far fa-eye"></i>
-                            </Link>
-
-                            <Link to={`/formbuilder/id`}>
-                                <i className="fas fa-edit"></i>
-                            </Link>
-
-                            <Link to="#!">
-                                <i onClick={''} className="fas fa-trash-alt"></i>
-                            </Link>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
+            {
+                forms.length > 0 ?
+                    (
+                        <table className="table table-striped table-hover  form-list">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Titulo</th>
+                                    <th>Descripcion</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    forms.map((form, i) => (
+                                        <FormItem key={form.schema.idPrefix} form={form} index={i + 1} />
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    ) : (
+                        <div className="well">
+                            <h4><strong>Aviso!</strong></h4>
+                            <p>No hay contenido disponible.
+                                <Link to="/formbuilder" className="alert-link">
+                                    {' '}Comienza a agregar formularios aca
+                                </Link>.
+                            </p>
+                        </div>
+                    )
+            }
         </Fragment>
     )
 }
 
-// Forms.propTypes = {
+Forms.propTypes = {
+    forms: PropTypes.array.isRequired,
+    clearForm: PropTypes.func.isRequired,
+}
 
-// }
+const mapStateToProps = (state) => ({
+    forms: state.forms,
+})
 
-export default Forms
+export default connect(mapStateToProps, { clearForm })(Forms);
