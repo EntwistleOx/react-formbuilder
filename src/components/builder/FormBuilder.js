@@ -114,7 +114,7 @@ const Formbuilder = ({ addElement, addUiOrder, addWidget, reorderElement }) => {
 
   return (
     <Fragment>
-      <div id='formbuilder' className='container'>
+      <div id='formbuilder'>
         <DragDropContext onDragEnd={onDragEnd}>
           <Canvas />
           <ToolKit toolkitSchema={toolkitSchema} />
