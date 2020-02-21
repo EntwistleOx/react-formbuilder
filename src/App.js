@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layouts/Navbar';
-import Forms from './components/forms/Forms';
-import FormRender from './components/render/FormRender';
 import FormBuilder from './components/builder/FormBuilder';
+import FormBuilderRender from './components/builder/FormBuilderRender';
 import EditFormElement from './components/builder/EditFormElement';
+import Forms from './components/forms/Forms';
+import FormItemRender from './components/forms/FormItemRender';
+import FormEdit from './components/forms/FormEdit';
 import TestSchema from './components/TestSchema';
 
 // CSS
@@ -23,11 +25,11 @@ function App() {
           <Route exact path="/" component={Forms} />
           <Switch>
             <Route exact path="/formbuilder" component={FormBuilder} />
+            <Route exact path="/formbuilder-render" component={FormBuilderRender} />
             <Route exact path="/formbuilder/:id" component={EditFormElement} />
-            <Route exact path="/formrender" component={FormRender} />
             <Route exact path="/forms" component={Forms} />
-            <Route exact path="/form-view/:id" component={FormRender} />
-            <Route exact path="/form-edit/:id" component={FormBuilder} />
+            <Route exact path="/form-view/:id" component={FormItemRender} />
+            <Route exact path="/form-edit/:id" component={FormEdit} />
             <Route exact path="/test-schema" component={TestSchema} />
           </Switch>
         </div>
