@@ -1,15 +1,32 @@
 import React, { Fragment } from 'react';
-import CanvasElementTemplate from './CanvasElementTemplate'
+import CanvasElementTemplate from './CanvasElementTemplate';
+import { addForm, updateForm, clearForm } from '../../../actions/form';
 import { connect } from 'react-redux';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from "react-jsonschema-form";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const Canvas = ({ formSchema }) => {
+// TODO:
+// onSave must add a form OR update form
+
+
+const Canvas = (props) => {
+
+    const { form, addForm, updateForm, clearForm, action } = props;
+
+    let history = useHistory();
 
     const onSave = () => {
-        console.log(formSchema)
+        if (action === 'add') {
+            console.log('add')
+            addForm(form);
+        } else {
+            console.log('upodate')
+            updateForm(form);
+        }
+        clearForm()
+        history.push(`/forms`);
     }
 
     return (
@@ -17,21 +34,30 @@ const Canvas = ({ formSchema }) => {
             {(provided, snapshot) => (
                 <div id="formbuilder-canvas" ref={provided.innerRef}>
                     <div className="form-wrap">
-                        {formSchema.schema.properties &&
-                            Object.keys(formSchema.schema.properties).length > 0 ?
+                        {form.schema &&
+                            Object.keys(form.schema).length > 0 ?
                             (
                                 <Form
-                                    schema={formSchema.schema}
-                                    uiSchema={formSchema.uiSchema}
-                                    // formData={formSchema.formData}
+                                    schema={form.schema}
+                                    uiSchema={form.uiSchema}
+                                    // formData={form.formData}
                                     FieldTemplate={CanvasElementTemplate}
                                     disabled={true}
                                 >
+                                    {
+                                        Object.keys(form.schema.properties).length < 1 ? (
+                                            <Fragment>
+                                                <div className="notice">
+                                                    Arrastra los elementos del menu aca
+                                                </div>
+                                            </Fragment>
+                                        ) : ''
+                                    }
+                                    <hr />
                                     <div className='form-buttons'>
-                                        <Link to='/formrender' className="btn btn-default">Probar</Link>
+                                        <Link to='/formbuilder-render' className="btn btn-default">Probar</Link>
                                         <button type="button" className="btn btn-success" onClick={onSave}>Guardar</button>
                                     </div>
-
                                 </Form>
                             )
                             : (
@@ -51,11 +77,10 @@ const Canvas = ({ formSchema }) => {
 }
 
 Canvas.propTypes = {
-    formSchema: PropTypes.object.isRequired,
+    form: PropTypes.object.isRequired,
+    addForm: PropTypes.func.isRequired,
+    updateForm: PropTypes.func.isRequired,
+    clearForm: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
-    formSchema: state.form,
-})
-
-export default connect(mapStateToProps)(Canvas);
+export default connect(null, { addForm, updateForm, clearForm })(Canvas);
