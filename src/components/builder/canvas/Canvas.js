@@ -1,15 +1,10 @@
 import React, { Fragment } from 'react';
 import CanvasElementTemplate from './CanvasElementTemplate'
-// import ObjectFieldTemplate from './ObjectFieldTemplate'
 import { connect } from 'react-redux';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from "react-jsonschema-form";
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
-// TODO:
-// Edit option on form title
-// Edit option on form description
 
 const Canvas = ({ formSchema }) => {
 
@@ -30,7 +25,6 @@ const Canvas = ({ formSchema }) => {
                                     schema={formSchema.schema}
                                     uiSchema={formSchema.uiSchema}
                                     // formData={formSchema.formData}
-                                    // ObjectFieldTemplate={ObjectFieldTemplate}
                                     FieldTemplate={CanvasElementTemplate}
                                     disabled={true}
                                 >

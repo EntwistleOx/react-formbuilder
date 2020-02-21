@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 // TODO:
-// Move inline css to styles
+// Move inline css to styles file
 
 const CanvasElementTemplate = (
     props
@@ -51,7 +51,7 @@ const CanvasElementTemplate = (
                     marginTop: '-2rem'
                 }}>
                     <div>
-                        <Link to={`/formRoot`}>
+                        <Link to={`/formbuilder/formRoot`}>
                             <i className="fas fa-edit"></i>
                         </Link>
                     </div>
@@ -69,7 +69,7 @@ const CanvasElementTemplate = (
                             <div style={{ display: 'flex', justifyContent: 'space-between', userSelect: 'none' }}>
                                 <label htmlFor={id}>{label} {required ? "*" : null}</label>
                                 <div>
-                                    <Link to={`/${elementId}`}>
+                                    <Link to={`/formbuilder/${elementId}`}>
                                         <i className="fas fa-edit"></i>
                                     </Link>
 
