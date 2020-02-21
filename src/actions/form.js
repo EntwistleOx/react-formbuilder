@@ -1,4 +1,5 @@
 import {
+    CREATE_FORM,
     ADD_ELEMENT,
     ADD_UI_ORDER,
     ADD_WIDGET,
@@ -8,8 +9,95 @@ import {
     DELETE_WIDGET,
     ELEMENT_ERROR,
     EDIT_ELEMENT,
-    GET_ELEMENT
+    GET_ELEMENT,
+    CLEAR_FORM,
+    ADD_FORM,
+    UPDATE_FORM,
+    DELETE_FORM,
+    LOAD_FORM
 } from './types';
+
+// clear form builder
+export const clearForm = () => dispatch => {
+    dispatch({ type: CLEAR_FORM });
+}
+
+// clear form builder
+export const createForm = () => dispatch => {
+    dispatch({ type: CREATE_FORM });
+}
+
+// add a form
+export const addForm = (formData) => dispatch => {
+    try {
+        dispatch({
+            type: ADD_FORM,
+            payload: { formData }
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// update a form
+export const updateForm = (formData) => dispatch => {
+    try {
+        dispatch({
+            type: UPDATE_FORM,
+            payload: { formData }
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// get form 
+export const loadForm = (form) => dispatch => {
+    try {
+        dispatch({
+            type: LOAD_FORM,
+            payload: form
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error,
+                status: error
+            }
+        });
+    }
+}
+
+// delete form
+export const deleteForm = (id) => dispatch => {
+    try {
+        dispatch({
+            type: DELETE_FORM,
+            payload: id
+        });
+    } catch (error) {
+        dispatch({
+            type: ELEMENT_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
 
 // add element to form
 export const addElement = (id, newElement) => dispatch => {
