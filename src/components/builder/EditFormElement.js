@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { editElement } from '../../actions/form';
 import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
@@ -12,7 +13,8 @@ import PropTypes from 'prop-types';
 
 const EditFormElement = props => {
   const id = props.match.params.id;
-  const { root, element, required, editElement } = props;
+
+  const { element, editElement } = props;
 
   // Schema state
   const [schema, setSchema] = useState({
@@ -44,13 +46,9 @@ const EditFormElement = props => {
   });
 
   useEffect(() => {
-    if (!Object.keys(element).length) {
-      return props.history.push(`/formbuilder`);
-    }
-
 
     // Required Field
-    const isRequired = required.find(element => element === id);
+    const isRequired = element.required.find(element => element === id);
 
     let options;
     let items;
@@ -72,15 +70,15 @@ const EditFormElement = props => {
       // Populate fields
       setFormData({
         ...formData,
-        title: root.title ? root.title : '...titulo del formulario',
-        description: root.description ? root.description : '...descripcion del formulario',
+        title: element.title ? element.title : '...titulo del formulario',
+        description: element.description ? element.description : '...descripcion del formulario',
         key: id,
       });
       return
     }
 
     //Paragraph field
-    else if (element[id].key === 'paragraph') {
+    else if (element.properties[id].key === 'paragraph') {
       // add description to schema
       setSchema({
         ...schema,
@@ -106,14 +104,14 @@ const EditFormElement = props => {
       // Populate fields
       setFormData({
         ...formData,
-        description: element[id].description,
-        key: element[id].key
+        description: element.properties[id].description,
+        key: element.properties[id].key
       });
       return
     }
 
     // Select Field
-    else if (element[id].key === 'select') {
+    else if (element.properties[id].key === 'select') {
       // add options to schema
       setSchema({
         ...schema,
@@ -144,8 +142,8 @@ const EditFormElement = props => {
       });
 
       // Options objects
-      const keys = element[id].enum;
-      const values = element[id].enumNames;
+      const keys = element.properties[id].enum;
+      const values = element.properties[id].enumNames;
       options = (keys.map((_, i) => {
         return { key: keys[i], value: values[i] }
       }));
@@ -153,16 +151,16 @@ const EditFormElement = props => {
       // Populate fields
       setFormData({
         ...formData,
-        title: element[id].title ? element[id].title : '...titulo del elemento',
+        title: element.properties[id].title ? element.properties[id].title : '...titulo del elemento',
         required: isRequired ? true : false,
-        key: element[id].key,
+        key: element.properties[id].key,
         options
       });
       return
     }
 
     // Radio Field
-    else if (element[id].key === 'radio') {
+    else if (element.properties[id].key === 'radio') {
       // add options to schema
       setSchema({
         ...schema,
@@ -195,19 +193,19 @@ const EditFormElement = props => {
       });
 
       // Populate fields
-      items = element[id].enumNames;
+      items = element.properties[id].enumNames;
       setFormData({
         ...formData,
-        title: element[id].title ? element[id].title : '...titulo del elemento',
+        title: element.properties[id].title ? element.properties[id].title : '...titulo del elemento',
         required: isRequired ? true : false,
-        key: element[id].key,
+        key: element.properties[id].key,
         items,
       });
       return
     }
 
     // Checkboxes Field
-    else if (element[id].key === 'checkboxes') {
+    else if (element.properties[id].key === 'checkboxes') {
       // add items to schema
       setSchema({
         ...schema,
@@ -228,12 +226,12 @@ const EditFormElement = props => {
       });
 
       // Populate fields
-      items = element[id].items.enum;
+      items = element.properties[id].items.enum;
       setFormData({
         ...formData,
-        title: element[id].title ? element[id].title : '...titulo del elemento',
+        title: element.properties[id].title ? element.properties[id].title : '...titulo del elemento',
         required: isRequired ? true : false,
-        key: element[id].key,
+        key: element.properties[id].key,
         items
       });
     }
@@ -254,12 +252,12 @@ const EditFormElement = props => {
       // Populate fields
       setFormData({
         ...formData,
-        title: element[id].title ? element[id].title : '...titulo del elemento',
+        title: element.properties[id].title ? element.properties[id].title : '...titulo del elemento',
         required: isRequired ? true : false,
-        key: element[id].key,
+        key: element.properties[id].key,
       });
     }
-  }, [element, id, props, required]);
+  }, [element, id, props]);
 
   const onSubmit = e => {
     editElement(id, e.formData);
@@ -272,9 +270,12 @@ const EditFormElement = props => {
         schema={schema}
         uiSchema={uiSchema}
         formData={formData}
-      // onSubmit={onSubmit}
+        onSubmit={onSubmit}
       >
-        <button type="submit" className="btn btn-success">Enviar</button>
+        <div className='form-buttons'>
+          <Link to='/formbuilder' className="btn btn-default">Volver</Link>
+          <button type="submit" className="btn btn-success">Guardar</button>
+        </div>
       </Form>
     </div>
   );
@@ -282,14 +283,11 @@ const EditFormElement = props => {
 
 EditFormElement.propTypes = {
   element: PropTypes.object.isRequired,
-  required: PropTypes.array.isRequired,
   editElement: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  root: state.form.schema,
-  element: state.form.schema.properties,
-  required: state.form.schema.required
+  element: state.form.schema,
 });
 
 export default connect(mapStateToProps, { editElement })(EditFormElement);
