@@ -13,14 +13,11 @@ import Canvas from './canvas/Canvas';
 import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
 import shortid from 'shortid';
-
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
 
 // TODO:
-// action must be a prop
-// do something when dnd an element before dnd a form
 // Maybe add placeholders in toolkit objects
 // EMAIL AUTOSUGEST
 
@@ -32,7 +29,6 @@ const Formbuilder = ({
   addWidget,
   reorderElement
 }) => {
-
   const onDragEnd = result => {
     const { source, destination } = result;
 
@@ -132,7 +128,7 @@ const Formbuilder = ({
     <Fragment>
       <div id='formbuilder'>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Canvas form={form} action={'add'} />
+          <Canvas form={form} />
           <ToolKit toolkitSchema={toolkitSchema} />
         </DragDropContext>
       </div>
@@ -147,9 +143,9 @@ Formbuilder.propTypes = {
   reorderElement: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   form: state.form
-})
+});
 
 export default connect(mapStateToProps, {
   createForm,
