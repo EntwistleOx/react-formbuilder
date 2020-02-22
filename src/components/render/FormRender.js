@@ -1,19 +1,17 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alert';
 import Form from 'react-jsonschema-form';
+import JSONPretty from 'react-json-prettify';
 import PropTypes from 'prop-types';
 
-// TODO: 
-// set initial state in correct way 
-// load form state correctly
-
-const FormRender = ({ form, goBack }) => {
-
+const FormRender = ({ form, goBack, setAlert }) => {
   const [renderState, setRenderState] = useState({});
 
   useEffect(() => {
-    setRenderState(form)
-  }, [])
+    setRenderState(form);
+  }, []);
 
   function transformErrors(errors) {
     return errors.map(error => {
@@ -37,8 +35,7 @@ const FormRender = ({ form, goBack }) => {
     //     16003145-0
     //     16158088-1
 
-    Object.keys(formData).forEach(function (item) {
-
+    Object.keys(formData).forEach(function(item) {
       const key = item;
       const val = formData[item];
 
@@ -112,36 +109,48 @@ const FormRender = ({ form, goBack }) => {
   };
 
   const onSubmit = formData => {
+    setAlert('Formulario Valido.', 'success');
     console.log(formData);
   };
 
+  if ((Object.keys(form) && Object.keys(form).length < 1) || form.error) {
+    return <Redirect to='/' />;
+  }
+
   return (
     <Fragment>
-      <div className='container'>
-        <Form
-          schema={renderState.schema ? renderState.schema : {}}
-          uiSchema={renderState.uiSchema ? renderState.uiSchema : {}}
-          // onSubmit={onSubmit}
-          // formData={formSchema.formData}
-          // liveValidate={true}
-          transformErrors={transformErrors}
-          validate={validate}
-          showErrorList={false}
-          noHtml5Validate={true}
-        >
-          <div className='form-buttons'>
-            <Link to={goBack} className="btn btn-default">Volver</Link>
-            <button type="submit" className="btn btn-success">Enviar</button>
-          </div>
-        </Form>
-      </div>
+      <Form
+        schema={renderState.schema ? renderState.schema : {}}
+        uiSchema={renderState.uiSchema ? renderState.uiSchema : {}}
+        onSubmit={onSubmit}
+        // formData={formSchema.formData}
+        // liveValidate={true}
+        transformErrors={transformErrors}
+        validate={validate}
+        showErrorList={false}
+        noHtml5Validate={true}
+      >
+        <div className='form-buttons'>
+          <Link to={goBack} className='btn btn-default'>
+            Volver
+          </Link>
+          <button type='submit' className='btn btn-success'>
+            Validar
+          </button>
+        </div>
+      </Form>
+      {/* <JSONPretty json={formData} /> */}
     </Fragment>
   );
 };
 
 FormRender.propTypes = {
   form: PropTypes.object.isRequired,
-  goBack: PropTypes.string.isRequired,
-}
+  goBack: PropTypes.string.isRequired
+};
 
-export default FormRender;
+const mapStateToProps = state => ({
+  form: state.form
+});
+
+export default connect(mapStateToProps, { setAlert })(FormRender);
