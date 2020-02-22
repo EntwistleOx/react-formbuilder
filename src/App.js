@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Alert from './components/layouts/Alert';
 import Navbar from './components/layouts/Navbar';
 import FormBuilder from './components/builder/FormBuilder';
 import FormBuilderRender from './components/builder/FormBuilderRender';
@@ -22,15 +23,20 @@ function App() {
       <Router>
         <Navbar />
         <div className='container'>
-          <Route exact path="/" component={Forms} />
+          <Alert />
+          <Route exact path='/' component={Forms} />
           <Switch>
-            <Route exact path="/formbuilder" component={FormBuilder} />
-            <Route exact path="/formbuilder-render" component={FormBuilderRender} />
-            <Route exact path="/formbuilder/:id" component={EditFormElement} />
-            <Route exact path="/forms" component={Forms} />
-            <Route exact path="/form-view/:id" component={FormItemRender} />
-            <Route exact path="/form-edit/:id" component={FormEdit} />
-            <Route exact path="/test-schema" component={TestSchema} />
+            <Route exact path='/formbuilder' component={FormBuilder} />
+            <Route
+              exact
+              path='/formbuilder-render'
+              component={FormBuilderRender}
+            />
+            <Route exact path='/formbuilder/:id' component={EditFormElement} />
+            <Route exact path='/forms' component={Forms} />
+            <Route exact path='/form-view/:id' component={FormItemRender} />
+            <Route exact path='/form-edit/:id' component={FormEdit} />
+            <Route exact path='/test-schema' component={TestSchema} />
           </Switch>
         </div>
       </Router>

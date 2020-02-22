@@ -1,4 +1,4 @@
-// Form 
+// Form
 export const CREATE_FORM = 'CREATE_FORM';
 export const ADD_ELEMENT = 'ADD_ELEMENT';
 export const ADD_UI_ORDER = 'ADD_UI_ORDER';
@@ -13,9 +13,13 @@ export const ELEMENT_ERROR = 'ELEMENT_ERROR';
 export const CLEAR_FORM = 'CLEAR_FORM';
 export const LOAD_FORM = 'LOAD_FORM';
 
-// Forms 
+// Forms
 export const ADD_FORM = 'ADD_FORM';
 export const UPDATE_FORM = 'UPDATE_FORM';
 export const GET_FORM = 'GET_FORM';
 export const DELETE_FORM = 'DELETE_FORM';
 export const FORM_ERROR = 'FORM_ERROR';
+
+// Form
+export const SET_ALERT = 'SET_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
