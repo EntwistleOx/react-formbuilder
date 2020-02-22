@@ -1,5 +1,4 @@
 import shortid from 'shortid';
-
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
@@ -11,7 +10,7 @@ const toolkitSchema = [
     key: 'form',
     name: 'Formulario',
     type: 'object',
-    icon: 'fas fa-clipboard',
+    icon: 'fas fa-clipboard'
   },
   {
     id: shortid.generate(),
@@ -20,7 +19,7 @@ const toolkitSchema = [
     type: 'boolean',
     default: false,
     icon: 'fas fa-check',
-    required: true,
+    required: true
   },
   {
     id: shortid.generate(),
@@ -30,13 +29,8 @@ const toolkitSchema = [
     default: false,
     icon: 'fas fa-check-double',
     items: {
-      type: "string",
-      enum: [
-        "option 1",
-        "option 2",
-        "option 3",
-        "option 4"
-      ],
+      type: 'string',
+      enum: ['option 1', 'option 2', 'option 3', 'option 4']
     },
     uniqueItems: true
   },
@@ -74,7 +68,7 @@ const toolkitSchema = [
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit.Quod vero magnam quibusdam assumenda, voluptatem quo quos perferendis totam consequatur voluptates.',
     required: false,
-    icon: 'fas fa-paragraph',
+    icon: 'fas fa-paragraph'
   },
   {
     id: shortid.generate(),
@@ -84,7 +78,7 @@ const toolkitSchema = [
     default: false,
     icon: 'fas fa-dot-circle',
     required: true,
-    enumNames: ['Opcion Si', 'Opcion No'],
+    enumNames: ['Opcion Si', 'Opcion No']
   },
   {
     id: shortid.generate(),
