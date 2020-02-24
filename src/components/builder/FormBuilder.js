@@ -8,8 +8,9 @@ import {
   reorderElement
 } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
-import ToolKit from './toolkit/Toolkit';
+import SchemaViewer from './schemaviewer/SchemaViewer';
 import Canvas from './canvas/Canvas';
+import ToolKit from './toolkit/Toolkit';
 import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
 import shortid from 'shortid';
@@ -20,6 +21,7 @@ shortid.characters(
 // TODO:
 // Maybe add placeholders in toolkit objects
 // EMAIL AUTOSUGEST
+// use bootstrap boxes for elements and css
 
 const Formbuilder = ({
   form,
@@ -127,6 +129,7 @@ const Formbuilder = ({
   return (
     <Fragment>
       <div id='formbuilder'>
+        <SchemaViewer />
         <DragDropContext onDragEnd={onDragEnd}>
           <Canvas form={form} />
           <ToolKit toolkitSchema={toolkitSchema} />

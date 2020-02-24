@@ -52,6 +52,7 @@
   border: #ddd 1px solid;
   border-radius: 3px;
   padding: 1rem;
+  max-width: 180px;
 }
 
 #formbuilder #formbuilder-toolkit .tolkit-item {
@@ -98,6 +99,17 @@
   color: #aaa;
 }
 
+/* JSON VIEWER */
+#formbuilder #json-viewer {
+  max-width: 380px;
+}
+
+#formbuilder #json-viewer pre {
+  font-size: 11px;
+  white-space: pre-wrap;
+}
+
+/* Edit element */
 #formelementedit {
   background: #fafafa;
   border: #ddd 1px solid;
