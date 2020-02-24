@@ -11,7 +11,7 @@ const SchemaViewer = ({ form }) => {
             <div id="json-viewer" className="well">
                 <fieldset>
                     <legend>JSON Schema</legend>
-                    <JSONPretty json={form} theme={github} padding={4} />
+                    <JSONPretty json={form} theme={github} padding={1} />
                 </fieldset>
             </div>
         </Fragment>
