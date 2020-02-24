@@ -1,108 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from "react-jsonschema-form";
 
-const schema =
-{
-    "title": "Form Elements",
-    "description": "List All Elements.",
-    "type": "object",
-    "required": [
-        "text"
-    ],
-    "properties": {
-        "checkbox": {
-            "type": "boolean",
-            "title": " Checkbox",
-            "default": false
-        },
-        "email": {
-            "type": "string",
-            "format": "email",
-            "title": "Email",
-        },
-        "date": {
-            "type": "string",
-            "title": "Fecha",
-            "format": "date"
-        },
-        "number": {
-            "type": "number",
-            "title": "Numero"
-        },
-        "paragraph": {
-            "title": "Parrafo",
-            "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit.Quod vero magnam quibusdam assumenda, voluptatem quo quos perferendis totam consequatur voluptates.",
-            "type": "null"
-        },
-        "radio": {
-            "type": "boolean",
-            "title": "Radio"
-        },
-        "select": {
-            "title": "Select",
-            "type": "string",
-            "enum": [
-                "foo",
-                "bar"
-            ],
-            "enumNames": [
-                "Foo",
-                "Bar"
-            ]
-        },
-        "textarea": {
-            "type": "string",
-            "title": "Textarea"
-        },
-        "text": {
-            "type": "string",
-            "title": "Texto"
-        },
+const stepsShema = [
+    {
+        title: "Step 1",
+        type: "object",
+        required: ["name"],
+        properties: {
+            name: { type: "string" },
+        }
+    },
+
+    {
+        title: "Step 2",
+        type: "object",
+        required: ["age"],
+        properties: {
+            age: { type: "integer" },
+        }
+    },
+
+    {
+        title: "Step 3",
+        type: "object",
+        required: ["email"],
+        properties: {
+            email: { type: "string" },
+        }
+    },
+
+    {
+        title: "Step 4",
+        type: "object",
+        required: ["phone"],
+        properties: {
+            phone: { type: "number" },
+        }
     }
-};
+]
 
-const uiSchema = {
-    "radio": {
-        "ui:widget": "radio"
-    },
-    "select": {
-        "ui:placeholder": "Seleciona"
-    },
-    "textarea": {
-        "ui:widget": "textarea"
-    },
-
-};
-
-function ElementTemplate(props) {
-    const { id, classNames, label, required, description, children } = props;
-    console.log(props)
-    return (
-        <div className={classNames}>
-            {
-                id !== 'root' ?
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <label htmlFor={id}>{label}{required ? "*" : null}</label>
-                        <div>
-                            <i className="fas fa-edit"></i>
-                            <i className="fas fa-trash-alt"></i>
-                            <i className="fas fa-arrows-alt"></i>
-                        </div>
-                    </div>
-                    : ''
-            }
-            {children}
-            {description}
-        </div >
-    );
-}
 
 const TestSchema = () => {
+
+    const [state, setState] = useState({ step: 1, formData: {} })
+
+    function getSteps() {
+        let step = stepsShema.find((step, index) => state.step === index + 1)
+        if (step === undefined) step = {}
+        return step
+    }
+
+    const onSubmit = ({ formData }) => {
+        let index = 0
+        for (index; index <= state.step; index++) {
+            setState({
+                step: index + 1,
+                formData: {
+                    ...state.formData,
+                    ...formData
+                },
+            });
+        }
+        if (stepsShema.length < index) {
+            alert("You submitted " + JSON.stringify(formData, null, 2));
+        }
+    }
+
     return (
         <div className="container">
-            <Form schema={schema} uiSchema={uiSchema} FieldTemplate={ElementTemplate} >
-                <button className="btn btn-primary" type="submit">Enviar</button>
-            </Form>
+            <Form
+                schema={getSteps()}
+                onSubmit={onSubmit}
+                formData={state.formData} />
         </div>
     )
 }
