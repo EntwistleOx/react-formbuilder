@@ -23,7 +23,7 @@ shortid.characters(
 // refactor required field in edit element
 // put short id in utils file
 
-const initial_state = {};
+const initial_state = [];
 
 export default function (state = initial_state, action) {
     const { type, payload } = action;
@@ -31,7 +31,7 @@ export default function (state = initial_state, action) {
 
     switch (type) {
         case CLEAR_FORM:
-            return {}
+            return []
 
         case LOAD_FORM:
             return {
@@ -39,65 +39,86 @@ export default function (state = initial_state, action) {
                 schema: payload.schema,
                 uiSchema: payload.uiSchema,
                 formData: payload.formData,
-            }
+            };
 
         case CREATE_FORM:
-            return {
+            return [
                 ...state,
-                schema: {
-                    idPrefix: shortid.generate(),
-                    title: "Titulo del Formulario",
-                    description: "Descripcion del Formulario.",
-                    type: "object",
-                    required: [],
-                    properties: {}
-                },
-                uiSchema: {
-                    "ui:order": []
-                },
-                formData: {},
-            }
+                {
+                    schema: {
+                        idPrefix: shortid.generate(),
+                        title: "Titulo del Formulario",
+                        description: "Descripcion del Formulario.",
+                        type: "object",
+                        required: [],
+                        properties: {}
+                    },
+                    uiSchema: {
+                        "ui:order": []
+                    },
+                    formData: {},
+                }
+            ];
 
         case ADD_ELEMENT:
+
             if (payload.newElement.type === 'null') {
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        properties: {
-                            ...state.schema.properties,
-                            [payload.id]: payload.newElement
-                        },
-                    },
-                };
+                // Paragraph element
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.destination.droppableId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                properties: {
+                                    ...item.schema.properties,
+                                    [payload.id]: payload.newElement
+                                },
+                            },
+                        }
+                    }
+                    return item;
+                })
             } else {
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        properties: {
-                            ...state.schema.properties,
-                            [payload.id]: payload.newElement
-                        },
-                        required: [
-                            ...state.schema.required,
-                            payload.id
-                        ]
-                    },
-                };
+
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.destination.droppableId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                properties: {
+                                    ...item.schema.properties,
+                                    [payload.id]: payload.newElement
+                                },
+                                required: [
+                                    ...item.schema.required,
+                                    payload.id
+                                ]
+                            },
+                        }
+                    }
+                    return item;
+                })
             }
 
         case ADD_UI_ORDER:
-            return {
-                ...state,
-                uiSchema: {
-                    ...state.uiSchema,
-                    "ui:order": [
-                        ...state.uiSchema[uiOrderKey],
-                        payload.id
-                    ]
+
+            return state.map((item, index) => {
+                if (item.schema.idPrefix === payload.destination.droppableId) {
+                    return {
+                        ...item,
+                        uiSchema: {
+                            ...item.uiSchema,
+                            "ui:order": [
+                                ...item.uiSchema[uiOrderKey],
+                                payload.id
+                            ]
+                        }
+                    };
                 }
-            };
+                return item;
+            })
 
         case ADD_WIDGET:
             return {

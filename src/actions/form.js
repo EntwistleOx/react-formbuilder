@@ -101,11 +101,11 @@ export const deleteForm = id => dispatch => {
 };
 
 // add element to form
-export const addElement = (id, newElement) => dispatch => {
+export const addElement = (id, newElement, source, destination) => dispatch => {
   try {
     dispatch({
       type: ADD_ELEMENT,
-      payload: { id, newElement }
+      payload: { id, newElement, source, destination }
     });
   } catch (error) {
     dispatch({
@@ -119,11 +119,11 @@ export const addElement = (id, newElement) => dispatch => {
 };
 
 // add element order in ui schema
-export const addUiOrder = (id, newElement) => dispatch => {
+export const addUiOrder = (id, newElement, source, destination) => dispatch => {
   try {
     dispatch({
       type: ADD_UI_ORDER,
-      payload: { id, newElement }
+      payload: { id, newElement, source, destination }
     });
   } catch (error) {
     dispatch({
