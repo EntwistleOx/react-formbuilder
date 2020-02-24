@@ -22,18 +22,22 @@ const CanvasElementTemplate = (
         deleteElement,
         deleteUiOrder,
         deleteWidget,
-        uiState
+        form
     } = props
 
     // Get prop id and split 'root_'
     const element = id.split('_');
     const elementId = element[1];
 
+    console.log('aers', props.schema.idPrefix)
+    console.log('aers', form)
+    // console.log('aers', id)
+
     const [order, setOrder] = useState(0);
 
-    useEffect(() => {
-        setOrder(uiState.findIndex(el => el === elementId))
-    }, [uiState, elementId])
+    // useEffect(() => {
+    //     // setOrder(uiState.findIndex(el => el === elementId))
+    // }, [uiState, elementId])
 
     const onDelete = () => {
         deleteElement(elementId);
@@ -41,52 +45,48 @@ const CanvasElementTemplate = (
         deleteWidget(elementId);
     }
 
+    console.log(form)
     return (
-        (id === 'root') ? (
-            <Fragment>
-                <div style={{
-                    position: 'relative',
-                    marginLeft: '97%',
-                    top: '26px',
-                    marginTop: '-2rem'
-                }}>
-                    <div>
-                        <Link to={`/formbuilder/formRoot`}>
-                            <i className="fas fa-edit"></i>
-                        </Link>
-                    </div>
-                </div>
-                {children}
-            </Fragment>
-        ) : (
-                <Draggable index={order} draggableId={id} isDragDisabled={id === 'root' ? true : false}>
-                    {(provided, snapshot) => (
-                        <div
-                            className={classNames}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                        >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', userSelect: 'none' }}>
-                                <label htmlFor={id}>{label} {required ? "*" : null}</label>
-                                <div>
-                                    <Link to={`/formbuilder/${elementId}`}>
-                                        <i className="fas fa-edit"></i>
-                                    </Link>
+        form.length ?
+            form.map((form, index) => {
+                console.log(form, index)
+                return (
+                    <Draggable
+                        key={id}
+                        draggableId={id}
+                        index={index}
+                    >
+                        {(provided, snapshot) => (
+                            <div
+                                className={classNames}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', userSelect: 'none' }}>
+                                    <label htmlFor={id}>{label} {required ? "*" : null}</label>
+                                    <div>
+                                        <Link to={`/formbuilder/${elementId}`}>
+                                            <i className="fas fa-edit"></i>
+                                        </Link>
 
-                                    <Link to="#!">
-                                        <i onClick={onDelete} className="fas fa-trash-alt"></i>
-                                    </Link>
-                                    <i {...provided.dragHandleProps} className="fas fa-arrows-alt"></i>
+                                        <Link to="#!">
+                                            <i onClick={onDelete} className="fas fa-trash-alt"></i>
+                                        </Link>
+                                        <i {...provided.dragHandleProps} className="fas fa-arrows-alt"></i>
+                                    </div>
                                 </div>
+                                {children}
+                                {description && description}
                             </div>
-                            {children}
-                            {description && description}
-                        </div>
-                    )
-                    }
-                </Draggable >
-            )
+                        )
+                        }
+                    </Draggable >
+                )
+            }
+
+            ) : ''
     )
+
 };
 
 CanvasElementTemplate.propTypes = {
@@ -104,7 +104,7 @@ CanvasElementTemplate.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    uiState: state.form.uiSchema["ui:order"]
+    form: state.form
 })
 
 // export default connect(null, { deleteElement })(CanvasElementTemplate);
