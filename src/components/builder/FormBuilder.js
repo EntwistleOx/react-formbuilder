@@ -34,6 +34,8 @@ const Formbuilder = ({
   const onDragEnd = result => {
     const { source, destination } = result;
 
+    console.log(source, destination)
+
     // dropped outside the list
     if (!destination) {
       return;
@@ -43,7 +45,8 @@ const Formbuilder = ({
       case 'Canvas':
         reorderElement(source.index, destination.index);
         break;
-      case 'ToolkitItems':
+      case source.droppableId:
+        // Source -> toolkit
         // All fields
         const title = toolkitSchema[source.index].name;
         const type = toolkitSchema[source.index].type;
@@ -110,16 +113,13 @@ const Formbuilder = ({
           }
         };
 
-        if (key === 'form') {
-          createForm();
-        } else {
-          const id = shortid.generate();
-          addElement(id, newElement);
-          addUiOrder(id, newElement);
-          if (newWidget()) {
-            addWidget(id, newWidget());
-          }
-        }
+        const id = shortid.generate();
+        addElement(id, newElement, source, destination);
+        addUiOrder(id, newElement, source, destination);
+        // if (newWidget()) {
+        //   addWidget(id, newWidget());
+        // }
+
         break;
       default:
         break;
