@@ -9,7 +9,7 @@ import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
 
 const Canvas = props => {
-  const { form, forms, addForm, updateForm, clearForm, setAlert } = props;
+  const { form, forms, createForm, addForm, updateForm, clearForm, setAlert } = props;
 
   let history = useHistory();
 
@@ -30,62 +30,69 @@ const Canvas = props => {
   };
 
   return (
-    <Droppable key='Canvas' droppableId='Canvas' type='builder'>
-      {(provided, snapshot) => (
-        <div id='formbuilder-canvas' ref={provided.innerRef}>
-          <div className='form-wrap'>
-            {form.schema && Object.keys(form.schema).length > 0 ? (
-              <Form
-                schema={form.schema}
-                uiSchema={form.uiSchema}
-                // formData={form.formData}
-                FieldTemplate={CanvasElementTemplate}
-                disabled={true}
-              >
-                {Object.keys(form.schema.properties).length < 1 ? (
-                  <Fragment>
-                    <div className='notice'>
-                      Arrastra los elementos del menu aca
-                    </div>
-                  </Fragment>
-                ) : (
-                  ''
-                )}
-                <hr />
-                <div className='form-buttons'>
-                  <Link to='/formbuilder-render' className='btn btn-default'>
-                    Probar
-                  </Link>
-                  <button
-                    type='button'
-                    className='btn btn-success'
-                    onClick={onSave}
-                  >
-                    Guardar
-                  </button>
+    <div id='formbuilder-canvas' >
+      {
+        form.map((form, index) =>
+          (
+            <Droppable key={form.schema.idPrefix} droppableId={form.schema.idPrefix} type='builder'>
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef}>
+                  <div className='form-wrap'>
+                    {form.schema && Object.keys(form.schema).length > 0 ? (
+                      <Form
+                        schema={form.schema}
+                        uiSchema={form.uiSchema}
+                        // formData={form.formData}
+                        // FieldTemplate={CanvasElementTemplate}
+                        disabled={true}
+                      >
+                        {Object.keys(form.schema.properties).length < 1 ? (
+                          <Fragment>
+                            <div className='notice'>
+                              Arrastra los elementos del menu aca
+                       </div>
+                          </Fragment>
+                        ) : (
+                            ''
+                          )}
+                        <hr />
+                        <div className='form-buttons'>
+                          <Link to='/formbuilder-render' className='btn btn-default'>
+                            Probar
+                     </Link>
+                          <button
+                            type='button'
+                            className='btn btn-success'
+                            onClick={onSave}
+                          >
+                            Guardar
+                     </button>
+                        </div>
+                      </Form>
+                    ) : (
+                        <Fragment>
+                          <div className='notice'>
+                            Arrastra los elementos del menu aca...
+                   </div>
+                        </Fragment>
+                      )}
+                    {provided.placeholder}
+                  </div>
                 </div>
-              </Form>
-            ) : (
-              <Fragment>
-                <div className='notice'>
-                  Arrastra los elementos del menu aca...
-                </div>
-              </Fragment>
-            )}
-            {provided.placeholder}
-          </div>
-        </div>
-      )}
-    </Droppable>
+              )}
+            </Droppable>
+          )
+        )
+      }
+    </div>
   );
 };
 
 Canvas.propTypes = {
-  form: PropTypes.object.isRequired,
+  form: PropTypes.array.isRequired,
   forms: PropTypes.array.isRequired,
   addForm: PropTypes.func.isRequired,
   updateForm: PropTypes.func.isRequired,
-  clearForm: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
