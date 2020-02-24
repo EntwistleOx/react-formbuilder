@@ -14,13 +14,14 @@ const ToolkitElement = ({ item, index, form }) => {
     item.key !== 'form'
   ) {
     dragDisabled = true;
-  } else if (
-    Object.keys(form) &&
-    Object.keys(form).length > 0 &&
-    item.key === 'form'
-  ) {
-    dragDisabled = true;
   }
+  // else if (
+  //   Object.keys(form) &&
+  //   Object.keys(form).length > 0 &&
+  //   item.key === 'form'
+  // ) {
+  //   dragDisabled = true;
+  // }
 
   const Icon = () => {
     if (item.key === 'number') {
