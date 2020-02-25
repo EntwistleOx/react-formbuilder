@@ -81,7 +81,7 @@ const ToolkitElement = ({ item, index, form }) => {
 ToolkitElement.propTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-  form: PropTypes.object.isRequired
+  form: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
