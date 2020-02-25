@@ -34,7 +34,7 @@ const Formbuilder = ({
   const onDragEnd = result => {
     const { source, destination } = result;
 
-    console.log(source, destination)
+    // console.log(source, destination)
 
     // dropped outside the list
     if (!destination) {
@@ -42,8 +42,8 @@ const Formbuilder = ({
     }
 
     switch (source.droppableId) {
-      case 'Canvas':
-        reorderElement(source.index, destination.index);
+      case destination.droppableId:
+        reorderElement(source.index, destination.index, source, destination);
         break;
       case source.droppableId:
         // Source -> toolkit
@@ -116,9 +116,9 @@ const Formbuilder = ({
         const id = shortid.generate();
         addElement(id, newElement, source, destination);
         addUiOrder(id, newElement, source, destination);
-        // if (newWidget()) {
-        //   addWidget(id, newWidget());
-        // }
+        if (newWidget()) {
+          addWidget(id, newWidget(), source, destination);
+        }
 
         break;
       default:
@@ -129,11 +129,11 @@ const Formbuilder = ({
   return (
     <Fragment>
       <div id='formbuilder'>
-        <SchemaViewer />
         <DragDropContext onDragEnd={onDragEnd}>
-          <Canvas form={form} />
           <ToolKit toolkitSchema={toolkitSchema} />
+          <Canvas form={form} />
         </DragDropContext>
+        <SchemaViewer />
       </div>
     </Fragment>
   );
