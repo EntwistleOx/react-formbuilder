@@ -20,7 +20,7 @@ const SchemaViewer = ({ form }) => {
 
 
 SchemaViewer.propTypes = {
-    form: PropTypes.object.isRequired,
+    form: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
