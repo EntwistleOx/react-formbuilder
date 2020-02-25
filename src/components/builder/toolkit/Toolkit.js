@@ -19,6 +19,7 @@ const Toolkit = ({ toolkitSchema, createForm }) => {
             {(provided, snapshot) => (
 
                 <div id="formbuilder-toolkit"
+                    className="well"
                     ref={provided.innerRef}
                 >
                     <a
