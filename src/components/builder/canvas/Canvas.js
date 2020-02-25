@@ -30,7 +30,7 @@ const Canvas = props => {
   };
 
   return (
-    <div id='formbuilder-canvas' >
+    <div id='formbuilder-canvas' className="well">
       {
         form.map((form, index) =>
           (
@@ -39,11 +39,13 @@ const Canvas = props => {
                 <div ref={provided.innerRef}>
                   <div className='form-wrap'>
                     {form.schema && Object.keys(form.schema).length > 0 ? (
+
                       <Form
                         schema={form.schema}
                         uiSchema={form.uiSchema}
                         // formData={form.formData}
-                        // FieldTemplate={CanvasElementTemplate}
+                        FieldTemplate={CanvasElementTemplate}
+                        formContext={form.schema}
                         disabled={true}
                       >
                         {Object.keys(form.schema.properties).length < 1 ? (
@@ -55,34 +57,56 @@ const Canvas = props => {
                         ) : (
                             ''
                           )}
-                        <hr />
+
                         <div className='form-buttons'>
-                          <Link to='/formbuilder-render' className='btn btn-default'>
-                            Probar
-                     </Link>
                           <button
                             type='button'
-                            className='btn btn-success'
-                            onClick={onSave}
+                            className='btn btn-primary btn-sm'
                           >
-                            Guardar
-                     </button>
+                            Anterior
+                          </button>
+                          <button
+                            type='button'
+                            className='btn btn-primary btn-sm'
+                          >
+                            Siguiente
+                          </button>
                         </div>
                       </Form>
+
                     ) : (
                         <Fragment>
                           <div className='notice'>
                             Arrastra los elementos del menu aca...
-                   </div>
+                          </div>
                         </Fragment>
                       )}
                     {provided.placeholder}
                   </div>
                 </div>
+
               )}
             </Droppable>
           )
         )
+      }
+      {
+        form.length > 0 ? (
+          <div className='form-buttons bottom-buttons'>
+            <Link to='/formbuilder-render' className='btn btn-default'>
+              Probar
+            </Link>
+            <button
+              type='button'
+              className='btn btn-success'
+              onClick={onSave}
+            >
+              Guardar
+            </button>
+          </div>
+        ) : (
+            ''
+          )
       }
     </div>
   );
