@@ -12,7 +12,8 @@ import {
     GET_ELEMENT,
     CLEAR_FORM,
     CREATE_FORM,
-    LOAD_FORM
+    LOAD_FORM,
+    DELETE_FORM_ELEMENT
 } from '../actions/types';
 
 shortid.characters(
@@ -61,7 +62,6 @@ export default function (state = initial_state, action) {
             ];
 
         case ADD_ELEMENT:
-
             if (payload.newElement.type === 'null') {
                 // Paragraph element
                 return state.map((item, index) => {
@@ -121,189 +121,245 @@ export default function (state = initial_state, action) {
             })
 
         case ADD_WIDGET:
-            return {
-                ...state,
-                uiSchema: {
-                    ...state.uiSchema,
-                    [payload.id]: payload.newWidget,
+            return state.map((item, index) => {
+                if (item.schema.idPrefix === payload.destination.droppableId) {
+                    return {
+                        ...item,
+                        uiSchema: {
+                            ...item.uiSchema,
+                            [payload.id]: payload.newWidget,
+                        }
+                    };
                 }
-            };
+                return item;
+            })
 
         case REORDER_ELEMENT:
-            const result = state.uiSchema[uiOrderKey].slice();
-            const [removed] = result.splice(payload.sourceIndex, 1);
-            result.splice(payload.destinationIndex, 0, removed);
+            return state.map((item, index) => {
+                if (item.schema.idPrefix === payload.destination.droppableId) {
 
-            return {
-                ...state,
-                uiSchema: {
-                    ...state.uiSchema,
-                    "ui:order": result
+                    const result = item.uiSchema[uiOrderKey].slice();
+                    const [removed] = result.splice(payload.sourceIndex, 1);
+                    result.splice(payload.destinationIndex, 0, removed);
+
+                    return {
+                        ...item,
+                        uiSchema: {
+                            ...item.uiSchema,
+                            "ui:order": result
+                        }
+                    };
                 }
-            };
+                return item;
+            })
 
         case DELETE_ELEMENT:
-            const newState = {
-                ...state,
-                schema: {
-                    ...state.schema,
-                    properties: {
-                        ...state.schema.properties
-                    },
-                    required: state.schema.required.filter((item) => item !== payload)
+            return state.map((item, index) => {
+                if (item.schema.idPrefix === payload.form) {
+                    const newState = {
+                        ...item,
+                        schema: {
+                            ...item.schema,
+                            properties: {
+                                ...item.schema.properties
+                            },
+                            required: item.schema.required.filter((item) => item !== payload.id)
+                        }
+                    };
+                    delete newState.schema.properties[payload.id];
+                    return newState;
                 }
-            };
-            delete newState.schema.properties[payload];
-            return newState;
+                return item;
+            });
 
         case DELETE_UI_ORDER:
-            return {
-                ...state,
-                uiSchema: {
-                    ...state.uiSchema,
-                    "ui:order": state.uiSchema[uiOrderKey].filter((item) => item !== payload)
+            return state.map((item, index) => {
+                if (item.schema.idPrefix === payload.form) {
+                    console.log(item.schema.idPrefix, payload.form)
+                    return {
+                        ...item,
+                        uiSchema: {
+                            ...item.uiSchema,
+                            "ui:order": item.uiSchema[uiOrderKey].filter((item) => item !== payload.id)
+                        }
+                    };
                 }
-            };
+                return item;
+            });
 
         case DELETE_WIDGET:
-            const newWidgetState = {
-                ...state,
-                uiSchema: {
-                    ...state.uiSchema
+            return state.map((item, index) => {
+                if (item.schema.idPrefix === payload.form) {
+                    const newWidgetState = {
+                        ...item,
+                        uiSchema: {
+                            ...item.uiSchema
+                        }
+                    };
+                    delete newWidgetState.uiSchema[payload.id];
+                    return newWidgetState;
                 }
-            };
-            delete newWidgetState.uiSchema[payload];
-            return newWidgetState;
+                return item;
+            });
+
+        case DELETE_FORM_ELEMENT:
+            return state.filter(form => form.schema.idPrefix !== payload);
 
         case GET_ELEMENT:
             return state.schema.properties[payload];
 
         case EDIT_ELEMENT:
-            const stateIndex = state.schema.required.findIndex(element => element === payload.id);
             const key = payload.formData.key ? payload.formData.key : undefined;
-            const title = payload.formData.title ? payload.formData.title : undefined;
-            const description = payload.formData.description ? payload.formData.description : undefined;
-
+            const formId = payload.formData.formId ? payload.formData.formId : undefined;
+            const title = payload.formData.title ? payload.formData.title : '';
+            const description = payload.formData.description ? payload.formData.description : '';
             const keys = payload.formData.options ? payload.formData.options.map((i) => i.key) : undefined;
             const values = payload.formData.options ? payload.formData.options.map((i) => i.value) : undefined;
             const items = payload.formData.items ? payload.formData.items : undefined;
 
-            if (key === 'formRoot') {
+
+            if (key === formId) {
                 // Form Title & Description
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        title,
-                        description
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.formData.formId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                title,
+                                description
+                            }
+                        };
                     }
-                };
+                    return item;
+                });
 
             } else if (key === 'checkboxes') {
                 // Checkboxes List
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        properties: {
-                            ...state.schema.properties,
-                            [payload.id]: {
-                                ...state.schema.properties[payload.id],
-                                title: payload.formData.title,
-                                items: {
-                                    ...state.schema.properties[payload.id].items,
-                                    enum: items
-                                }
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.formData.formId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                properties: {
+                                    ...item.schema.properties,
+                                    [payload.id]: {
+                                        ...item.schema.properties[payload.id],
+                                        title: payload.formData.title,
+                                        items: {
+                                            ...item.schema.properties[payload.id].items,
+                                            enum: items
+                                        }
+                                    }
+                                },
+                                required: payload.formData.required === true ? (
+                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                ) : (
+                                        item.schema.required.filter((item) => item !== payload.id))
                             }
-                        },
-                        required: payload.formData.required === true ?
-                            (
-                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
-                            ) : (
-                                state.schema.required.filter((item) => item !== payload.id))
+                        };
                     }
-                };
+                    return item;
+                });
 
             } else if (key === 'radio') {
                 // Radio Field
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        properties: {
-                            ...state.schema.properties,
-                            [payload.id]: {
-                                ...state.schema.properties[payload.id],
-                                title: payload.formData.title,
-                                enumNames: items
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.formData.formId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                properties: {
+                                    ...item.schema.properties,
+                                    [payload.id]: {
+                                        ...item.schema.properties[payload.id],
+                                        title: payload.formData.title,
+                                        enumNames: items
+                                    }
+                                },
+                                required: payload.formData.required === true ? (
+                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                ) : (
+                                        item.schema.required.filter((item) => item !== payload.id))
                             }
-                        },
-                        required: payload.formData.required === true ?
-                            (
-                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
-                            ) : (
-                                state.schema.required.filter((item) => item !== payload.id))
+                        };
                     }
-                };
+                    return item;
+                });
 
             } else if (key === 'paragraph') {
                 // Paragraph
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        properties: {
-                            ...state.schema.properties,
-                            [payload.id]: {
-                                ...state.schema.properties[payload.id],
-                                description
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.formData.formId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                properties: {
+                                    ...item.schema.properties,
+                                    [payload.id]: {
+                                        ...item.schema.properties[payload.id],
+                                        description
+                                    }
+                                }
                             }
-                        }
+                        };
                     }
-                };
+                    return item;
+                });
 
             } else if (key === 'select') {
                 // Select List
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        properties: {
-                            ...state.schema.properties,
-                            [payload.id]: {
-                                ...state.schema.properties[payload.id],
-                                title: payload.formData.title,
-                                enum: keys,
-                                enumNames: values,
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.formData.formId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                properties: {
+                                    ...item.schema.properties,
+                                    [payload.id]: {
+                                        ...item.schema.properties[payload.id],
+                                        title: payload.formData.title,
+                                        enum: keys,
+                                        enumNames: values,
+                                    }
+                                },
+                                required: payload.formData.required === true ? (
+                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                ) : (
+                                        item.schema.required.filter((item) => item !== payload.id))
                             }
-                        },
-                        required: payload.formData.required === true ?
-                            (
-                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
-                            ) : (
-                                state.schema.required.filter((item) => item !== payload.id))
+                        };
                     }
-                };
+                    return item;
+                });
 
             } else {
-                return {
-                    ...state,
-                    schema: {
-                        ...state.schema,
-                        properties: {
-                            ...state.schema.properties,
-                            [payload.id]: {
-                                ...state.schema.properties[payload.id],
-                                title: payload.formData.title,
+                return state.map((item, index) => {
+                    if (item.schema.idPrefix === payload.formData.formId) {
+                        return {
+                            ...item,
+                            schema: {
+                                ...item.schema,
+                                properties: {
+                                    ...item.schema.properties,
+                                    [payload.id]: {
+                                        ...item.schema.properties[payload.id],
+                                        title: payload.formData.title,
+                                    }
+                                },
+                                required: payload.formData.required === true ? (
+                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                ) : (
+                                        item.schema.required.filter((item) => item !== payload.id))
                             }
-                        },
-                        required: payload.formData.required === true ?
-                            (
-                                state.schema.required[stateIndex] ? [...state.schema.required] : [...state.schema.required, payload.id]
-                            ) : (
-                                state.schema.required.filter((item) => item !== payload.id))
+                        };
                     }
-                };
+                    return item;
+                });
             };
 
         case ELEMENT_ERROR:
