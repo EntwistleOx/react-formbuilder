@@ -15,7 +15,8 @@ import {
   UPDATE_FORM,
   DELETE_FORM,
   LOAD_FORM,
-  GET_FORM
+  GET_FORM,
+  DELETE_FORM_ELEMENT
 } from './types';
 
 // clear form builder
@@ -98,6 +99,24 @@ export const deleteForm = id => dispatch => {
       }
     });
   }
+}
+  ;
+// delete form element from canvas
+export const deleteFormElement = id => dispatch => {
+  try {
+    dispatch({
+      type: DELETE_FORM_ELEMENT,
+      payload: id
+    });
+  } catch (error) {
+    dispatch({
+      type: ELEMENT_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status
+      }
+    });
+  }
 };
 
 // add element to form
@@ -137,11 +156,11 @@ export const addUiOrder = (id, newElement, source, destination) => dispatch => {
 };
 
 // add new widget if any
-export const addWidget = (id, newWidget) => dispatch => {
+export const addWidget = (id, newWidget, source, destination) => dispatch => {
   try {
     dispatch({
       type: ADD_WIDGET,
-      payload: { id, newWidget }
+      payload: { id, newWidget, source, destination }
     });
   } catch (error) {
     dispatch({
@@ -155,11 +174,11 @@ export const addWidget = (id, newWidget) => dispatch => {
 };
 
 // reorder element
-export const reorderElement = (sourceIndex, destinationIndex) => dispatch => {
+export const reorderElement = (sourceIndex, destinationIndex, source, destination) => dispatch => {
   try {
     dispatch({
       type: REORDER_ELEMENT,
-      payload: { sourceIndex, destinationIndex }
+      payload: { sourceIndex, destinationIndex, source, destination }
     });
   } catch (error) {
     dispatch({
@@ -173,11 +192,11 @@ export const reorderElement = (sourceIndex, destinationIndex) => dispatch => {
 };
 
 // delete element
-export const deleteElement = id => dispatch => {
+export const deleteElement = (id, form) => dispatch => {
   try {
     dispatch({
       type: DELETE_ELEMENT,
-      payload: id
+      payload: { id, form }
     });
   } catch (error) {
     dispatch({
@@ -191,11 +210,29 @@ export const deleteElement = id => dispatch => {
 };
 
 // delete ui order
-export const deleteUiOrder = id => dispatch => {
+export const deleteUiOrder = (id, form) => dispatch => {
   try {
     dispatch({
       type: DELETE_UI_ORDER,
-      payload: id
+      payload: { id, form }
+    });
+  } catch (error) {
+    dispatch({
+      type: ELEMENT_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status
+      }
+    });
+  }
+};
+
+// delete widget
+export const deleteWidget = (id, form) => dispatch => {
+  try {
+    dispatch({
+      type: DELETE_WIDGET,
+      payload: { id, form }
     });
   } catch (error) {
     dispatch({
@@ -262,20 +299,4 @@ export const editElement = (id, formData) => dispatch => {
   }
 };
 
-// delete widget
-export const deleteWidget = id => dispatch => {
-  try {
-    dispatch({
-      type: DELETE_WIDGET,
-      payload: id
-    });
-  } catch (error) {
-    dispatch({
-      type: ELEMENT_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status
-      }
-    });
-  }
-};
+
