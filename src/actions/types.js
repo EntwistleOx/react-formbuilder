@@ -12,6 +12,7 @@ export const EDIT_ELEMENT = 'EDIT_ELEMENT';
 export const ELEMENT_ERROR = 'ELEMENT_ERROR';
 export const CLEAR_FORM = 'CLEAR_FORM';
 export const LOAD_FORM = 'LOAD_FORM';
+export const DELETE_FORM_ELEMENT = 'DELETE_FORM_ELEMENT';
 
 // Forms
 export const ADD_FORM = 'ADD_FORM';
