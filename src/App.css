@@ -14,11 +14,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 2.1rem;
+}
+
+.bottom-buttons {
+  padding: 0 1rem;
+  margin-top: 1rem;
 }
 
 /* FORM STYLES */
 .form-wrap {
   padding: 1rem;
+  margin: 1rem;
+  background: azure;
+  border: 1px solid #ddd;
+}
+.form-wrap hr {
+  margin-top: 21px;
+  margin-bottom: 0px;
 }
 
 .form-wrap .form-group {
@@ -47,12 +60,20 @@
 
 /* TOOLKIT */
 #formbuilder #formbuilder-toolkit {
-  flex: 1;
-  background: #fafafa;
-  border: #ddd 1px solid;
-  border-radius: 3px;
-  padding: 1rem;
-  max-width: 180px;
+  /* flex: 1; */
+  /* background: #fafafa; */
+  /* border: #ddd 1px solid; */
+  /* border-radius: 3px; */
+  /* padding: 1rem; */
+  /* max-width: 180px; */
+
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  min-width: 170px;
+
+  /* Fixed toolkit */
+  overflow: hidden;
+  position: fixed;
 }
 
 #formbuilder #formbuilder-toolkit .tolkit-item {
@@ -68,10 +89,14 @@
 
 /* FORMBUILDER CANVAS */
 #formbuilder #formbuilder-canvas {
-  flex: 3;
-  background: #fafafa;
-  border: #ddd 1px solid;
-  border-radius: 3px;
+  flex: 1;
+  /* background: #fafafa; */
+  /* border: #ddd 1px solid; */
+  /* border-radius: 3px; */
+
+  /* Same size than toolkit */
+  /* margin-left: 152px; */
+  margin-left: 170px;
 }
 
 /* Every Form Element in form canvas */
@@ -101,6 +126,8 @@
 
 /* JSON VIEWER */
 #formbuilder #json-viewer {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   max-width: 380px;
 }
 
