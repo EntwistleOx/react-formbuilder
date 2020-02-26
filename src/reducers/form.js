@@ -254,7 +254,7 @@ export default function (state = initial_state, action) {
                                     }
                                 },
                                 required: payload.formData.required === true ? (
-                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                    item.schema.required.find(req => req === payload.id) ? [...item.schema.required] : [...item.schema.required, payload.id]
                                 ) : (
                                         item.schema.required.filter((item) => item !== payload.id))
                             }
@@ -280,7 +280,7 @@ export default function (state = initial_state, action) {
                                     }
                                 },
                                 required: payload.formData.required === true ? (
-                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                    item.schema.required.find(req => req === payload.id) ? [...item.schema.required] : [...item.schema.required, payload.id]
                                 ) : (
                                         item.schema.required.filter((item) => item !== payload.id))
                             }
@@ -328,7 +328,7 @@ export default function (state = initial_state, action) {
                                     }
                                 },
                                 required: payload.formData.required === true ? (
-                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                    item.schema.required.find(req => req === payload.id) ? [...item.schema.required] : [...item.schema.required, payload.id]
                                 ) : (
                                         item.schema.required.filter((item) => item !== payload.id))
                             }
@@ -352,7 +352,7 @@ export default function (state = initial_state, action) {
                                     }
                                 },
                                 required: payload.formData.required === true ? (
-                                    item.schema.required[payload.id] ? [...item.schema.required] : [...item.schema.required, payload.id]
+                                    item.schema.required.find(req => req === payload.id) ? [...item.schema.required] : [...item.schema.required, payload.id]
                                 ) : (
                                         item.schema.required.filter((item) => item !== payload.id))
                             }
