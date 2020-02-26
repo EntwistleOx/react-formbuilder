@@ -124,21 +124,21 @@
   color: #aaa;
 }
 
-/* JSON VIEWER */
-#formbuilder #json-viewer {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  max-width: 380px;
-}
-
-#formbuilder #json-viewer pre {
-  font-size: 10px;
-  white-space: pre-wrap;
-}
-
 /* Edit element */
 #formelementedit {
   background: #fafafa;
   border: #ddd 1px solid;
   border-radius: 3px;
+}
+
+/* JSON VIEWER */
+#json-viewer {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  max-width: 380px;
+}
+
+#json-viewer pre {
+  font-size: 10px;
+  white-space: pre-wrap;
 }
