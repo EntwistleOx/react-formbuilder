@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
@@ -7,10 +7,7 @@ import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
 
 // TODO:
-// Validations
-// useeffect 
-// render from forms list
-// 
+// move validation and error sfunction to external file
 
 const FormRender = ({ forms, goBack, setAlert }) => {
 
@@ -148,15 +145,25 @@ const FormRender = ({ forms, goBack, setAlert }) => {
 
   function getSteps() {
     let step = forms.find((step, index) => stepsState.step === index)
+    console.log(step)
     return step
+  }
+
+  function prevForm() {
+    console.log(stepsState.step)
+    console.log(stepsState.step - 1)
+    setStepsState({
+      ...stepsState,
+      step: stepsState.step - 1,
+    });
   }
 
   if ((Object.keys(forms) && Object.keys(forms).length < 1) || forms.error) {
     return <Redirect to='/' />;
   }
 
-  console.log(forms)
-  console.log(stepsState)
+  // console.log(forms)
+  // console.log(forms.length)
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <div style={{ flex: '1', marginRight: '1rem' }}>
@@ -172,14 +179,43 @@ const FormRender = ({ forms, goBack, setAlert }) => {
           noHtml5Validate={true}
         >
           <div className='form-buttons'>
-            <Link to={goBack} className='btn btn-default'>
-              Volver
-          </Link>
-            <button type='submit' className='btn btn-success'>
-              Validar
-          </button>
+            {
+              stepsState.step === 0 ? (
+                <Fragment>
+                  <div></div>
+                  <button type='submit' className='btn btn-primary btn-sm pull-right'>
+                    Siguiente
+                  </button>
+                </Fragment>
+
+              ) : (
+                  stepsState.step === forms.length - 1 ? (
+                    <Fragment>
+                      <Link className='btn btn-primary btn-sm' to="#!" onClick={prevForm}>
+                        Anterior
+                    </Link>
+                      <button type='submit' className='btn btn-success btn-sm'>
+                        Validar
+                    </button>
+                    </Fragment>
+                  ) : (
+                      <Fragment>
+                        <Link className='btn btn-primary btn-sm' onClick={prevForm}>
+                          Anterior
+                    </Link>
+                        <button type='submit' className='btn btn-primary btn-sm'>
+                          Siguiente
+                    </button>
+                      </Fragment>
+                    )
+                )
+            }
           </div>
         </Form>
+        <hr />
+        <Link to={goBack} className='btn btn-default'>
+          Volver
+          </Link>
       </div>
       <SchemaViewer form={stepsState.formData} />
     </div>
