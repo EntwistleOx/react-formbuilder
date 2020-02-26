@@ -133,7 +133,7 @@ const Formbuilder = ({
           <ToolKit toolkitSchema={toolkitSchema} />
           <Canvas form={form} />
         </DragDropContext>
-        <SchemaViewer />
+        <SchemaViewer form={form} />
       </div>
     </Fragment>
   );

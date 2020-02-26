@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import JSONPretty from 'react-json-prettify';
-import { github, atomOneLight } from 'react-json-prettify/dist/themes';
-import { connect } from 'react-redux';
+import { github } from 'react-json-prettify/dist/themes';
+// import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
 const SchemaViewer = ({ form }) => {
@@ -20,11 +20,12 @@ const SchemaViewer = ({ form }) => {
 
 
 SchemaViewer.propTypes = {
-    form: PropTypes.array.isRequired,
+    form: PropTypes.any.isRequired
 };
 
-const mapStateToProps = (state) => ({
-    form: state.form
-});
+// const mapStateToProps = (state) => ({
+//     form: state.form
+// });
 
-export default connect(mapStateToProps)(SchemaViewer);
+// export default connect(mapStateToProps)(SchemaViewer);
+export default SchemaViewer;
