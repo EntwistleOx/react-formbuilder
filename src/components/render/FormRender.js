@@ -155,12 +155,14 @@ const FormRender = ({ forms, goBack, setAlert }) => {
     return <Redirect to='/' />;
   }
 
+  console.log(forms)
+  console.log(stepsState)
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <div style={{ flex: '1', marginRight: '1rem' }}>
         <Form
           schema={forms ? getSteps().schema : {}}
-          // uiSchema={forms ? renderState.uiSchema : {}}
+          uiSchema={forms ? forms[stepsState.step].uiSchema : {}}
           onSubmit={onSubmit}
           formData={stepsState.formData}
           // liveValidate={true}
