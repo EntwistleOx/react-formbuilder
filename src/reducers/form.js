@@ -23,6 +23,7 @@ shortid.characters(
 // TODO: 
 // refactor required field in edit element
 // put short id in utils file
+// add id, title, description 
 
 const initial_state = [];
 
