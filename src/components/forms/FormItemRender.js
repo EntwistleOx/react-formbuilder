@@ -8,7 +8,7 @@ const FormItemRender = props => {
   const id = props.match.params.id;
   const { forms, loadForm } = props;
 
-  const form = forms.find(form => form.schema.idPrefix === id);
+  const form = forms.find(form => form.id === id);
   loadForm(form);
 
   return (
