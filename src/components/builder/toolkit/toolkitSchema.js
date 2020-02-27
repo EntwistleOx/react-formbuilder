@@ -5,13 +5,6 @@ shortid.characters(
 
 // Toolkit Schema
 const toolkitSchema = [
-  // {
-  //   id: 'form-schema',
-  //   key: 'form',
-  //   name: 'Formulario',
-  //   type: 'object',
-  //   icon: 'fas fa-clipboard'
-  // },
   {
     id: shortid.generate(),
     key: 'checkbox',
