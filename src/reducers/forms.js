@@ -16,17 +16,17 @@ export default function (state = initial_state, action) {
       return [...state, payload.formData];
     case UPDATE_FORM:
       return state.map(form => {
-        if (form.schema.idPrefix === payload.formData.schema.idPrefix) {
+        if (form.id === payload.formData.id) {
           return payload.formData;
         }
         return form;
       });
     case GET_FORM:
       return state.find(form => {
-        if (form.schema.idPrefix === payload) return true;
+        if (form.id === payload) return true;
       });
     case DELETE_FORM:
-      return state.filter(form => form.schema.idPrefix !== payload);
+      return state.filter(form => form.id !== payload);
     case FORM_ERROR:
       return {
         ...state,
