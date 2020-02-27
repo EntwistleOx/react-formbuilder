@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
-  createForm,
   addElement,
   addUiOrder,
   addWidget,
@@ -25,7 +24,6 @@ shortid.characters(
 
 const Formbuilder = ({
   form,
-  createForm,
   addElement,
   addUiOrder,
   addWidget,
@@ -143,7 +141,8 @@ Formbuilder.propTypes = {
   addElement: PropTypes.func.isRequired,
   addUiOrder: PropTypes.func.isRequired,
   addWidget: PropTypes.func.isRequired,
-  reorderElement: PropTypes.func.isRequired
+  reorderElement: PropTypes.func.isRequired,
+  form: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -151,7 +150,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  createForm,
   addElement,
   addUiOrder,
   addWidget,
