@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { editElement } from '../../actions/form';
 import { setAlert } from '../../actions/alert';
 
@@ -11,12 +11,12 @@ import PropTypes from 'prop-types';
 // check effect dependencies
 
 const EditFormElement = props => {
+
   const formId = props.match.params.formId;
   const id = props.match.params.id;
 
   const { forms, editElement, setAlert } = props;
 
-  console.log(props)
   // Schema state
   const [schema, setSchema] = useState({
     title: 'Editar Elemento',
@@ -55,6 +55,11 @@ const EditFormElement = props => {
   });
 
   useEffect(() => {
+
+    if (forms && forms.length < 1) {
+      return <Redirect to='/' />;
+    }
+
     const result = forms.findIndex(form => form.schema.idPrefix === formId)
 
     let options;
@@ -297,7 +302,7 @@ EditFormElement.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  forms: state.form
+  forms: state.form.json
 });
 
 export default connect(mapStateToProps, { editElement, setAlert })(
