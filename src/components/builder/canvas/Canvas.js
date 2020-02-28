@@ -55,10 +55,10 @@ const Canvas = props => {
             </div>
           </div>
         ) : (
-          <Fragment>
-            <div className='notice'>Debes agregar un paso para comenzar</div>
-          </Fragment>
-        )}
+            <Fragment>
+              <div className='notice'>Debes agregar un paso para comenzar</div>
+            </Fragment>
+          )}
         {form.json.map((form, index) => (
           <Droppable
             key={form.schema.idPrefix}
@@ -66,7 +66,11 @@ const Canvas = props => {
             type='builder'
           >
             {(provided, snapshot) => (
-              <div ref={provided.innerRef} className='well'>
+              <div ref={provided.innerRef} className='well' style={{
+                border: "1px solid #cccccc",
+                backgroundColor: "rgb(248, 248, 248)",
+                boxShadow: "none"
+              }}>
                 <Form
                   schema={form.schema}
                   uiSchema={form.uiSchema}
@@ -84,8 +88,8 @@ const Canvas = props => {
                       </div>
                     </Fragment>
                   ) : (
-                    ''
-                  )}
+                      ''
+                    )}
 
                   <div className='form-buttons'>
                     <button type='button' className='btn btn-primary btn-sm'>
@@ -103,17 +107,19 @@ const Canvas = props => {
           </Droppable>
         ))}
       </div>
-      {form.json.length > 0 && (
-        <div className='form-buttons bottom-buttons'>
-          <Link to='/formbuilder-render' className='btn btn-default'>
-            Probar
+      {
+        form.json.length > 0 && (
+          <div className='form-buttons bottom-buttons'>
+            <Link to='/formbuilder-render' className='btn btn-default'>
+              Probar
           </Link>
-          <button type='button' className='btn btn-success' onClick={onSave}>
-            Guardar
+            <button type='button' className='btn btn-success' onClick={onSave}>
+              Guardar
           </button>
-        </div>
-      )}
-    </div>
+          </div>
+        )
+      }
+    </div >
   );
 };
 
