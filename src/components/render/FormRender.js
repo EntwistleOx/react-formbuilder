@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import SchemaViewer from '../builder/schemaviewer/SchemaViewer';
+import EmailAutocomplete from '../custom-widgets/EmailAutocomplete';
 import Form from 'react-jsonschema-form';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -179,6 +180,10 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
     });
   }
 
+  const emailAutocomplete = {
+    emailAutocompleteWidget: EmailAutocomplete,
+  }
+
   if ((Object.keys(forms) && Object.keys(forms).length < 1) || forms.error) {
     return <Redirect to='/' />;
   }
@@ -212,6 +217,7 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
           validate={validate}
           showErrorList={false}
           noHtml5Validate={true}
+          fields={emailAutocomplete}
         >
           <div className='form-buttons'>
             {

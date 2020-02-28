@@ -6,6 +6,7 @@ import { addForm, updateForm, clearForm, getForm } from '../../../actions/form';
 // import CanvasElementTemplate from './CanvasElementTemplate';
 import FieldTemplate from './FieldTemplate';
 import ObjectFieldTemplate from './ObjectFieldTemplate';
+import EmailAutocomplete from '../../custom-widgets/EmailAutocomplete';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
@@ -20,7 +21,6 @@ const Canvas = props => {
     const formExist = forms.find(item => (item.id === form.id ? true : false));
 
     if (formExist) {
-      console.log('llego');
       updateForm(form);
       setAlert('Formulario Actualizado.', 'success');
     } else {
@@ -30,6 +30,10 @@ const Canvas = props => {
     clearForm();
     history.push(`/forms`);
   };
+
+  const emailAutocomplete = {
+    emailAutocompleteWidget: EmailAutocomplete,
+  }
 
   return (
     <div id='formbuilder-canvas' className='well'>
@@ -74,12 +78,14 @@ const Canvas = props => {
                 <Form
                   schema={form.schema}
                   uiSchema={form.uiSchema}
-                  // formData={form.formData}
+                  formData={form.formData}
                   // FieldTemplate={CanvasElementTemplate}
                   FieldTemplate={FieldTemplate}
                   ObjectFieldTemplate={ObjectFieldTemplate}
                   formContext={form.schema}
                   disabled={true}
+                  fields={emailAutocomplete}
+                // safeRenderCompletion={true}
                 >
                   {Object.keys(form.schema.properties).length < 1 ? (
                     <Fragment>
