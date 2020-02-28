@@ -28,6 +28,8 @@ const CanvasElementTemplate = (
         form
     } = props
 
+    console.log(props)
+
     // Get prop id and split 'root_'
     const element = id.split('_');
     const elementId = element[1];
@@ -35,7 +37,7 @@ const CanvasElementTemplate = (
     const [order, setOrder] = useState(0);
 
     useEffect(() => {
-        form.forEach((form) => {
+        form.json.forEach((form) => {
             const result = form.uiSchema["ui:order"].findIndex(el => el === elementId)
             if (result !== -1) setOrder(result)
         })
@@ -111,7 +113,7 @@ CanvasElementTemplate.propTypes = {
     deleteUiOrder: PropTypes.func.isRequired,
     deleteWidget: PropTypes.func.isRequired,
     deleteFormElement: PropTypes.func.isRequired,
-    form: PropTypes.array.isRequired,
+    form: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

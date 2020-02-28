@@ -3,22 +3,28 @@ import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../../actions/alert';
 import { addForm, updateForm, clearForm, getForm } from '../../../actions/form';
-import CanvasElementTemplate from './CanvasElementTemplate';
+// import CanvasElementTemplate from './CanvasElementTemplate';
+import FieldTemplate from './FieldTemplate';
+// import ArrayFieldTemplate from './ArrayFieldTemplate';
+import ObjectFieldTemplate from './ObjectFieldTemplate';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
 
 const Canvas = props => {
-  const { form, forms, createForm, addForm, updateForm, clearForm, setAlert } = props;
+  const { form, forms, addForm, updateForm, clearForm, setAlert } = props;
 
   let history = useHistory();
 
   const onSave = () => {
+    // if form exist update, if not create
     const formExist = forms.find(item =>
-      item.schema.idPrefix === form.schema.idPrefix ? true : false
+      item.id === form.id ? true : false
     );
 
+    console.log(formExist)
     if (formExist) {
+      console.log('llego')
       updateForm(form);
       setAlert('Formulario Actualizado.', 'success');
     } else {
@@ -31,67 +37,94 @@ const Canvas = props => {
 
   return (
     <div id='formbuilder-canvas' className="well">
-      {
-        form.map((form, index) =>
-          (
-            <Droppable key={form.schema.idPrefix} droppableId={form.schema.idPrefix} type='builder'>
-              {(provided, snapshot) => (
-                <div ref={provided.innerRef}>
-                  <div className='form-wrap'>
-                    {form.schema && Object.keys(form.schema).length > 0 ? (
+      <div className='form-wrap'>
+        {
+          form.json.length > 0 ? (
+            <div className="page-header" style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              marginTop: "-1rem"
+            }}>
+              <h2>
+                Titulo del Formulario
+              </h2>
+              <div style={{ display: 'flex', fontSize: "15px" }}>
+                <Link to={`/formbuilder/${'id'}`}>
+                  <i className="fas fa-edit"></i>
+                </Link>
+                {/* <Link to="#!">
+                  <i onClick={() => clearForm(props.schema.idPrefix)} className="fas fa-trash-alt"></i>
+                </Link> */}
+              </div>
+            </div>
+          ) : (
+              <Fragment>
+                <div className='notice'>
+                  Debes agregar un paso para comenzar
+                </div>
+              </Fragment>
+            )
+        }
+        {
+          form.json.map((form, index) =>
+            (
+              <Droppable key={form.schema.idPrefix} droppableId={form.schema.idPrefix} type='builder'>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    className="well"
+                  >
 
-                      <Form
-                        schema={form.schema}
-                        uiSchema={form.uiSchema}
-                        // formData={form.formData}
-                        FieldTemplate={CanvasElementTemplate}
-                        formContext={form.schema}
-                        disabled={true}
-                      >
-                        {Object.keys(form.schema.properties).length < 1 ? (
-                          <Fragment>
-                            <div className='notice'>
-                              Arrastra los elementos del menu aca
-                       </div>
-                          </Fragment>
-                        ) : (
-                            ''
-                          )}
 
-                        <div className='form-buttons'>
-                          <button
-                            type='button'
-                            className='btn btn-primary btn-sm'
-                          >
-                            Anterior
-                          </button>
-                          <button
-                            type='button'
-                            className='btn btn-primary btn-sm'
-                          >
-                            Siguiente
-                          </button>
-                        </div>
-                      </Form>
 
-                    ) : (
+                    <Form
+                      schema={form.schema}
+                      uiSchema={form.uiSchema}
+                      // formData={form.formData}
+                      // FieldTemplate={CanvasElementTemplate}
+                      FieldTemplate={FieldTemplate}
+                      // ArrayFieldTemplate={ArrayFieldTemplate}
+                      ObjectFieldTemplate={ObjectFieldTemplate}
+                      formContext={form.schema}
+                      disabled={true}
+                    >
+                      {Object.keys(form.schema.properties).length < 1 ? (
                         <Fragment>
                           <div className='notice'>
-                            Arrastra los elementos del menu aca...
-                          </div>
+                            Arrastra los elementos del menu aca
+                            </div>
                         </Fragment>
-                      )}
+                      ) : (
+                          ''
+                        )}
+
+                      <div className='form-buttons'>
+                        <button
+                          type='button'
+                          className='btn btn-primary btn-sm'
+                        >
+                          Anterior
+                          </button>
+                        <button
+                          type='button'
+                          className='btn btn-primary btn-sm'
+                        >
+                          Siguiente
+                          </button>
+                      </div>
+                    </Form>
+
                     {provided.placeholder}
                   </div>
-                </div>
-
-              )}
-            </Droppable>
+                )}
+              </Droppable>
+            )
           )
-        )
-      }
+        }
+      </div>
       {
-        form.length > 0 ? (
+        form.json.length > 0 && (
           <div className='form-buttons bottom-buttons'>
             <Link to='/formbuilder-render' className='btn btn-default'>
               Probar
@@ -104,16 +137,14 @@ const Canvas = props => {
               Guardar
             </button>
           </div>
-        ) : (
-            ''
-          )
+        )
       }
     </div>
   );
 };
 
 Canvas.propTypes = {
-  form: PropTypes.array.isRequired,
+  form: PropTypes.object.isRequired,
   forms: PropTypes.array.isRequired,
   addForm: PropTypes.func.isRequired,
   updateForm: PropTypes.func.isRequired,

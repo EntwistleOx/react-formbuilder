@@ -1,17 +1,40 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import SchemaViewer from '../builder/schemaviewer/SchemaViewer';
 import Form from 'react-jsonschema-form';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 
 // TODO:
 // move validation and error sfunction to external file
 
-const FormRender = ({ forms, goBack, setAlert }) => {
+const FormRender = ({ forms, title, description, goBack, setAlert }) => {
 
   const [stepsState, setStepsState] = useState({ step: 0, formData: {} })
+
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        'https://randomuser.me/api/?nat=es',
+      );
+
+      setUser({
+        name: result.data.results[0].name.first + ' ' + result.data.results[0].name.last,
+        email: result.data.results[0].email,
+        cell: result.data.results[0].cell,
+        phone: result.data.results[0].phone,
+      })
+    }
+
+    fetchData();
+  }, [])
+
+
+  console.log(user)
 
   function transformErrors(errors) {
     return errors.map(error => {
@@ -150,8 +173,6 @@ const FormRender = ({ forms, goBack, setAlert }) => {
   }
 
   function prevForm() {
-    console.log(stepsState.step)
-    console.log(stepsState.step - 1)
     setStepsState({
       ...stepsState,
       step: stepsState.step - 1,
@@ -167,6 +188,20 @@ const FormRender = ({ forms, goBack, setAlert }) => {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <div style={{ flex: '1', marginRight: '1rem' }}>
+        <div className="page-header">
+          <h1>{title}</h1>
+        </div>
+        <div className="panel panel-primary">
+          <div className="panel-heading">
+            <h3 className="panel-title">Datos del Cliente</h3>
+          </div>
+          <div className="panel-body">
+            <p>Nombre: {user.name}</p>
+            <p>Email: {user.email}</p>
+            <p>Celular: {user.cell}</p>
+            <p>Telefono: {user.phone}</p>
+          </div>
+        </div>
         <Form
           schema={forms ? getSteps().schema : {}}
           uiSchema={forms ? forms[stepsState.step].uiSchema : {}}
@@ -181,13 +216,21 @@ const FormRender = ({ forms, goBack, setAlert }) => {
           <div className='form-buttons'>
             {
               stepsState.step === 0 ? (
-                <Fragment>
-                  <div></div>
-                  <button type='submit' className='btn btn-primary btn-sm pull-right'>
-                    Siguiente
+                forms.length > 1 ? (
+                  <Fragment>
+                    <div></div>
+                    <button type='submit' className='btn btn-primary btn-sm pull-right'>
+                      Siguiente
                   </button>
-                </Fragment>
-
+                  </Fragment>
+                ) : (
+                    <Fragment>
+                      <div></div>
+                      <button type='submit' className='btn btn-success btn-sm pull-right'>
+                        Validar
+                  </button>
+                    </Fragment>
+                  )
               ) : (
                   stepsState.step === forms.length - 1 ? (
                     <Fragment>
@@ -228,7 +271,9 @@ FormRender.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  forms: state.form
+  forms: state.form.json,
+  title: state.form.title,
+  description: state.form.description,
 });
 
 export default connect(mapStateToProps, { setAlert })(FormRender);

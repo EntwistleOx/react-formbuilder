@@ -4,7 +4,7 @@ shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
 
-export const setAlert = (msg, alertType, timeout = 3000) => dispatch => {
+export const setAlert = (msg, alertType, timeout = 1000) => dispatch => {
   const id = shortid.generate();
   dispatch({
     type: SET_ALERT,

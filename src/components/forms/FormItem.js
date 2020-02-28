@@ -10,26 +10,21 @@ const FormItem = ({ form, index, deleteForm, setAlert }) => {
     <Fragment>
       <tr>
         <td>{index}</td>
-        {/* <td>{form.schema.title}</td> */}
-        <td>Titulo</td>
-        {/* <td>{form.schema.description}</td> */}
-        <td>Descripcion</td>
+        <td>{form.title}</td>
+        <td>{form.description}</td>
         <td>
-          {/* <Link to={`/form-view/${form.schema.idPrefix}`}> */}
-          <Link to={`/form-view/id`}>
+          <Link to={`/form-view/${form.id}`}>
             <i className='far fa-eye'></i>
           </Link>
 
-          {/* <Link to={`/form-edit/${form.schema.idPrefix}`}> */}
-          <Link to={`/form-edit/id`}>
+          <Link to={`/form-edit/${form.id}`}>
             <i className='fas fa-edit'></i>
           </Link>
 
           <Link to='#!'>
             <i
               onClick={() => {
-                // deleteForm(form.schema.idPrefix);
-                deleteForm('id');
+                deleteForm(form.id);
                 setAlert('Formulario Eliminado.', 'success');
               }}
               className='fas fa-trash-alt'

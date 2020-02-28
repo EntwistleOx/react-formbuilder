@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 // dashed border in cloned element
 
 const ToolkitElement = ({ item, index, form }) => {
+
+  //TODO:
+  // Checkear
   let dragDisabled = false;
   if (
     Object.keys(form) &&
@@ -15,13 +18,6 @@ const ToolkitElement = ({ item, index, form }) => {
   ) {
     dragDisabled = true;
   }
-  // else if (
-  //   Object.keys(form) &&
-  //   Object.keys(form).length > 0 &&
-  //   item.key === 'form'
-  // ) {
-  //   dragDisabled = true;
-  // }
 
   const Icon = () => {
     if (item.key === 'number') {
@@ -81,7 +77,7 @@ const ToolkitElement = ({ item, index, form }) => {
 ToolkitElement.propTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-  form: PropTypes.array.isRequired
+  form: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
