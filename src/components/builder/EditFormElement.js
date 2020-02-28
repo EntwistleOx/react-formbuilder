@@ -9,10 +9,11 @@ import PropTypes from 'prop-types';
 
 //TODO:
 // check effect dependencies
+// refactor edit title and get url params => /form/step/element
 
 const EditFormElement = props => {
-
-  const formId = props.match.params.formId;
+  const root = props.match.params.formId;
+  const formId = props.match.params.stepId;
   const id = props.match.params.id;
 
   const { forms, editElement, setAlert } = props;
@@ -33,6 +34,10 @@ const EditFormElement = props => {
       formId: {
         type: 'string',
         title: 'Type'
+      },
+      root: {
+        type: 'string',
+        title: 'Type'
       }
     }
   });
@@ -44,6 +49,9 @@ const EditFormElement = props => {
     },
     formId: {
       'ui:widget': 'hidden'
+    },
+    root: {
+      'ui:widget': 'hidden'
     }
   });
 
@@ -51,45 +59,75 @@ const EditFormElement = props => {
   const [formData, setFormData] = useState({
     title: '',
     key: '',
-    formId: formId
+    formId: formId,
+    root: root
   });
 
   useEffect(() => {
-
-    if (forms && forms.length < 1) {
+    if (forms.json && forms.json.length < 1) {
       return <Redirect to='/' />;
     }
 
-    const result = forms.findIndex(form => form.schema.idPrefix === formId)
+    const result = forms.json.findIndex(
+      form => form.schema.idPrefix === formId
+    );
 
+    // console.log(forms.json, formId, result);
     let options;
     let items;
 
-    // Form Root
-    if (forms[result].schema.idPrefix === formId && id === formId) {
+    // Form Title
+    if (formId === 'title' && root === 'root') {
       // add description to schema
       setSchema({
         ...schema,
         properties: {
-          ...schema.properties,
-          description: {
-            type: 'string',
-            title: 'Descripcion'
-          }
+          ...schema.properties
         }
       });
 
       // Populate fields
       setFormData({
         ...formData,
-        title: forms[result].schema.title ? forms[result].schema.title : '...titulo del formulario',
-        description: forms[result].schema.description ? forms[result].schema.description : '...descripcion del formulario',
+        title: forms.title ? forms.title : '...titulo del formulario',
         key: id
       });
     }
 
-    //Paragraph field
-    else if (forms[result].schema.idPrefix === formId && forms[result].schema.properties[id].key === 'paragraph') {
+    // // Step Title
+    else if (formId === 'title') {
+      const idTitle = forms.json.findIndex(form => form.schema.idPrefix === id);
+      // add description to schema
+      setSchema({
+        ...schema,
+        properties: {
+          ...schema.properties
+          // description: {
+          //   type: 'string',
+          //   title: 'Descripcion'
+          // }
+        }
+      });
+
+      // Populate fields
+      setFormData({
+        ...formData,
+        title: forms.json[idTitle].schema.title
+          ? forms.json[idTitle].schema.title
+          : '...titulo',
+        // description: forms[result].schema.description
+        //   ? forms[result].schema.description
+        //   : '...descripcion del formulario',
+        key: id,
+        root: root
+      });
+    }
+
+    //Paragraph Field
+    else if (
+      forms.json[result].schema.idPrefix === formId &&
+      forms.json[result].schema.properties[id].key === 'paragraph'
+    ) {
       // add description to schema
       setSchema({
         ...schema,
@@ -115,13 +153,16 @@ const EditFormElement = props => {
       // Populate fields
       setFormData({
         ...formData,
-        description: forms[result].schema.properties[id].description,
-        key: forms[result].schema.properties[id].key
+        description: forms.json[result].schema.properties[id].description,
+        key: forms.json[result].schema.properties[id].key
       });
     }
 
     // Select Field
-    else if (forms[result].schema.idPrefix === formId && forms[result].schema.properties[id].key === 'select') {
+    else if (
+      forms.json[result].schema.idPrefix === formId &&
+      forms.json[result].schema.properties[id].key === 'select'
+    ) {
       // add options to schema
       setSchema({
         ...schema,
@@ -152,8 +193,8 @@ const EditFormElement = props => {
       });
 
       // Options objects
-      const keys = forms[result].schema.properties[id].enum;
-      const values = forms[result].schema.properties[id].enumNames;
+      const keys = forms.json[result].schema.properties[id].enum;
+      const values = forms.json[result].schema.properties[id].enumNames;
       options = keys.map((_, i) => {
         return { key: keys[i], value: values[i] };
       });
@@ -161,15 +202,24 @@ const EditFormElement = props => {
       // Populate fields
       setFormData({
         ...formData,
-        title: forms[result].schema.properties[id].title ? forms[result].schema.properties[id].title : '...titulo del elemento',
-        required: forms[result].schema.required.find(element => element === id) ? true : false,
-        key: forms[result].schema.properties[id].key,
+        title: forms.json[result].schema.properties[id].title
+          ? forms.json[result].schema.properties[id].title
+          : '...titulo del elemento',
+        required: forms.json[result].schema.required.find(
+          element => element === id
+        )
+          ? true
+          : false,
+        key: forms.json[result].schema.properties[id].key,
         options
       });
     }
 
-    // Radio Field
-    else if (forms[result].schema.idPrefix === formId && forms[result].schema.properties[id].key === 'radio') {
+    // Radio field
+    else if (
+      forms.json[result].schema.idPrefix === formId &&
+      forms.json[result].schema.properties[id].key === 'radio'
+    ) {
       // add options to schema
       setSchema({
         ...schema,
@@ -202,19 +252,28 @@ const EditFormElement = props => {
       });
 
       // Populate fields
-      items = forms[result].schema.properties[id].enumNames;
+      items = forms.json[result].schema.properties[id].enumNames;
       setFormData({
         ...formData,
-        title: forms[result].schema.properties[id].title ? forms[result].schema.properties[id].title : '...titulo del elemento',
-        required: forms[result].schema.required.find(element => element === id) ? true : false,
-        key: forms[result].schema.properties[id].key,
+        title: forms.json[result].schema.properties[id].title
+          ? forms.json[result].schema.properties[id].title
+          : '...titulo del elemento',
+        required: forms.json[result].schema.required.find(
+          element => element === id
+        )
+          ? true
+          : false,
+        key: forms.json[result].schema.properties[id].key,
         items
       });
-      return
+      return;
     }
 
-    // Checkboxes Field
-    else if (forms[result].schema.idPrefix === formId && forms[result].schema.properties[id].key === 'checkboxes') {
+    // Checkboxes field
+    else if (
+      forms.json[result].schema.idPrefix === formId &&
+      forms.json[result].schema.properties[id].key === 'checkboxes'
+    ) {
       // add items to schema
       setSchema({
         ...schema,
@@ -235,12 +294,18 @@ const EditFormElement = props => {
       });
 
       // Populate fields
-      items = forms[result].schema.properties[id].items.enum;
+      items = forms.json[result].schema.properties[id].items.enum;
       setFormData({
         ...formData,
-        title: forms[result].schema.properties[id].title ? forms[result].schema.properties[id].title : '...titulo del elemento',
-        required: forms[result].schema.required.find(element => element === id) ? true : false,
-        key: forms[result].schema.properties[id].key,
+        title: forms.json[result].schema.properties[id].title
+          ? forms.json[result].schema.properties[id].title
+          : '...titulo del elemento',
+        required: forms.json[result].schema.required.find(
+          element => element === id
+        )
+          ? true
+          : false,
+        key: forms.json[result].schema.properties[id].key,
         items
       });
     }
@@ -262,9 +327,15 @@ const EditFormElement = props => {
       // Populate fields
       setFormData({
         ...formData,
-        title: forms[result].schema.properties[id].title ? forms[result].schema.properties[id].title : '...titulo del elemento',
-        required: forms[result].schema.required.find(element => element === id) ? true : false,
-        key: forms[result].schema.properties[id].key
+        title: forms.json[result].schema.properties[id].title
+          ? forms.json[result].schema.properties[id].title
+          : '...titulo del elemento',
+        required: forms.json[result].schema.required.find(
+          element => element === id
+        )
+          ? true
+          : false,
+        key: forms.json[result].schema.properties[id].key
       });
     }
   }, [forms, formId, id, props]); // End UseEffect
@@ -297,12 +368,12 @@ const EditFormElement = props => {
 };
 
 EditFormElement.propTypes = {
-  forms: PropTypes.array.isRequired,
+  forms: PropTypes.object.isRequired,
   editElement: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  forms: state.form.json
+  forms: state.form
 });
 
 export default connect(mapStateToProps, { editElement, setAlert })(
