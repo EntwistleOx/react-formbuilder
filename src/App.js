@@ -9,6 +9,7 @@ import Forms from './components/forms/Forms';
 import FormItemRender from './components/forms/FormItemRender';
 import FormEdit from './components/forms/FormEdit';
 import TestSchema from './components/TestSchema';
+import EmailAutocomplete from './components/custom-widgets/EmailAutocomplete';
 
 // CSS
 import './App.css';
@@ -41,6 +42,7 @@ function App() {
             <Route exact path='/form-view/:id' component={FormItemRender} />
             <Route exact path='/form-edit/:id' component={FormEdit} />
             <Route exact path='/test-schema' component={TestSchema} />
+            <Route exact path='/test-email-auto' component={EmailAutocomplete} />
           </Switch>
         </div>
       </Router>
