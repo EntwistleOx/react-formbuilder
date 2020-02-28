@@ -28,11 +28,11 @@ shortid.characters(
 const initial_state = {
   id: shortid.generate(),
   title: 'Titulo del Formulario',
-  description: 'Descripcion del Formulario.',
+  description: '',
   json: []
 };
 
-export default function(state = initial_state, action) {
+export default function (state = initial_state, action) {
   const { type, payload } = action;
   const uiOrderKey = 'ui:order';
 
@@ -41,7 +41,7 @@ export default function(state = initial_state, action) {
       return {
         id: shortid.generate(),
         title: 'Titulo del Formulario',
-        description: 'Descripcion del Formulario.',
+        description: '',
         json: []
       };
 
@@ -57,7 +57,7 @@ export default function(state = initial_state, action) {
             schema: {
               idPrefix: shortid.generate(),
               title: 'Titulo',
-              description: 'Descripcion.',
+              description: '',
               type: 'object',
               required: [],
               properties: {}
@@ -338,8 +338,8 @@ export default function(state = initial_state, action) {
                           ? [...item.schema.required]
                           : [...item.schema.required, payload.id]
                         : item.schema.required.filter(
-                            item => item !== payload.id
-                          )
+                          item => item !== payload.id
+                        )
                   }
                 };
               }
@@ -372,8 +372,8 @@ export default function(state = initial_state, action) {
                           ? [...item.schema.required]
                           : [...item.schema.required, payload.id]
                         : item.schema.required.filter(
-                            item => item !== payload.id
-                          )
+                          item => item !== payload.id
+                        )
                   }
                 };
               }
@@ -432,8 +432,8 @@ export default function(state = initial_state, action) {
                           ? [...item.schema.required]
                           : [...item.schema.required, payload.id]
                         : item.schema.required.filter(
-                            item => item !== payload.id
-                          )
+                          item => item !== payload.id
+                        )
                   }
                 };
               }
@@ -465,8 +465,8 @@ export default function(state = initial_state, action) {
                           ? [...item.schema.required]
                           : [...item.schema.required, payload.id]
                         : item.schema.required.filter(
-                            item => item !== payload.id
-                          )
+                          item => item !== payload.id
+                        )
                   }
                 };
               }
