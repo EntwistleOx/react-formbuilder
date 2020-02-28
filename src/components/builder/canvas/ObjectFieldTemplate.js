@@ -38,18 +38,16 @@ const ObjectFieldTemplate = props => {
       {props.properties.map((element, index) => (
         <Draggable index={index} key={element.name} draggableId={element.name}>
           {(provided, snapshot) => (
-            <div
-              className='well'
-              style={{ backgroundColor: '#fff', border: '1px dashed #aaa' }}
-            >
+            <Fragment>
               <div
+                className='well'
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
               >
                 {element.content}
               </div>
-            </div>
+            </Fragment>
           )}
         </Draggable>
       ))}
