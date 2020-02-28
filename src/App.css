@@ -60,13 +60,6 @@
 
 /* TOOLKIT */
 #formbuilder #formbuilder-toolkit {
-  /* flex: 1; */
-  /* background: #fafafa; */
-  /* border: #ddd 1px solid; */
-  /* border-radius: 3px; */
-  /* padding: 1rem; */
-  /* max-width: 180px; */
-
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   min-width: 170px;
@@ -90,12 +83,6 @@
 /* FORMBUILDER CANVAS */
 #formbuilder #formbuilder-canvas {
   flex: 1;
-  /* background: #fafafa; */
-  /* border: #ddd 1px solid; */
-  /* border-radius: 3px; */
-
-  /* Same size than toolkit */
-  /* margin-left: 152px; */
   margin-left: 170px;
 }
 
