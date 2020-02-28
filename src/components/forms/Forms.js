@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 const Forms = ({ forms, clearForm }) => {
   useEffect(() => {
     clearForm();
-  }, []);
+  }, [clearForm]);
 
   return (
     <Fragment>
@@ -41,25 +41,29 @@ const Forms = ({ forms, clearForm }) => {
           </thead>
           <tbody>
             {forms.map((form, i) => (
-              <FormItem key={i} /*key={form.schema.idPrefix}*/ form={form} index={i + 1} />
+              <FormItem
+                key={i}
+                /*key={form.schema.idPrefix}*/ form={form}
+                index={i + 1}
+              />
             ))}
           </tbody>
         </table>
       ) : (
-          <div className='well'>
-            <h4>
-              <strong>Aviso!</strong>
-            </h4>
-            <p>
-              No hay contenido disponible.
+        <div className='well'>
+          <h4>
+            <strong>Aviso!</strong>
+          </h4>
+          <p>
+            No hay contenido disponible.
             <Link to='/formbuilder' className='alert-link'>
-                {' '}
-                Comienza a agregar formularios aca
+              {' '}
+              Comienza a agregar formularios aca
             </Link>
-              .
+            .
           </p>
-          </div>
-        )}
+        </div>
+      )}
     </Fragment>
   );
 };
