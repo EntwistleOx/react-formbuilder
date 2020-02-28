@@ -5,7 +5,6 @@ import { setAlert } from '../../../actions/alert';
 import { addForm, updateForm, clearForm, getForm } from '../../../actions/form';
 // import CanvasElementTemplate from './CanvasElementTemplate';
 import FieldTemplate from './FieldTemplate';
-// import ArrayFieldTemplate from './ArrayFieldTemplate';
 import ObjectFieldTemplate from './ObjectFieldTemplate';
 import { Droppable } from 'react-beautiful-dnd';
 import Form from 'react-jsonschema-form';
@@ -18,13 +17,10 @@ const Canvas = props => {
 
   const onSave = () => {
     // if form exist update, if not create
-    const formExist = forms.find(item =>
-      item.id === form.id ? true : false
-    );
+    const formExist = forms.find(item => (item.id === form.id ? true : false));
 
-    console.log(formExist)
     if (formExist) {
-      console.log('llego')
+      console.log('llego');
       updateForm(form);
       setAlert('Formulario Actualizado.', 'success');
     } else {
@@ -36,109 +32,87 @@ const Canvas = props => {
   };
 
   return (
-    <div id='formbuilder-canvas' className="well">
+    <div id='formbuilder-canvas' className='well'>
       <div className='form-wrap'>
-        {
-          form.json.length > 0 ? (
-            <div className="page-header" style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              marginTop: "-1rem"
-            }}>
-              <h2>
-                Titulo del Formulario
-              </h2>
-              <div style={{ display: 'flex', fontSize: "15px" }}>
-                <Link to={`/formbuilder/${'id'}`}>
-                  <i className="fas fa-edit"></i>
-                </Link>
-                {/* <Link to="#!">
-                  <i onClick={() => clearForm(props.schema.idPrefix)} className="fas fa-trash-alt"></i>
-                </Link> */}
-              </div>
+        {form.json.length > 0 ? (
+          <div
+            className='page-header'
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
+              marginTop: '-1rem'
+            }}
+          >
+            <h2>{form.title}</h2>
+            <div style={{ display: 'flex', fontSize: '15px' }}>
+              <Link to={`/formbuilder/root/title/${form.id}/`}>
+                <i className='fas fa-edit'></i>
+              </Link>
+              <Link to='#!'>
+                <i onClick={() => clearForm()} className='fas fa-trash-alt'></i>
+              </Link>
             </div>
-          ) : (
-              <Fragment>
-                <div className='notice'>
-                  Debes agregar un paso para comenzar
-                </div>
-              </Fragment>
-            )
-        }
-        {
-          form.json.map((form, index) =>
-            (
-              <Droppable key={form.schema.idPrefix} droppableId={form.schema.idPrefix} type='builder'>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    className="well"
-                  >
-
-
-
-                    <Form
-                      schema={form.schema}
-                      uiSchema={form.uiSchema}
-                      // formData={form.formData}
-                      // FieldTemplate={CanvasElementTemplate}
-                      FieldTemplate={FieldTemplate}
-                      // ArrayFieldTemplate={ArrayFieldTemplate}
-                      ObjectFieldTemplate={ObjectFieldTemplate}
-                      formContext={form.schema}
-                      disabled={true}
-                    >
-                      {Object.keys(form.schema.properties).length < 1 ? (
-                        <Fragment>
-                          <div className='notice'>
-                            Arrastra los elementos del menu aca
-                            </div>
-                        </Fragment>
-                      ) : (
-                          ''
-                        )}
-
-                      <div className='form-buttons'>
-                        <button
-                          type='button'
-                          className='btn btn-primary btn-sm'
-                        >
-                          Anterior
-                          </button>
-                        <button
-                          type='button'
-                          className='btn btn-primary btn-sm'
-                        >
-                          Siguiente
-                          </button>
-                      </div>
-                    </Form>
-
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            )
-          )
-        }
-      </div>
-      {
-        form.json.length > 0 && (
-          <div className='form-buttons bottom-buttons'>
-            <Link to='/formbuilder-render' className='btn btn-default'>
-              Probar
-            </Link>
-            <button
-              type='button'
-              className='btn btn-success'
-              onClick={onSave}
-            >
-              Guardar
-            </button>
           </div>
-        )
-      }
+        ) : (
+          <Fragment>
+            <div className='notice'>Debes agregar un paso para comenzar</div>
+          </Fragment>
+        )}
+        {form.json.map((form, index) => (
+          <Droppable
+            key={form.schema.idPrefix}
+            droppableId={form.schema.idPrefix}
+            type='builder'
+          >
+            {(provided, snapshot) => (
+              <div ref={provided.innerRef} className='well'>
+                <Form
+                  schema={form.schema}
+                  uiSchema={form.uiSchema}
+                  // formData={form.formData}
+                  // FieldTemplate={CanvasElementTemplate}
+                  FieldTemplate={FieldTemplate}
+                  ObjectFieldTemplate={ObjectFieldTemplate}
+                  formContext={form.schema}
+                  disabled={true}
+                >
+                  {Object.keys(form.schema.properties).length < 1 ? (
+                    <Fragment>
+                      <div className='notice'>
+                        Arrastra los elementos del menu aca
+                      </div>
+                    </Fragment>
+                  ) : (
+                    ''
+                  )}
+
+                  <div className='form-buttons'>
+                    <button type='button' className='btn btn-primary btn-sm'>
+                      Anterior
+                    </button>
+                    <button type='button' className='btn btn-primary btn-sm'>
+                      Siguiente
+                    </button>
+                  </div>
+                </Form>
+
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        ))}
+      </div>
+      {form.json.length > 0 && (
+        <div className='form-buttons bottom-buttons'>
+          <Link to='/formbuilder-render' className='btn btn-default'>
+            Probar
+          </Link>
+          <button type='button' className='btn btn-success' onClick={onSave}>
+            Guardar
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -147,7 +121,7 @@ Canvas.propTypes = {
   form: PropTypes.object.isRequired,
   forms: PropTypes.array.isRequired,
   addForm: PropTypes.func.isRequired,
-  updateForm: PropTypes.func.isRequired,
+  updateForm: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
