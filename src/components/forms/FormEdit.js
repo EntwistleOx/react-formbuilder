@@ -12,7 +12,7 @@ const FormEdit = props => {
 
   useEffect(() => {
     loadForm(form);
-  }, []);
+  }, [loadForm, form]);
 
   return (
     <Fragment>
