@@ -32,8 +32,8 @@ const Canvas = props => {
   };
 
   const emailAutocomplete = {
-    emailAutocompleteWidget: EmailAutocomplete,
-  }
+    emailAutocompleteWidget: EmailAutocomplete
+  };
 
   return (
     <div id='formbuilder-canvas' className='well'>
@@ -59,10 +59,10 @@ const Canvas = props => {
             </div>
           </div>
         ) : (
-            <Fragment>
-              <div className='notice'>Debes agregar un paso para comenzar</div>
-            </Fragment>
-          )}
+          <Fragment>
+            <div className='notice'>Debes agregar un paso para comenzar</div>
+          </Fragment>
+        )}
         {form.json.map((form, index) => (
           <Droppable
             key={form.schema.idPrefix}
@@ -70,11 +70,15 @@ const Canvas = props => {
             type='builder'
           >
             {(provided, snapshot) => (
-              <div ref={provided.innerRef} className='well' style={{
-                border: "1px solid #cccccc",
-                backgroundColor: "rgb(248, 248, 248)",
-                boxShadow: "none"
-              }}>
+              <div
+                ref={provided.innerRef}
+                className='well'
+                style={{
+                  border: '1px solid #cccccc',
+                  backgroundColor: 'rgb(248, 248, 248)',
+                  boxShadow: 'none'
+                }}
+              >
                 <Form
                   schema={form.schema}
                   uiSchema={form.uiSchema}
@@ -84,8 +88,8 @@ const Canvas = props => {
                   ObjectFieldTemplate={ObjectFieldTemplate}
                   formContext={form.schema}
                   disabled={true}
-                  fields={emailAutocomplete}
-                // safeRenderCompletion={true}
+                  widgets={emailAutocomplete}
+                  // safeRenderCompletion={true}
                 >
                   {Object.keys(form.schema.properties).length < 1 ? (
                     <Fragment>
@@ -94,8 +98,8 @@ const Canvas = props => {
                       </div>
                     </Fragment>
                   ) : (
-                      ''
-                    )}
+                    ''
+                  )}
 
                   <div className='form-buttons'>
                     <button type='button' className='btn btn-primary btn-sm'>
@@ -113,19 +117,17 @@ const Canvas = props => {
           </Droppable>
         ))}
       </div>
-      {
-        form.json.length > 0 && (
-          <div className='form-buttons bottom-buttons'>
-            <Link to='/formbuilder-render' className='btn btn-default'>
-              Probar
+      {form.json.length > 0 && (
+        <div className='form-buttons bottom-buttons'>
+          <Link to='/formbuilder-render' className='btn btn-default'>
+            Probar
           </Link>
-            <button type='button' className='btn btn-success' onClick={onSave}>
-              Guardar
+          <button type='button' className='btn btn-success' onClick={onSave}>
+            Guardar
           </button>
-          </div>
-        )
-      }
-    </div >
+        </div>
+      )}
+    </div>
   );
 };
 
