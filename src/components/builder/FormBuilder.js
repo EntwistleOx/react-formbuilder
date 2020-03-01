@@ -94,7 +94,10 @@ const Formbuilder = ({
             case 'number':
               return { 'ui:placeholder': '...12345' };
             case 'email':
-              return { 'ui:placeholder': '...my@email.cl', 'ui:field': 'emailAutocompleteWidget' };
+              return {
+                'ui:placeholder': '...my@email.cl',
+                'ui:widget': 'emailAutocompleteWidget'
+              };
             case 'rut':
               return { 'ui:placeholder': '...12.444.555-0' };
             case 'radio':
