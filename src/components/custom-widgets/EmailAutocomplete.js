@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
+// TODO:
+// accept only one @
+// accept only one email domain
+// filter by domain domain, now shows all domains
+
 const EmailAutocomplete = props => {
   const suggestions = [
     '2call.cl',
@@ -35,19 +40,24 @@ const EmailAutocomplete = props => {
     };
   }, []);
 
+  // Fired when input value is changed
   const onChange = (e, fromClick) => {
     const input = e;
 
     if (!fromClick) {
-      // Pattern: .*@.*
+      // Pattern: \S+@.
+      // \S ==> any non whitespace character
+      // + ==> one or more results must appear
+      // @ ==> contains @
+      // .* ==> any character 
       let reg = new RegExp(
         input
           .split('')
           .join('\\w*\\s*\\w*')
-          .replace(/.*@.*/, ''),
+          .replace(/\S+@.*/, ''),
         'i'
       );
-      let filteredSuggestions = suggestions.filter(function(sugestion) {
+      let filteredSuggestions = suggestions.filter(function (sugestion) {
         if (sugestion.match(reg)) {
           return sugestion;
         }
@@ -75,18 +85,63 @@ const EmailAutocomplete = props => {
 
   // Event fired when the user clicks on a suggestion
   const onClick = e => {
-    // Update the user input and reset the rest of the state
 
     const email = state.userInput + e.currentTarget.innerText;
     onChange(email, true);
 
+    // Update the user input and reset the rest of the state
     setState({
       activeSuggestion: 0,
       filteredSuggestions: [],
       showSuggestions: false,
-      userInput: state.userInput + e.currentTarget.innerText,
+      userInput: email,
       dropdownOpen: ''
     });
+  };
+
+  // Event fired when the user presses a key down
+  const onKeyDown = e => {
+    // User pressed the enter key, update the input and close the
+    // suggestions
+    if (e.keyCode === 13) {
+      e.preventDefault()
+
+      const email = state.userInput + state.filteredSuggestions[state.activeSuggestion];
+      onChange(email, true);
+
+      setState({
+        activeSuggestion: 0,
+        filteredSuggestions: [],
+        showSuggestions: false,
+        userInput: email,
+        dropdownOpen: ''
+      });
+    }
+
+    // User pressed the up arrow, decrement the index
+    else if (e.keyCode === 38) {
+      if (state.activeSuggestion === 0) {
+        return;
+      }
+
+      setState({
+        ...state,
+        activeSuggestion: state.activeSuggestion - 1
+      });
+    }
+
+    // User pressed the down arrow, increment the index
+    else if (e.keyCode === 40) {
+      if (state.activeSuggestion - 1 === state.filteredSuggestions.length) {
+        return;
+      }
+
+      console.log(state.activeSuggestion + 1)
+      setState({
+        ...state,
+        activeSuggestion: state.activeSuggestion + 1
+      });
+    }
   };
 
   // Close Dropdown
@@ -96,7 +151,7 @@ const EmailAutocomplete = props => {
       return;
     }
 
-    // outside click and setState
+    // Outside field click and setState
     setState({
       ...state,
       activeSuggestion: 0,
@@ -116,8 +171,16 @@ const EmailAutocomplete = props => {
           <div className={`dropdown ${state.dropdownOpen}`}>
             <ul className='dropdown-menu' role='menu'>
               {state.filteredSuggestions.map((suggestion, index) => {
+
+                let className;
+
+                // Flag the active suggestion with a class
+                if (index === state.activeSuggestion) {
+                  className = "active";
+                }
+
                 return (
-                  <li key={suggestion} onClick={onClick}>
+                  <li className={className} key={suggestion} onClick={onClick}>
                     <Link to='#!'>{suggestion}</Link>
                   </li>
                 );
@@ -131,7 +194,7 @@ const EmailAutocomplete = props => {
 
   return (
     <Fragment>
-      <div className='form-group' ref={node}>
+      <div id="email-autocomplete" className='form-group' ref={node}>
         <input
           type='email'
           className='form-control'
@@ -139,7 +202,8 @@ const EmailAutocomplete = props => {
           placeholder={props.placeholder}
           disabled={props.disabled}
           onChange={e => onChange(e.target.value, false)}
-          onKeyUp={e => onChange(e.target.value, false)}
+          onKeyDown={onKeyDown}
+        // onKeyUp={e => onChange(e.target.value, false)}
         />
         {suggestionsListComponent}
       </div>
