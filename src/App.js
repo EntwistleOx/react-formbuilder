@@ -8,8 +8,9 @@ import EditFormElement from './components/builder/EditFormElement';
 import Forms from './components/forms/Forms';
 import FormItemRender from './components/forms/FormItemRender';
 import FormEdit from './components/forms/FormEdit';
-import TestSchema from './components/TestSchema';
-import EmailAutocomplete from './components/custom-widgets/EmailAutocomplete';
+import BuilderTestSchema from './components/test-components/BuilderTestSchema';
+import RenderTestSchema from './components/test-components/RenderTestSchema';
+import FlowDiagram from './components/test-components/FlowDiagram';
 
 // CSS
 import './App.css';
@@ -41,8 +42,9 @@ function App() {
             <Route exact path='/forms' component={Forms} />
             <Route exact path='/form-view/:id' component={FormItemRender} />
             <Route exact path='/form-edit/:id' component={FormEdit} />
-            <Route exact path='/test-schema' component={TestSchema} />
-            <Route exact path='/test-email-auto' component={EmailAutocomplete} />
+            <Route exact path='/builder-test-schema' component={BuilderTestSchema} />
+            <Route exact path='/render-test-schema' component={RenderTestSchema} />
+            <Route exact path='/flow-diagram' component={FlowDiagram} />
           </Switch>
         </div>
       </Router>

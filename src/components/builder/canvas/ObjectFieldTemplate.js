@@ -12,6 +12,8 @@ import PropTypes from 'prop-types';
 const ObjectFieldTemplate = props => {
   const { deleteFormElement, formId } = props;
 
+  console.log('aers', props)
+
   return (
     <Fragment>
       <legend
