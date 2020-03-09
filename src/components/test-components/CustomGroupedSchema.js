@@ -61,23 +61,26 @@ function doGrouping({ properties, groups, props }) {
   }
   const mapped = groups.map((g, index) => {
 
+    console.log('map ==> ', g)
 
     if (typeof g === "string") {
       const found = properties.filter(p => p.name === g);
-      // console.log(found)
       if (found.length === 1) {
         const el = found[0];
         return el.content;
       } else {
-        return
+        return null
       }
-      return EXTRANEOUS;
+      // return EXTRANEOUS;
     } else if (typeof g === "object") {
+
       const { templates } = props.formContext;
       const GroupComponent = templates
         ? templates[g["ui:template"]]
         : DefaultTemplate;
       const _properties = Object.keys(g).reduce((acc, key) => {
+
+        console.log('entro aca', acc, key)
 
         const Name = () => {
           return <div
@@ -119,6 +122,9 @@ function doGrouping({ properties, groups, props }) {
     }
     throw new Error("Invalid object type: " + typeof g + " " + g);
   });
+
+  console.log(mapped)
+
   const remainder = mapped.filter(m => m === REST);
   if (remainder.length > 0) {
     throw new Error("Remainder fields not supported");
