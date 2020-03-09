@@ -1,6 +1,7 @@
 // Form
-export const CREATE_FORM = 'CREATE_FORM';
+export const CREATE_STEP = 'CREATE_STEP';
 export const ADD_ELEMENT = 'ADD_ELEMENT';
+export const ADD_UI_STEP = 'ADD_UI_STEP';
 export const ADD_UI_ORDER = 'ADD_UI_ORDER';
 export const ADD_WIDGET = 'ADD_WIDGET';
 export const REORDER_ELEMENT = 'REORDER_ELEMENT';

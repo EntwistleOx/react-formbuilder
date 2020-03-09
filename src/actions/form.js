@@ -1,6 +1,7 @@
 import {
-  CREATE_FORM,
+  CREATE_STEP,
   ADD_ELEMENT,
+  ADD_UI_STEP,
   ADD_UI_ORDER,
   ADD_WIDGET,
   REORDER_ELEMENT,
@@ -24,9 +25,9 @@ export const clearForm = () => dispatch => {
   dispatch({ type: CLEAR_FORM });
 };
 
-// clear form builder
-export const createForm = () => dispatch => {
-  dispatch({ type: CREATE_FORM });
+// create step
+export const createStep = () => dispatch => {
+  dispatch({ type: CREATE_STEP });
 };
 
 // add a form
@@ -124,6 +125,24 @@ export const addElement = (id, newElement, source, destination) => dispatch => {
   try {
     dispatch({
       type: ADD_ELEMENT,
+      payload: { id, newElement, source, destination }
+    });
+  } catch (error) {
+    dispatch({
+      type: ELEMENT_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status
+      }
+    });
+  }
+};
+
+// add element order in ui schema
+export const addUiStep = (id, newElement, source, destination) => dispatch => {
+  try {
+    dispatch({
+      type: ADD_UI_STEP,
       payload: { id, newElement, source, destination }
     });
   } catch (error) {
