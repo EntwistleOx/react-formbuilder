@@ -1,17 +1,17 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
-import { createForm } from '../../../actions/form'
+import { createStep } from '../../../actions/form'
 import ToolkitElement from './ToolkitElement';
 import PropTypes from 'prop-types';
 
 // TODO:
 // inline style to css file
 
-const Toolkit = ({ toolkitSchema, createForm }) => {
+const Toolkit = ({ toolkitSchema, createStep }) => {
 
     const onCreate = () => {
-        createForm()
+        createStep()
     }
 
     return (
@@ -48,7 +48,7 @@ const Toolkit = ({ toolkitSchema, createForm }) => {
 
 Toolkit.propTypes = {
     toolkitSchema: PropTypes.array.isRequired,
-    createForm: PropTypes.func.isRequired,
+    createStep: PropTypes.func.isRequired,
 }
 
-export default connect(null, { createForm })(Toolkit)
+export default connect(null, { createStep })(Toolkit)
