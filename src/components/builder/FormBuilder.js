@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
   addElement,
+  addUiStep,
   addUiOrder,
   addWidget,
   reorderElement
@@ -25,14 +26,13 @@ shortid.characters(
 const Formbuilder = ({
   form,
   addElement,
+  addUiStep,
   addUiOrder,
   addWidget,
   reorderElement
 }) => {
   const onDragEnd = result => {
     const { source, destination } = result;
-
-    // console.log(source, destination)
 
     // dropped outside the list
     if (!destination) {
@@ -116,10 +116,11 @@ const Formbuilder = ({
 
         const id = shortid.generate();
         addElement(id, newElement, source, destination);
-        addUiOrder(id, newElement, source, destination);
-        if (newWidget()) {
-          addWidget(id, newWidget(), source, destination);
-        }
+        // addUiStep(id, newElement, source, destination);
+        // addUiOrder(id, newElement, source, destination);
+        // if (newWidget()) {
+        //   addWidget(id, newWidget(), source, destination);
+        // }
 
         break;
       default:
@@ -142,6 +143,7 @@ const Formbuilder = ({
 
 Formbuilder.propTypes = {
   addElement: PropTypes.func.isRequired,
+  addUiStep: PropTypes.func.isRequired,
   addUiOrder: PropTypes.func.isRequired,
   addWidget: PropTypes.func.isRequired,
   reorderElement: PropTypes.func.isRequired,
@@ -154,6 +156,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   addElement,
+  addUiStep,
   addUiOrder,
   addWidget,
   reorderElement
