@@ -34,14 +34,10 @@ export const GroupTemplates = {
         </Table>
     ),
     well: props => props.properties.map(p => {
-        if (p.children[0] !== undefined) {
-            return <Well>
-                {p.name}
-                {p.children}
-            </Well>
-        } else {
-            return
-        }
+        return <Well>
+            {p.name}
+            {p.children}
+        </Well>
     }
     ),
     tabs: props => {
