@@ -1,6 +1,7 @@
 import shortid from 'shortid';
 import {
   ADD_ELEMENT,
+  ADD_UI_STEP,
   ADD_UI_ORDER,
   ADD_WIDGET,
   REORDER_ELEMENT,
@@ -11,11 +12,11 @@ import {
   ELEMENT_ERROR,
   GET_ELEMENT,
   CLEAR_FORM,
-  CREATE_FORM,
+  CREATE_STEP,
   LOAD_FORM,
   DELETE_FORM_ELEMENT
 } from '../actions/types';
-
+import { CustomObjectFieldTemplate } from '../components/CustomGroupedSchema';
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
@@ -27,47 +28,67 @@ shortid.characters(
 
 const initial_state = {
   id: shortid.generate(),
-  title: 'Titulo del Formulario',
-  description: '',
-  json: []
+  schema: {
+    type: 'object',
+    title: 'Titulo del Formulario',
+    description: '',
+    properties: {},
+    required: []
+  },
+  uiSchema: {
+    'ui:order': [],
+    'ui:groups': [{
+      'ui:template': 'well',
+    }],
+    'ui:template': CustomObjectFieldTemplate
+  },
+  formData: {},
 };
 
 export default function (state = initial_state, action) {
+
   const { type, payload } = action;
+
+  // Ui Schema Keys
   const uiOrderKey = 'ui:order';
+  const uiGroupsKey = 'ui:groups';
 
   switch (type) {
     case CLEAR_FORM:
       return {
         id: shortid.generate(),
-        title: 'Titulo del Formulario',
-        description: '',
-        json: []
+        schema: {
+          type: 'object',
+          title: 'Titulo del Formulario',
+          description: '',
+          properties: {},
+          required: []
+        },
+        uiSchema: {
+          'ui:order': [],
+          'ui:groups': [{
+            'ui:template': 'well'
+          }],
+          'ui:template': CustomObjectFieldTemplate
+        },
+        formData: {},
       };
 
     case LOAD_FORM:
       return payload;
 
-    case CREATE_FORM:
+    case CREATE_STEP:
       return {
         ...state,
-        json: [
-          ...state.json,
-          {
-            schema: {
-              idPrefix: shortid.generate(),
-              title: 'Titulo',
-              description: '',
-              type: 'object',
-              required: [],
-              properties: {}
-            },
-            uiSchema: {
-              'ui:order': []
-            },
-            formData: {}
-          }
-        ]
+        uiSchema: {
+          ...state.uiSchema,
+          [uiGroupsKey]: [
+            {
+              ...state.uiSchema[uiGroupsKey][0],
+              [`Paso_${shortid.generate()}`]: []
+            }
+          ]
+        }
       };
 
     case ADD_ELEMENT:
@@ -75,66 +96,64 @@ export default function (state = initial_state, action) {
         // Paragraph element
         return {
           ...state,
-          json: [
-            ...state.json.map((item, index) => {
-              if (item.schema.idPrefix === payload.destination.droppableId) {
-                return {
-                  ...item,
-                  schema: {
-                    ...item.schema,
-                    properties: {
-                      ...item.schema.properties,
-                      [payload.id]: payload.newElement
-                    }
-                  }
-                };
+          schema: {
+            ...state.schema,
+            properties: {
+              ...state.schema.properties,
+              [payload.id]: payload.newElement
+            },
+          },
+          uiSchema: {
+            ...state.uiSchema,
+            [uiOrderKey]: [
+              ...state.uiSchema[uiOrderKey],
+              payload.id
+            ],
+            [uiGroupsKey]: [
+              {
+                ...state.uiSchema[uiGroupsKey][0],
+                [payload.destination.droppableId]: [
+                  ...state.uiSchema[uiGroupsKey][0][payload.destination.droppableId],
+                  payload.id
+                ]
               }
-              return item;
-            })
-          ]
-        };
+            ]
+          }
+        }
       } else {
         // All other form elements
+        // add properties, required, ui:order, ui:groups
+
         return {
           ...state,
-          json: [
-            ...state.json.map((item, index) => {
-              if (item.schema.idPrefix === payload.destination.droppableId) {
-                return {
-                  ...item,
-                  schema: {
-                    ...item.schema,
-                    properties: {
-                      ...item.schema.properties,
-                      [payload.id]: payload.newElement
-                    },
-                    required: [...item.schema.required, payload.id]
-                  }
-                };
+          schema: {
+            ...state.schema,
+            properties: {
+              ...state.schema.properties,
+              [payload.id]: payload.newElement
+            },
+            required: [
+              ...state.schema.required,
+              payload.id
+            ]
+          },
+          uiSchema: {
+            ...state.uiSchema,
+            [uiOrderKey]: [
+              ...state.uiSchema[uiOrderKey],
+              payload.id
+            ],
+            [uiGroupsKey]: [
+              {
+                ...state.uiSchema[uiGroupsKey][0],
+                [payload.destination.droppableId]: [
+                  ...state.uiSchema[uiGroupsKey][0][payload.destination.droppableId],
+                  payload.id
+                ]
               }
-              return item;
-            })
-          ]
-        };
-      }
-
-    case ADD_UI_ORDER:
-      return {
-        ...state,
-        json: [
-          ...state.json.map((item, index) => {
-            if (item.schema.idPrefix === payload.destination.droppableId) {
-              return {
-                ...item,
-                uiSchema: {
-                  ...item.uiSchema,
-                  'ui:order': [...item.uiSchema[uiOrderKey], payload.id]
-                }
-              };
-            }
-            return item;
-          })
-        ]
+            ]
+          }
+        }
       };
 
     case ADD_WIDGET:
@@ -273,15 +292,6 @@ export default function (state = initial_state, action) {
         ? payload.formData.options.map(i => i.value)
         : undefined;
       const items = payload.formData.items ? payload.formData.items : undefined;
-
-      // return {
-      //     ...state,
-      //     json: [
-
-      //     ]
-      // }
-
-      console.log(payload);
 
       if (formId === 'title' && root === 'root') {
         // Form Title
