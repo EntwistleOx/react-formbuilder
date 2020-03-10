@@ -31,7 +31,7 @@ function App() {
             <Route exact path='/formbuilder' component={FormBuilder} />
             <Route
               exact
-              path='/formbuilder/:formId/:stepId/:id'
+              path='/formbuilder/:context/:id'
               component={EditFormElement}
             />
             <Route
