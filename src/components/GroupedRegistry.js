@@ -35,7 +35,6 @@ export const GroupTemplates = {
         </Table>
     ),
     well: props => props.properties.map(p => {
-        console.log(props)
         return (
             <Well key={p.key}>
                 <Droppable
@@ -53,11 +52,6 @@ export const GroupTemplates = {
                                     Arrastra los elementos del menu aca
                                </div>
                             )}
-
-                            <div className='form-buttons'>
-                                <Button className='btn btn-primary btn-sm'>Back</Button>
-                                <Button className='btn btn-primary btn-sm'>Next</Button>
-                            </div>
                             {provided.placeholder}
                         </div>
                     )}
