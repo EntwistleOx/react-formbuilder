@@ -2,9 +2,6 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
   addElement,
-  addUiStep,
-  addUiOrder,
-  addWidget,
   reorderElement
 } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -26,9 +23,6 @@ shortid.characters(
 const Formbuilder = ({
   form,
   addElement,
-  addUiStep,
-  addUiOrder,
-  addWidget,
   reorderElement
 }) => {
   const onDragEnd = result => {
@@ -115,13 +109,7 @@ const Formbuilder = ({
         };
 
         const id = shortid.generate();
-        addElement(id, newElement, source, destination);
-        // addUiStep(id, newElement, source, destination);
-        // addUiOrder(id, newElement, source, destination);
-        // if (newWidget()) {
-        //   addWidget(id, newWidget(), source, destination);
-        // }
-
+        addElement(id, newElement, newWidget(), source, destination);
         break;
       default:
         break;
@@ -143,9 +131,6 @@ const Formbuilder = ({
 
 Formbuilder.propTypes = {
   addElement: PropTypes.func.isRequired,
-  addUiStep: PropTypes.func.isRequired,
-  addUiOrder: PropTypes.func.isRequired,
-  addWidget: PropTypes.func.isRequired,
   reorderElement: PropTypes.func.isRequired,
   form: PropTypes.object.isRequired
 };
@@ -156,8 +141,5 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   addElement,
-  addUiStep,
-  addUiOrder,
-  addWidget,
   reorderElement
 })(Formbuilder);
