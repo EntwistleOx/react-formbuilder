@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { Link } from 'react-router-dom';
 
 export function CustomObjectFieldTemplate(props) {
+
   const { TitleField, DescriptionField } = props;
 
   return (
@@ -23,8 +24,7 @@ export function CustomObjectFieldTemplate(props) {
               formContext={props.formContext}
             />
             <div style={{ display: 'flex', fontSize: '15px' }}>
-              <Link to='#!'>
-                {/* <Link to={`/formbuilder/root/title/${form.id}/`}> */}
+              <Link to={`/formbuilder/form/${props.formContext.schema.id}/`}>
                 <i className='fas fa-edit'></i>
               </Link>
               <Link to='#!'>
@@ -65,7 +65,6 @@ function doGrouping({ properties, groups, props }) {
 
     if (typeof g === "string") {
       const found = properties.filter(p => p.name === g);
-      // console.log(found)
       if (found.length === 1) {
         const el = found[0];
         return el.content;
@@ -91,11 +90,11 @@ function doGrouping({ properties, groups, props }) {
               {key}
             </legend>
             <div style={{ display: 'flex', fontSize: '15px' }}>
-              <Link to='#!'>
+              <Link to={`/formbuilder/step/${key}/`}>
                 <i className='fas fa-edit'></i>
               </Link>
               <Link to='#!'>
-                <i className='fas fa-trash-alt'></i>
+                <i onClick={() => props.formContext.fnDeleteStep(key)} className='fas fa-trash-alt'></i>
               </Link>
             </div>
           </div>
