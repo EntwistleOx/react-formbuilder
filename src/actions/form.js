@@ -5,7 +5,7 @@ import {
   ADD_UI_ORDER,
   ADD_WIDGET,
   REORDER_ELEMENT,
-  DELETE_ELEMENT,
+  DELETE_STEP,
   DELETE_UI_ORDER,
   DELETE_WIDGET,
   ELEMENT_ERROR,
@@ -17,7 +17,7 @@ import {
   DELETE_FORM,
   LOAD_FORM,
   GET_FORM,
-  DELETE_FORM_ELEMENT
+  DELETE_ELEMENT
 } from './types';
 
 // clear form builder
@@ -103,10 +103,10 @@ export const deleteForm = id => dispatch => {
 }
   ;
 // delete form element from canvas
-export const deleteFormElement = id => dispatch => {
+export const deleteElement = id => dispatch => {
   try {
     dispatch({
-      type: DELETE_FORM_ELEMENT,
+      type: DELETE_ELEMENT,
       payload: id
     });
   } catch (error) {
@@ -121,11 +121,11 @@ export const deleteFormElement = id => dispatch => {
 };
 
 // add element to form
-export const addElement = (id, newElement, source, destination) => dispatch => {
+export const addElement = (id, newElement, newWidget, source, destination) => dispatch => {
   try {
     dispatch({
       type: ADD_ELEMENT,
-      payload: { id, newElement, source, destination }
+      payload: { id, newElement, newWidget, source, destination }
     });
   } catch (error) {
     dispatch({
@@ -211,11 +211,11 @@ export const reorderElement = (sourceIndex, destinationIndex, source, destinatio
 };
 
 // delete element
-export const deleteElement = (id, form) => dispatch => {
+export const deleteStep = (id) => dispatch => {
   try {
     dispatch({
-      type: DELETE_ELEMENT,
-      payload: { id, form }
+      type: DELETE_STEP,
+      payload: { id }
     });
   } catch (error) {
     dispatch({
