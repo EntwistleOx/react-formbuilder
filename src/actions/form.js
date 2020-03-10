@@ -301,11 +301,11 @@ export const getForm = id => dispatch => {
 };
 
 // edit element
-export const editElement = (id, formData) => dispatch => {
+export const editElement = (context, id, formData) => dispatch => {
   try {
     dispatch({
       type: EDIT_ELEMENT,
-      payload: { id, formData }
+      payload: { context, id, formData }
     });
   } catch (error) {
     dispatch({
