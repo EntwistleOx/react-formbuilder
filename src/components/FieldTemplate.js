@@ -28,13 +28,11 @@ const FieldTemplate = props => {
               {label} {required ? '*' : null}
             </label>
             <div>
-              <Link
-                to={`/formbuilder/${'formId'}/${'idPrefix'}/${elementId}`}
-              >
+              <Link to={`/formbuilder/element/${elementId}`}>
                 <i className='fas fa-edit'></i>
               </Link>
               <Link to='#!'>
-                <i className='fas fa-trash-alt'></i>
+                <i onClick={() => props.formContext.fnDeleteElement(elementId)} className='fas fa-trash-alt'></i>
               </Link>
             </div>
           </Fragment>
