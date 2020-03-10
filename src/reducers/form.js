@@ -1,20 +1,15 @@
 import shortid from 'shortid';
 import {
-  ADD_ELEMENT,
-  ADD_UI_STEP,
-  ADD_UI_ORDER,
-  ADD_WIDGET,
-  REORDER_ELEMENT,
-  DELETE_ELEMENT,
-  DELETE_UI_ORDER,
-  DELETE_WIDGET,
-  EDIT_ELEMENT,
-  ELEMENT_ERROR,
-  GET_ELEMENT,
+  LOAD_FORM,
   CLEAR_FORM,
   CREATE_STEP,
-  LOAD_FORM,
-  DELETE_FORM_ELEMENT
+  DELETE_STEP,
+  ADD_ELEMENT,
+  DELETE_ELEMENT,
+  EDIT_ELEMENT,
+  REORDER_ELEMENT,
+  ELEMENT_ERROR,
+  GET_ELEMENT,
 } from '../actions/types';
 import { CustomObjectFieldTemplate } from '../components/CustomGroupedSchema';
 shortid.characters(
@@ -22,9 +17,8 @@ shortid.characters(
 );
 
 // TODO:
-// refactor required field in edit element
 // put short id in utils file
-// add id, title, description
+// delete from array using splice
 
 const initial_state = {
   id: shortid.generate(),
@@ -52,6 +46,7 @@ export default function (state = initial_state, action) {
   // Ui Schema Keys
   const uiOrderKey = 'ui:order';
   const uiGroupsKey = 'ui:groups';
+  const uiTemplateKey = 'ui:template';
 
   switch (type) {
     case CLEAR_FORM:
@@ -65,11 +60,11 @@ export default function (state = initial_state, action) {
           required: []
         },
         uiSchema: {
-          'ui:order': [],
-          'ui:groups': [{
-            'ui:template': 'well'
+          [uiOrderKey]: [],
+          [uiGroupsKey]: [{
+            [uiTemplateKey]: 'well'
           }],
-          'ui:template': CustomObjectFieldTemplate
+          [uiTemplateKey]: CustomObjectFieldTemplate
         },
         formData: {},
       };
@@ -91,91 +86,126 @@ export default function (state = initial_state, action) {
         }
       };
 
-    case ADD_ELEMENT:
-      if (payload.newElement.type === 'null') {
-        // Paragraph element
-        return {
-          ...state,
-          schema: {
-            ...state.schema,
-            properties: {
-              ...state.schema.properties,
-              [payload.id]: payload.newElement
-            },
-          },
-          uiSchema: {
-            ...state.uiSchema,
-            [uiOrderKey]: [
-              ...state.uiSchema[uiOrderKey],
-              payload.id
-            ],
-            [uiGroupsKey]: [
-              {
-                ...state.uiSchema[uiGroupsKey][0],
-                [payload.destination.droppableId]: [
-                  ...state.uiSchema[uiGroupsKey][0][payload.destination.droppableId],
-                  payload.id
-                ]
-              }
-            ]
-          }
-        }
-      } else {
-        // All other form elements
-        // add properties, required, ui:order, ui:groups
+    case DELETE_STEP:
 
-        return {
-          ...state,
-          schema: {
-            ...state.schema,
-            properties: {
-              ...state.schema.properties,
-              [payload.id]: payload.newElement
-            },
-            required: [
-              ...state.schema.required,
-              payload.id
-            ]
+      const groups = Object.entries(state.uiSchema[uiGroupsKey][0][payload.id]);
+
+      const newStepState = {
+        ...state,
+        schema: {
+          ...state.schema,
+          properties: {
+            ...state.schema.properties
           },
-          uiSchema: {
-            ...state.uiSchema,
-            [uiOrderKey]: [
-              ...state.uiSchema[uiOrderKey],
-              payload.id
-            ],
-            [uiGroupsKey]: [
-              {
-                ...state.uiSchema[uiGroupsKey][0],
-                [payload.destination.droppableId]: [
-                  ...state.uiSchema[uiGroupsKey][0][payload.destination.droppableId],
-                  payload.id
-                ]
+          required: [...state.schema.required.filter(el => {
+            for (const [index, group] of groups) {
+              if (el === group) {
+                return false
               }
-            ]
-          }
+            }
+            return true
+          })]
+        },
+        uiSchema: {
+          ...state.uiSchema,
+          [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => {
+            for (const [index, group] of groups) {
+              if (el === group) {
+                return false
+              }
+            }
+            return true
+          })],
+          [uiGroupsKey]: [
+            {
+              ...state.uiSchema[uiGroupsKey][0]
+            }
+          ]
         }
       };
 
-    case ADD_WIDGET:
+      for (const [index, group] of groups) {
+        delete newStepState.schema.properties[group];
+        delete newStepState.uiSchema[group];
+      };
+      delete newStepState.uiSchema[uiGroupsKey][0][payload.id];
+
+      return newStepState;
+
+    case ADD_ELEMENT:
+
       return {
         ...state,
-        json: [
-          ...state.json.map((item, index) => {
-            if (item.schema.idPrefix === payload.destination.droppableId) {
-              return {
-                ...item,
-                uiSchema: {
-                  ...item.uiSchema,
-                  [payload.id]: payload.newWidget
-                }
-              };
+        schema: {
+          ...state.schema,
+          properties: {
+            ...state.schema.properties,
+            [payload.id]: payload.newElement
+          },
+          required: [
+            ...state.schema.required,
+            ...(payload.newElement.type !== 'null') ? [payload.id] : ''
+          ]
+        },
+        uiSchema: {
+          ...state.uiSchema,
+          ...(payload.newWidget) && { [payload.id]: payload.newWidget },
+          [uiOrderKey]: [
+            ...state.uiSchema[uiOrderKey],
+            payload.id
+          ],
+          [uiGroupsKey]: [
+            {
+              ...state.uiSchema[uiGroupsKey][0],
+              [payload.destination.droppableId]: [
+                ...state.uiSchema[uiGroupsKey][0][payload.destination.droppableId],
+                payload.id
+              ]
             }
-            return item;
-          })
-        ]
+          ]
+        }
       };
 
+    case DELETE_ELEMENT:
+
+      // Search the step where element is located
+      let stepId = ''
+      for (let [key, value] of Object.entries(state.uiSchema[uiGroupsKey][0])) {
+        for (let i = 0; i < value.length; i++) {
+          console.log(value[i])
+          if (value[i] === payload) {
+            stepId = key
+          }
+        }
+      }
+
+      const newElementsState = {
+        ...state,
+        schema: {
+          ...state.schema,
+          properties: {
+            ...state.schema.properties
+          },
+          required: [...state.schema.required.filter(el => el !== payload)]
+        },
+        uiSchema: {
+          ...state.uiSchema,
+          [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => el !== payload)],
+          [uiGroupsKey]: [
+            {
+              ...state.uiSchema[uiGroupsKey][0],
+              [stepId]: [...state.uiSchema[uiGroupsKey][0][stepId].filter(el => el !== payload)],
+            }
+          ]
+        }
+      };
+      delete newElementsState.schema.properties[payload];
+      delete newElementsState.uiSchema[payload];
+
+      return newElementsState;
+
     case REORDER_ELEMENT:
+
       return {
         ...state,
         json: [
@@ -198,84 +228,11 @@ export default function (state = initial_state, action) {
         ]
       };
 
-    case DELETE_ELEMENT:
-      return {
-        ...state,
-        json: [
-          ...state.json.map((item, index) => {
-            if (item.schema.idPrefix === payload.form) {
-              const newState = {
-                ...item,
-                schema: {
-                  ...item.schema,
-                  properties: {
-                    ...item.schema.properties
-                  },
-                  required: item.schema.required.filter(
-                    item => item !== payload.id
-                  )
-                }
-              };
-              delete newState.schema.properties[payload.id];
-              return newState;
-            }
-            return item;
-          })
-        ]
-      };
-
-    case DELETE_UI_ORDER:
-      return {
-        ...state,
-        json: [
-          ...state.json.map((item, index) => {
-            if (item.schema.idPrefix === payload.form) {
-              console.log(item.schema.idPrefix, payload.form);
-              return {
-                ...item,
-                uiSchema: {
-                  ...item.uiSchema,
-                  'ui:order': item.uiSchema[uiOrderKey].filter(
-                    item => item !== payload.id
-                  )
-                }
-              };
-            }
-            return item;
-          })
-        ]
-      };
-
-    case DELETE_WIDGET:
-      return {
-        ...state,
-        json: [
-          ...state.json.map((item, index) => {
-            if (item.schema.idPrefix === payload.form) {
-              const newWidgetState = {
-                ...item,
-                uiSchema: {
-                  ...item.uiSchema
-                }
-              };
-              delete newWidgetState.uiSchema[payload.id];
-              return newWidgetState;
-            }
-            return item;
-          })
-        ]
-      };
-
-    case DELETE_FORM_ELEMENT:
-      return {
-        ...state,
-        json: [...state.json.filter(form => form.schema.idPrefix !== payload)]
-      };
-
     case GET_ELEMENT:
       return state.schema.properties[payload];
 
     case EDIT_ELEMENT:
+
       const key = payload.formData.key ? payload.formData.key : undefined;
       const root = payload.formData.root ? payload.formData.root : undefined;
       const formId = payload.formData.formId
@@ -487,10 +444,12 @@ export default function (state = initial_state, action) {
       }
 
     case ELEMENT_ERROR:
+
       return {
         ...state,
         error: payload
       };
+
     default:
       return state;
   }
