@@ -3,7 +3,7 @@ import Form from 'react-jsonschema-form';
 import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../../actions/alert';
-import { addForm, updateForm, clearForm, getForm } from '../../../actions/form';
+import { addForm, updateForm, clearForm, getForm, deleteStep, deleteElement } from '../../../actions/form';
 import * as Templates from '../../GroupedRegistry';
 import * as UiTemplate from '../../UiTemplate';
 import CustomFieldTemplate from '../../FieldTemplate';
@@ -11,7 +11,7 @@ import EmailAutocomplete from '../../custom-widgets/EmailAutocomplete';
 import PropTypes from 'prop-types';
 
 const Canvas = props => {
-  const { form, forms, addForm, updateForm, clearForm, setAlert } = props;
+  const { form, forms, addForm, updateForm, clearForm, setAlert, deleteStep, deleteElement } = props;
 
   let history = useHistory();
 
@@ -48,11 +48,14 @@ const Canvas = props => {
           <Form
             schema={form.schema}
             uiSchema={form.uiSchema}
-            // disabled={true}
-            // widgets={emailAutocomplete}
+            disabled={true}
+            widgets={emailAutocomplete}
             formContext={{
               templates: Templates.GroupTemplates,
-              fnClearForm: clearForm
+              schema: form,
+              fnClearForm: clearForm,
+              fnDeleteStep: deleteStep,
+              fnDeleteElement: deleteElement,
             }}
             {...UiTemplate}
             FieldTemplate={CustomFieldTemplate}
@@ -81,7 +84,9 @@ Canvas.propTypes = {
   form: PropTypes.object.isRequired,
   forms: PropTypes.array.isRequired,
   addForm: PropTypes.func.isRequired,
-  updateForm: PropTypes.func.isRequired
+  updateForm: PropTypes.func.isRequired,
+  deleteStep: PropTypes.func.isRequired,
+  deleteElement: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -93,5 +98,7 @@ export default connect(mapStateToProps, {
   updateForm,
   clearForm,
   getForm,
-  setAlert
+  setAlert,
+  deleteStep,
+  deleteElement
 })(Canvas);
