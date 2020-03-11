@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 const FieldTemplate = props => {
@@ -14,35 +14,35 @@ const FieldTemplate = props => {
   const elementId = element[1];
 
   return (
-    <Fragment>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          userSelect: 'none'
-        }}
-      >
-        {id !== 'root' && (
-          <Fragment>
-            <label>
-              {label} {required ? '*' : null}
-            </label>
-            <div>
-              <Link to={`/formbuilder/element/${elementId}`}>
-                <i className='fas fa-edit'></i>
-              </Link>
-              <Link to='#!'>
-                <i onClick={() => props.formContext.fnDeleteElement(elementId)} className='fas fa-trash-alt'></i>
-              </Link>
-            </div>
-          </Fragment>
-        )}
-      </div>
-
-      {children}
-
-      {id !== 'root' && description}
-    </Fragment>
+    id !== 'root' ? (
+      <Fragment>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            userSelect: 'none'
+          }}
+        >
+          <label>
+            {label} {required ? '*' : null}
+          </label>
+          <div>
+            <Link to={`/formbuilder/element/${elementId}`}>
+              <i className='fas fa-edit'></i>
+            </Link>
+            <Link to='#!'>
+              <i onClick={() => props.formContext.fnDeleteElement(elementId)} className='fas fa-trash-alt'></i>
+            </Link>
+          </div>
+        </div>
+        {children}
+        {description}
+      </Fragment>
+    ) : (
+        <Fragment>
+          {children}
+        </Fragment>
+      )
   );
 };
 
