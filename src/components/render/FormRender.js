@@ -6,12 +6,16 @@ import SchemaViewer from '../builder/schemaviewer/SchemaViewer';
 import EmailAutocomplete from '../custom-widgets/EmailAutocomplete';
 import Form from 'react-jsonschema-form';
 import axios from 'axios';
+import * as Templates from '../GroupedRegistry';
+import * as UiTemplate from '../UiTemplate';
+import CustomFieldTemplate from '../FieldTemplate';
+import { ObjectFieldTemplate } from "../GroupedSchema";
 import PropTypes from 'prop-types';
 
 // TODO:
 // move validation and error sfunction to external file
 
-const FormRender = ({ forms, title, description, goBack, setAlert }) => {
+const FormRender = ({ form, goBack, setAlert }) => {
   const [stepsState, setStepsState] = useState({ step: 0, formData: {} });
 
   const [user, setUser] = useState({});
@@ -21,10 +25,7 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
       const result = await axios('https://randomuser.me/api/?nat=es');
 
       setUser({
-        name:
-          result.data.results[0].name.first +
-          ' ' +
-          result.data.results[0].name.last,
+        name: result.data.results[0].name.first + ' ' + result.data.results[0].name.last,
         email: result.data.results[0].email,
         cell: result.data.results[0].cell,
         phone: result.data.results[0].phone
@@ -33,8 +34,6 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
 
     fetchData();
   }, []);
-
-  console.log(user);
 
   function transformErrors(errors) {
     return errors.map(error => {
@@ -62,23 +61,24 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
     //     16158088-1
 
     function isRut(searchKey) {
-      for (let i = 0; i < forms.length; ++i) {
-        for (
-          let j = 0;
-          j < Object.keys(forms[i].schema.properties).length;
-          j++
-        ) {
-          if (Object.keys(forms[i].schema.properties)[j] === searchKey) {
-            if (forms[i].schema.properties[searchKey].key === 'rut') {
-              return true;
-            }
-          }
-        }
-      }
+      // Search if field is RUT
+      // for (let i = 0; i < form.length; ++i) {
+      //   for (
+      //     let j = 0;
+      //     j < Object.keys(form.schema.properties).length;
+      //     j++
+      //   ) {
+      //     if (Object.keys(form.schema.properties)[j] === searchKey) {
+      //       if (forms[i].schema.properties[searchKey].key === 'rut') {
+      //         return true;
+      //       }
+      //     }
+      //   }
+      // }
       return false;
     }
 
-    Object.keys(formData).forEach(function(item) {
+    Object.keys(formData).forEach(function (item) {
       const key = item;
       const val = formData[key];
       let isRutField = isRut(key);
@@ -154,10 +154,10 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
 
   const onSubmit = ({ formData }) => {
     let index = 0;
-    for (index; index <= forms.length - 1; index++) {
+    for (index; index <= form.length - 1; index++) {
       if (stepsState.step === index) {
         setStepsState({
-          step: index < forms.length - 1 ? index + 1 : index,
+          step: index < form.length - 1 ? index + 1 : index,
           formData: {
             ...stepsState.formData,
             ...formData
@@ -165,13 +165,13 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
         });
       }
     }
-    if (stepsState.step === forms.length - 1) {
+    if (stepsState.step === form.length - 1) {
       setAlert('Formulario Valido.', 'success');
     }
   };
 
   function getSteps() {
-    let step = forms.find((step, index) => stepsState.step === index);
+    let step = form.find((step, index) => stepsState.step === index);
     console.log(step);
     return step;
   }
@@ -187,7 +187,7 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
     emailAutocompleteWidget: EmailAutocomplete
   };
 
-  if ((Object.keys(forms) && Object.keys(forms).length < 1) || forms.error) {
+  if ((Object.keys(form) && Object.keys(form).length < 1) || form.error) {
     return <Redirect to='/' />;
   }
 
@@ -197,7 +197,7 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <div style={{ flex: '1', marginRight: '1rem' }}>
         <div className='page-header'>
-          <h1>{title}</h1>
+          <h1>{form.schema.title}</h1>
         </div>
         <div className='panel panel-primary'>
           <div className='panel-heading'>
@@ -211,20 +211,26 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
           </div>
         </div>
         <Form
-          schema={forms ? getSteps().schema : {}}
-          uiSchema={forms ? forms[stepsState.step].uiSchema : {}}
+          schema={form.schema}
+          uiSchema={form.uiSchema}
+          formContext={{
+            templates: Templates.GroupTemplates,
+            schema: form
+          }}
+          {...UiTemplate}
+          FieldTemplate={CustomFieldTemplate}
           onSubmit={onSubmit}
-          formData={stepsState.formData}
+          // formData={stepsState.formData}
           // liveValidate={true}
+          widgets={emailAutocomplete}
           transformErrors={transformErrors}
           validate={validate}
           showErrorList={false}
           noHtml5Validate={true}
-          widgets={emailAutocomplete}
         >
           <div className='form-buttons'>
             {stepsState.step === 0 ? (
-              forms.length > 1 ? (
+              form.length > 1 ? (
                 <Fragment>
                   <div></div>
                   <button
@@ -235,17 +241,17 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
                   </button>
                 </Fragment>
               ) : (
-                <Fragment>
-                  <div></div>
-                  <button
-                    type='submit'
-                    className='btn btn-success btn-sm pull-right'
-                  >
-                    Validar
+                  <Fragment>
+                    <div></div>
+                    <button
+                      type='submit'
+                      className='btn btn-success btn-sm pull-right'
+                    >
+                      Validar
                   </button>
-                </Fragment>
-              )
-            ) : stepsState.step === forms.length - 1 ? (
+                  </Fragment>
+                )
+            ) : stepsState.step === form.length - 1 ? (
               <Fragment>
                 <Link
                   className='btn btn-primary btn-sm'
@@ -259,15 +265,15 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
                 </button>
               </Fragment>
             ) : (
-              <Fragment>
-                <Link className='btn btn-primary btn-sm' onClick={prevForm}>
-                  Anterior
+                  <Fragment>
+                    <Link className='btn btn-primary btn-sm' onClick={prevForm}>
+                      Anterior
                 </Link>
-                <button type='submit' className='btn btn-primary btn-sm'>
-                  Siguiente
+                    <button type='submit' className='btn btn-primary btn-sm'>
+                      Siguiente
                 </button>
-              </Fragment>
-            )}
+                  </Fragment>
+                )}
           </div>
         </Form>
         <hr />
@@ -281,14 +287,12 @@ const FormRender = ({ forms, title, description, goBack, setAlert }) => {
 };
 
 FormRender.propTypes = {
-  forms: PropTypes.array.isRequired,
+  form: PropTypes.object.isRequired,
   goBack: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  forms: state.form.json,
-  title: state.form.title,
-  description: state.form.description
+  form: state.form
 });
 
 export default connect(mapStateToProps, { setAlert })(FormRender);
