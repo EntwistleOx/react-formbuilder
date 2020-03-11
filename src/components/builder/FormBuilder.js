@@ -16,8 +16,6 @@ shortid.characters(
 );
 
 // TODO:
-// Maybe add placeholders in toolkit objects
-// EMAIL AUTOSUGEST
 // use bootstrap boxes for elements and css
 
 const Formbuilder = ({
