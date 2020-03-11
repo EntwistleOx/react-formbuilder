@@ -8,30 +8,12 @@ export function ObjectFieldTemplate(props) {
         <fieldset>
             {/* FORM TITLE */}
             {(props.uiSchema["ui:title"] || props.title) && (
-                <Fragment>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'baseline'
-                        }}
-                    >
-                        <TitleField
-                            id={`${props.idSchema.$id}__title`}
-                            title={props.title || props.uiSchema["ui:title"]}
-                            required={props.required}
-                            formContext={props.formContext}
-                        />
-                        <div style={{ display: 'flex', fontSize: '15px' }}>
-                            <Link to='#!'>
-                                <i className='fas fa-edit'></i>
-                            </Link>
-                            <Link to='#!'>
-                                <i className='fas fa-trash-alt'></i>
-                            </Link>
-                        </div>
-                    </div>
-                </Fragment>
+                <TitleField
+                    id={`${props.idSchema.$id}__title`}
+                    title={props.title || props.uiSchema["ui:title"]}
+                    required={props.required}
+                    formContext={props.formContext}
+                />
             )}
 
             {/* FORM DESCRIPTION */}
@@ -63,6 +45,8 @@ function doGrouping({ properties, groups, props }) {
             if (found.length === 1) {
                 const el = found[0];
                 return el.content;
+            } else {
+                return ''
             }
             return EXTRANEOUS;
         } else if (typeof g === "object") {
