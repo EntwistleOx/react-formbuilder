@@ -230,10 +230,11 @@ export default function (state = initial_state, action) {
       return state.schema.properties[payload];
 
     case EDIT_ELEMENT:
-
       const id = payload.id;
       const context = payload.context;
+      const key = payload.formData.key ? payload.formData.key : '';
       const title = payload.formData.title ? payload.formData.title : '';
+      const description = payload.formData.description ? payload.formData.description : '';
       const keys = payload.formData.options ? payload.formData.options.map(i => i.key) : undefined;
       const values = payload.formData.options ? payload.formData.options.map(i => i.value) : undefined;
       const items = payload.formData.items ? payload.formData.items : undefined;
@@ -247,11 +248,13 @@ export default function (state = initial_state, action) {
             title
           }
         };
-      }
-
-      else if (context === 'step') {
+      } else if (context === 'step') {
         // Step Title
+
+        // Get object keys to array
         const keys = Object.keys(state.uiSchema[uiGroupsKey][0]);
+
+        // Change array key name
         const newUiGroup = keys.reduce((acc, val) => {
           if (val === id) {
             acc[title] = state.uiSchema[uiGroupsKey][0][id];
@@ -267,182 +270,137 @@ export default function (state = initial_state, action) {
           uiSchema: {
             ...state.uiSchema,
             [uiGroupsKey]: [
-
               newUiGroup
-
             ]
           }
         };
       }
 
-    // else if (key === 'checkboxes') {
-    //   // Checkboxes List
-    //   return {
-    //     ...state,
-    //     json: [
-    //       ...state.json.map((item, index) => {
-    //         if (item.schema.idPrefix === payload.formData.formId) {
-    //           return {
-    //             ...item,
-    //             schema: {
-    //               ...item.schema,
-    //               properties: {
-    //                 ...item.schema.properties,
-    //                 [payload.id]: {
-    //                   ...item.schema.properties[payload.id],
-    //                   title: payload.formData.title,
-    //                   items: {
-    //                     ...item.schema.properties[payload.id].items,
-    //                     enum: items
-    //                   }
-    //                 }
-    //               },
-    //               required:
-    //                 payload.formData.required === true
-    //                   ? item.schema.required.find(req => req === payload.id)
-    //                     ? [...item.schema.required]
-    //                     : [...item.schema.required, payload.id]
-    //                   : item.schema.required.filter(
-    //                     item => item !== payload.id
-    //                   )
-    //             }
-    //           };
-    //         }
-    //         return item;
-    //       })
-    //     ]
-    //   };
-    // } else if (key === 'radio') {
-    //   // Radio Field
-    //   return {
-    //     ...state,
-    //     json: [
-    //       ...state.json.map((item, index) => {
-    //         if (item.schema.idPrefix === payload.formData.formId) {
-    //           return {
-    //             ...item,
-    //             schema: {
-    //               ...item.schema,
-    //               properties: {
-    //                 ...item.schema.properties,
-    //                 [payload.id]: {
-    //                   ...item.schema.properties[payload.id],
-    //                   title: payload.formData.title,
-    //                   enumNames: items
-    //                 }
-    //               },
-    //               required:
-    //                 payload.formData.required === true
-    //                   ? item.schema.required.find(req => req === payload.id)
-    //                     ? [...item.schema.required]
-    //                     : [...item.schema.required, payload.id]
-    //                   : item.schema.required.filter(
-    //                     item => item !== payload.id
-    //                   )
-    //             }
-    //           };
-    //         }
-    //         return item;
-    //       })
-    //     ]
-    //   };
-    // } else if (key === 'paragraph') {
-    //   // Paragraph
-    //   return {
-    //     ...state,
-    //     json: [
-    //       ...state.json.map((item, index) => {
-    //         if (item.schema.idPrefix === payload.formData.formId) {
-    //           return {
-    //             ...item,
-    //             schema: {
-    //               ...item.schema,
-    //               properties: {
-    //                 ...item.schema.properties,
-    //                 [payload.id]: {
-    //                   ...item.schema.properties[payload.id],
-    //                   description
-    //                 }
-    //               }
-    //             }
-    //           };
-    //         }
-    //         return item;
-    //       })
-    //     ]
-    //   };
-    // } else if (key === 'select') {
-    //   // Select List
-    //   return {
-    //     ...state,
-    //     json: [
-    //       ...state.json.map((item, index) => {
-    //         if (item.schema.idPrefix === payload.formData.formId) {
-    //           return {
-    //             ...item,
-    //             schema: {
-    //               ...item.schema,
-    //               properties: {
-    //                 ...item.schema.properties,
-    //                 [payload.id]: {
-    //                   ...item.schema.properties[payload.id],
-    //                   title: payload.formData.title,
-    //                   enum: keys,
-    //                   enumNames: values
-    //                 }
-    //               },
-    //               required:
-    //                 payload.formData.required === true
-    //                   ? item.schema.required.find(req => req === payload.id)
-    //                     ? [...item.schema.required]
-    //                     : [...item.schema.required, payload.id]
-    //                   : item.schema.required.filter(
-    //                     item => item !== payload.id
-    //                   )
-    //             }
-    //           };
-    //         }
-    //         return item;
-    //       })
-    //     ]
-    //   };
-    // } else {
-    //   // Other text fields and checkbox
-    //   return {
-    //     ...state,
-    //     json: [
-    //       ...state.json.map((item, index) => {
-    //         if (item.schema.idPrefix === payload.formData.formId) {
-    //           return {
-    //             ...item,
-    //             schema: {
-    //               ...item.schema,
-    //               properties: {
-    //                 ...item.schema.properties,
-    //                 [payload.id]: {
-    //                   ...item.schema.properties[payload.id],
-    //                   title: payload.formData.title
-    //                 }
-    //               },
-    //               required:
-    //                 payload.formData.required === true
-    //                   ? item.schema.required.find(req => req === payload.id)
-    //                     ? [...item.schema.required]
-    //                     : [...item.schema.required, payload.id]
-    //                   : item.schema.required.filter(
-    //                     item => item !== payload.id
-    //                   )
-    //             }
-    //           };
-    //         }
-    //         return item;
-    //       })
-    //     ]
-    // };
-    // }
+      else if (key === 'checkboxes') {
+        // Checkboxes List
+        return {
+          ...state,
+          schema: {
+            ...state.schema,
+            properties: {
+              ...state.schema.properties,
+              [payload.id]: {
+                ...state.schema.properties[payload.id],
+                title: payload.formData.title,
+                items: {
+                  ...state.schema.properties[payload.id].items,
+                  enum: items
+                }
+              }
+            },
+            required:
+              payload.formData.required === true
+                ? state.schema.required.find(req => req === payload.id)
+                  ? [...state.schema.required]
+                  : [...state.schema.required, payload.id]
+                : state.schema.required.filter(
+                  state => state !== payload.id
+                )
+          }
+        };
+      }
+
+      else if (key === 'radio') {
+        // Radio Field
+        return {
+          ...state,
+          schema: {
+            ...state.schema,
+            properties: {
+              ...state.schema.properties,
+              [payload.id]: {
+                ...state.schema.properties[payload.id],
+                title: payload.formData.title,
+                enumNames: items
+              }
+            },
+            required:
+              payload.formData.required === true
+                ? state.schema.required.find(req => req === payload.id)
+                  ? [...state.schema.required]
+                  : [...state.schema.required, payload.id]
+                : state.schema.required.filter(
+                  state => state !== payload.id
+                )
+          }
+        };
+      }
+
+      else if (key === 'paragraph') {
+        // Paragraph
+        return {
+          ...state,
+          schema: {
+            ...state.schema,
+            properties: {
+              ...state.schema.properties,
+              [payload.id]: {
+                ...state.schema.properties[payload.id],
+                description
+              }
+            }
+          }
+        };
+      }
+
+      else if (key === 'select') {
+        // Select List
+        return {
+          ...state,
+          schema: {
+            ...state.schema,
+            properties: {
+              ...state.schema.properties,
+              [payload.id]: {
+                ...state.schema.properties[payload.id],
+                title: payload.formData.title,
+                enum: keys,
+                enumNames: values
+              }
+            },
+            required:
+              payload.formData.required === true
+                ? state.schema.required.find(req => req === payload.id)
+                  ? [...state.schema.required]
+                  : [...state.schema.required, payload.id]
+                : state.schema.required.filter(
+                  state => state !== payload.id
+                )
+          }
+        };
+      }
+
+      else {
+        // Other text fields and checkbox
+        return {
+          ...state,
+          schema: {
+            ...state.schema,
+            properties: {
+              ...state.schema.properties,
+              [payload.id]: {
+                ...state.schema.properties[payload.id],
+                title: payload.formData.title
+              }
+            },
+            required:
+              payload.formData.required === true
+                ? state.schema.required.find(req => req === payload.id)
+                  ? [...state.schema.required]
+                  : [...state.schema.required, payload.id]
+                : state.schema.required.filter(
+                  state => state !== payload.id
+                )
+          }
+        };
+      }
 
     case ELEMENT_ERROR:
-
       return {
         ...state,
         error: payload
