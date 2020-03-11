@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 
 //TODO:
 // use form schema from form context
+// send key via props, not formData
 // check effect dependencies
 
 const EditFormElement = props => {
