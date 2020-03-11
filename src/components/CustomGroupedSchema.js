@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Link } from 'react-router-dom';
+import { Draggable } from 'react-beautiful-dnd';
 
 export function CustomObjectFieldTemplate(props) {
 
@@ -61,17 +62,28 @@ function doGrouping({ properties, groups, props }) {
     return props.map(p => p.content);
   }
   const mapped = groups.map((g, index) => {
-
-
     if (typeof g === "string") {
       const found = properties.filter(p => p.name === g);
       if (found.length === 1) {
         const el = found[0];
-        return el.content;
+        return (
+          <Draggable index={index} key={g} draggableId={g}>
+            {(provided, snapshot) => (
+              <div
+                className='well'
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                {el.content}
+              </div>
+            )}
+          </Draggable>
+        )
       } else {
-        return
+        return ''
       }
-      return EXTRANEOUS;
+      // return EXTRANEOUS;
     } else if (typeof g === "object") {
       const { templates } = props.formContext;
       const GroupComponent = templates
@@ -128,7 +140,6 @@ function doGrouping({ properties, groups, props }) {
   if (extraneous.length) {
     throw new Error("Extranoues fields" + extraneous);
   }
-
   return mapped;
 }
 
