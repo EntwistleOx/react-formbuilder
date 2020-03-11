@@ -50,7 +50,7 @@ export const GroupTemplates = {
                             {Object.keys(p.children).length === 0 && (
                                 <div className='notice'>
                                     Arrastra los elementos del menu aca
-                               </div>
+                                </div>
                             )}
                             {provided.placeholder}
                         </div>
