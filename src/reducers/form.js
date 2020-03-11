@@ -29,11 +29,11 @@ const initial_state = {
     required: []
   },
   uiSchema: {
-    'ui:template': CustomObjectFieldTemplate,
-    'ui:order': [],
+    // 'ui:order': [],
     'ui:groups': [{
       'ui:template': 'well',
     }],
+    'ui:template': CustomObjectFieldTemplate,
   },
   formData: {},
 };
@@ -59,7 +59,7 @@ export default function (state = initial_state, action) {
         },
         uiSchema: {
           [uiTemplateKey]: CustomObjectFieldTemplate,
-          [uiOrderKey]: [],
+          // [uiOrderKey]: [],
           [uiGroupsKey]: [{
             [uiTemplateKey]: 'well'
           }],
@@ -106,14 +106,14 @@ export default function (state = initial_state, action) {
         },
         uiSchema: {
           ...state.uiSchema,
-          [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => {
-            for (const [index, group] of groups) {
-              if (el === group) {
-                return false
-              }
-            }
-            return true
-          })],
+          // [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => {
+          //   for (const [index, group] of groups) {
+          //     if (el === group) {
+          //       return false
+          //     }
+          //   }
+          //   return true
+          // })],
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0]
@@ -148,10 +148,10 @@ export default function (state = initial_state, action) {
         uiSchema: {
           ...state.uiSchema,
           ...(payload.newWidget) && { [payload.id]: payload.newWidget },
-          [uiOrderKey]: [
-            ...state.uiSchema[uiOrderKey],
-            payload.id
-          ],
+          // [uiOrderKey]: [
+          //   ...state.uiSchema[uiOrderKey],
+          //   payload.id
+          // ],
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0],
@@ -170,7 +170,6 @@ export default function (state = initial_state, action) {
       let stepId = ''
       for (let [key, value] of Object.entries(state.uiSchema[uiGroupsKey][0])) {
         for (let i = 0; i < value.length; i++) {
-          console.log(value[i])
           if (value[i] === payload) {
             stepId = key
           }
@@ -188,7 +187,7 @@ export default function (state = initial_state, action) {
         },
         uiSchema: {
           ...state.uiSchema,
-          [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => el !== payload)],
+          // [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => el !== payload)],
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0],
@@ -204,26 +203,22 @@ export default function (state = initial_state, action) {
 
     case REORDER_ELEMENT:
 
+      const result = state.uiSchema[uiGroupsKey][0][payload.destination.droppableId].slice();
+      const [removed] = result.splice(payload.sourceIndex, 1);
+      result.splice(payload.destinationIndex, 0, removed);
+
       return {
         ...state,
-        json: [
-          ...state.json.map((item, index) => {
-            if (item.schema.idPrefix === payload.destination.droppableId) {
-              const result = item.uiSchema[uiOrderKey].slice();
-              const [removed] = result.splice(payload.sourceIndex, 1);
-              result.splice(payload.destinationIndex, 0, removed);
-
-              return {
-                ...item,
-                uiSchema: {
-                  ...item.uiSchema,
-                  'ui:order': result
-                }
-              };
+        uiSchema: {
+          ...state.uiSchema,
+          // [uiOrderKey]: result
+          [uiGroupsKey]: [
+            {
+              ...state.uiSchema[uiGroupsKey][0],
+              [payload.destination.droppableId]: result
             }
-            return item;
-          })
-        ]
+          ]
+        }
       };
 
     case GET_ELEMENT:
