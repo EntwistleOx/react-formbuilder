@@ -49,7 +49,6 @@ const Canvas = props => {
             schema={form.schema}
             uiSchema={form.uiSchema}
             disabled={true}
-            widgets={emailAutocomplete}
             formContext={{
               templates: Templates.GroupTemplates,
               schema: form,
@@ -59,6 +58,7 @@ const Canvas = props => {
             }}
             {...UiTemplate}
             FieldTemplate={CustomFieldTemplate}
+            widgets={emailAutocomplete}
           >
             {Object.keys(form.uiSchema['ui:groups'][0]).length === 1 && (
               <Fragment>
