@@ -103,7 +103,7 @@ const groups = [
 
 const uiSchema = {
     "ui:groups": groups,
-    "ui:template": CustomObjectFieldTemplate
+    "ui:template": ObjectFieldTemplate
     // "ui:template": ObjectFieldTemplate
 }
 
