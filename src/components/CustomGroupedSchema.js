@@ -29,7 +29,10 @@ export function CustomObjectFieldTemplate(props) {
                 <i className='fas fa-edit'></i>
               </Link>
               <Link to='#!'>
-                <i onClick={() => props.formContext.fnClearForm()} className='fas fa-trash-alt'></i>
+                <i onClick={() => {
+                  props.formContext.fnClearForm();
+                  props.formContext.fnSetTemplate('well', 'custom');
+                }} className='fas fa-trash-alt'></i>
               </Link>
             </div>
           </div>
