@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import Form from 'react-jsonschema-form';
 import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../../actions/alert';
-import { addForm, updateForm, clearForm, getForm, deleteStep, deleteElement } from '../../../actions/form';
+import { addForm, updateForm, clearForm, getForm, deleteStep, deleteElement, setTemplate } from '../../../actions/form';
 import * as Templates from '../../GroupedRegistry';
 import * as UiTemplate from '../../UiTemplate';
 import CustomFieldTemplate from '../../FieldTemplate';
@@ -11,7 +11,12 @@ import EmailAutocomplete from '../../custom-widgets/EmailAutocomplete';
 import PropTypes from 'prop-types';
 
 const Canvas = props => {
-  const { form, forms, addForm, updateForm, clearForm, setAlert, deleteStep, deleteElement } = props;
+  const { form, forms, addForm, updateForm, clearForm, setAlert, deleteStep, deleteElement, setTemplate } = props;
+
+  useEffect(() => {
+    // Excecuted only on first render
+    setTemplate('well', 'custom');
+  }, [])
 
   let history = useHistory();
 
@@ -69,7 +74,7 @@ const Canvas = props => {
               <Link to='/formbuilder-render' className='btn btn-default'>
                 Probar
                   </Link>
-              <button type='button' className='btn btn-success' onClick={onSave}>
+              <button type='button' className='btn btn-primary' onClick={onSave}>
                 Guardar
                   </button>
             </div>
@@ -87,6 +92,7 @@ Canvas.propTypes = {
   updateForm: PropTypes.func.isRequired,
   deleteStep: PropTypes.func.isRequired,
   deleteElement: PropTypes.func.isRequired,
+  setTemplate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -100,5 +106,6 @@ export default connect(mapStateToProps, {
   getForm,
   setAlert,
   deleteStep,
-  deleteElement
+  deleteElement,
+  setTemplate
 })(Canvas);
