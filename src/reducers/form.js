@@ -10,8 +10,12 @@ import {
   REORDER_ELEMENT,
   ELEMENT_ERROR,
   GET_ELEMENT,
+  SET_TEMPLATE,
 } from '../actions/types';
-import { CustomObjectFieldTemplate } from '../components/CustomGroupedSchema';
+
+import { CustomObjectFieldTemplate } from '../components/CustomGroupedSchema'
+import { ObjectFieldTemplate } from "../components/GroupedSchema";
+
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
@@ -29,11 +33,10 @@ const initial_state = {
     required: []
   },
   uiSchema: {
-    // 'ui:order': [],
     'ui:groups': [{
-      'ui:template': 'well',
+      'ui:template': '',
     }],
-    'ui:template': CustomObjectFieldTemplate,
+    'ui:template': '',
   },
   formData: {},
 };
@@ -43,7 +46,6 @@ export default function (state = initial_state, action) {
   const { type, payload } = action;
 
   // Ui Schema Keys
-  const uiOrderKey = 'ui:order';
   const uiGroupsKey = 'ui:groups';
   const uiTemplateKey = 'ui:template';
 
@@ -58,11 +60,10 @@ export default function (state = initial_state, action) {
           required: []
         },
         uiSchema: {
-          [uiTemplateKey]: CustomObjectFieldTemplate,
-          // [uiOrderKey]: [],
           [uiGroupsKey]: [{
-            [uiTemplateKey]: 'well'
+            [uiTemplateKey]: ''
           }],
+          [uiTemplateKey]: '',
         },
         formData: {},
       };
@@ -106,14 +107,6 @@ export default function (state = initial_state, action) {
         },
         uiSchema: {
           ...state.uiSchema,
-          // [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => {
-          //   for (const [index, group] of groups) {
-          //     if (el === group) {
-          //       return false
-          //     }
-          //   }
-          //   return true
-          // })],
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0]
@@ -148,10 +141,6 @@ export default function (state = initial_state, action) {
         uiSchema: {
           ...state.uiSchema,
           ...(payload.newWidget) && { [payload.id]: payload.newWidget },
-          // [uiOrderKey]: [
-          //   ...state.uiSchema[uiOrderKey],
-          //   payload.id
-          // ],
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0],
@@ -187,7 +176,6 @@ export default function (state = initial_state, action) {
         },
         uiSchema: {
           ...state.uiSchema,
-          // [uiOrderKey]: [...state.uiSchema[uiOrderKey].filter(el => el !== payload)],
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0],
@@ -211,7 +199,6 @@ export default function (state = initial_state, action) {
         ...state,
         uiSchema: {
           ...state.uiSchema,
-          // [uiOrderKey]: result
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0],
@@ -223,6 +210,21 @@ export default function (state = initial_state, action) {
 
     case GET_ELEMENT:
       return state.schema.properties[payload];
+
+    case SET_TEMPLATE:
+      return {
+        ...state,
+        uiSchema: {
+          ...state.uiSchema,
+          [uiGroupsKey]: [
+            {
+              ...state.uiSchema[uiGroupsKey][0],
+              ['ui:template']: payload.type
+            }
+          ],
+          ['ui:template']: payload.template === 'custom' ? CustomObjectFieldTemplate : ObjectFieldTemplate
+        }
+      };
 
     case EDIT_ELEMENT:
       const id = payload.id;

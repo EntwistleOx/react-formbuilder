@@ -17,7 +17,8 @@ import {
   DELETE_FORM,
   LOAD_FORM,
   GET_FORM,
-  DELETE_ELEMENT
+  DELETE_ELEMENT,
+  SET_TEMPLATE
 } from './types';
 
 // clear form builder
@@ -100,8 +101,26 @@ export const deleteForm = id => dispatch => {
       }
     });
   }
-}
-  ;
+};
+
+// set a template
+export const setTemplate = (type, template) => dispatch => {
+  try {
+    dispatch({
+      type: SET_TEMPLATE,
+      payload: { type, template }
+    });
+  } catch (error) {
+    dispatch({
+      type: ELEMENT_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status
+      }
+    });
+  }
+};
+
 // delete form element from canvas
 export const deleteElement = id => dispatch => {
   try {

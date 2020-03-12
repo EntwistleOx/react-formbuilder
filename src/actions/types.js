@@ -14,11 +14,12 @@ export const ELEMENT_ERROR = 'ELEMENT_ERROR';
 export const CLEAR_FORM = 'CLEAR_FORM';
 export const LOAD_FORM = 'LOAD_FORM';
 export const DELETE_ELEMENT = 'DELETE_ELEMENT';
+export const SET_TEMPLATE = 'SET_TEMPLATE';
 
 // Forms
 export const ADD_FORM = 'ADD_FORM';
-export const UPDATE_FORM = 'UPDATE_FORM';
 export const GET_FORM = 'GET_FORM';
+export const UPDATE_FORM = 'UPDATE_FORM';
 export const DELETE_FORM = 'DELETE_FORM';
 export const FORM_ERROR = 'FORM_ERROR';
 
