@@ -81,6 +81,17 @@ export const GroupTemplates = {
 function ControlledTabs(props) {
     const [active, setActive] = useState(0);
 
+    let isTabDisabled = true;
+    if (active < props.properties.length - 1) {
+        isTabDisabled = true;
+    }
+
+    // tab error
+    // color: #ff0039;
+    // border-top: 1px solid #ff0039;
+    // border-left: 1px solid #ff0039;
+    // border-right: 1px solid #ff0039;
+
     return (
         <Tabs activeKey={active} onSelect={setActive} id="controlled-tab">
             {props.properties.map((p, idx) => {
@@ -88,18 +99,13 @@ function ControlledTabs(props) {
                 // true if every formdata child is undefined
                 const hasEmptyFields = p.children.every(child => child.props.formData !== undefined)
                 const hasErrors = p.children.every(child => Object.keys(child.props.errorSchema).length > 0)
-
                 // console.log(hasErrors)
-
                 const notLast = props.properties.length - idx > 1;
                 const isLast = !notLast;
                 const notFirst = idx >= 1 && props.properties.length > 1;
 
-                const isNextTab = active < props.properties.length ? true : false;
-
-                console.log(active, props.properties.length)
                 return (
-                    <Tab key={idx} eventKey={idx} title={p.name} disabled={isNextTab} style={{ color: '#ff0039', borderColor: '#f0005e' }}>
+                    <Tab key={idx} eventKey={idx} title={p.name} disabled={isTabDisabled} >
                         {p.children}
                         <div className='form-buttons'>
                             {notFirst && (
