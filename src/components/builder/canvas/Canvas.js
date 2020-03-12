@@ -14,7 +14,7 @@ const Canvas = props => {
   const { form, forms, addForm, updateForm, clearForm, setAlert, deleteStep, deleteElement, setTemplate } = props;
 
   useEffect(() => {
-    // Excecuted only on first render
+    // Excecuted on first render
     setTemplate('well', 'custom');
   }, [])
 
@@ -60,6 +60,7 @@ const Canvas = props => {
               fnClearForm: clearForm,
               fnDeleteStep: deleteStep,
               fnDeleteElement: deleteElement,
+              fnSetTemplate: setTemplate,
             }}
             {...UiTemplate}
             FieldTemplate={CustomFieldTemplate}
