@@ -153,40 +153,13 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
   };
 
   const onSubmit = ({ formData }) => {
-    // let index = 0;
-    // for (index; index <= form.length - 1; index++) {
-    //   if (stepsState.step === index) {
-    //     setStepsState({
-    //       step: index < form.length - 1 ? index + 1 : index,
-    //       formData: {
-    //         ...stepsState.formData,
-    //         ...formData
-    //       }
-    //     });
-    //   }
-    // }
-    // if (stepsState.step === form.length - 1) {
     setFormData(formData)
     setAlert('Formulario Valido.', 'success');
-    // }
   };
 
   const onChange = ({ formData }) => {
     setFormData(formData)
   }
-
-  // function getSteps() {
-  //   let step = form.find((step, index) => stepsState.step === index);
-  //   console.log(step);
-  //   return step;
-  // }
-
-  // function prevForm() {
-  //   setStepsState({
-  //     ...stepsState,
-  //     step: stepsState.step - 1
-  //   });
-  // }
 
   const emailAutocomplete = {
     emailAutocompleteWidget: EmailAutocomplete
@@ -221,64 +194,16 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
             schema: form
           }}
           {...UiTemplate}
-          // FieldTemplate={CustomFieldTemplate}
           onSubmit={onSubmit}
           formData={formData}
           onChange={onChange}
-          // liveValidate={true}
           widgets={emailAutocomplete}
           transformErrors={transformErrors}
           validate={validate}
+          // liveValidate={true}
           // showErrorList={false}
           noHtml5Validate={true}
         >
-          {/* <div className='form-buttons'>
-            {stepsState.step === 0 ? (
-              form.length > 1 ? (
-                <Fragment>
-                  <div></div>
-                  <button
-                    type='submit'
-                    className='btn btn-primary btn-sm pull-right'
-                  >
-                    Siguiente
-                  </button>
-                </Fragment>
-              ) : (
-                  <Fragment>
-                    <div></div>
-                    <button
-                      type='submit'
-                      className='btn btn-success btn-sm pull-right'
-                    >
-                      Validar
-                  </button>
-                  </Fragment>
-                )
-            ) : stepsState.step === form.length - 1 ? (
-              <Fragment>
-                <Link
-                  className='btn btn-primary btn-sm'
-                  to='#!'
-                  onClick={prevForm}
-                >
-                  Anterior
-                </Link>
-                <button type='submit' className='btn btn-success btn-sm'>
-                  Validar
-                </button>
-              </Fragment>
-            ) : (
-                  <Fragment>
-                    <Link className='btn btn-primary btn-sm' onClick={prevForm}>
-                      Anterior
-                </Link>
-                    <button type='submit' className='btn btn-primary btn-sm'>
-                      Siguiente
-                </button>
-                  </Fragment>
-                )}
-          </div> */}
           <div></div>
         </Form>
         <hr />
