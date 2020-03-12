@@ -1,23 +1,27 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import Form from 'react-jsonschema-form';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import { setTemplate } from '../../actions/form';
 import SchemaViewer from '../builder/schemaviewer/SchemaViewer';
 import EmailAutocomplete from '../custom-widgets/EmailAutocomplete';
-import Form from 'react-jsonschema-form';
 import axios from 'axios';
 import * as Templates from '../GroupedRegistry';
 import * as UiTemplate from '../UiTemplate';
-import CustomFieldTemplate from '../FieldTemplate';
-import { ObjectFieldTemplate } from "../GroupedSchema";
 import PropTypes from 'prop-types';
 
 // TODO:
-// move validation and error sfunction to external file
+// move validation and error to external file
+// email live formdata
+// rellenar digito verificador esperado
 
-const FormRender = ({ form, goBack, setAlert }) => {
-  const [stepsState, setStepsState] = useState({ step: 0, formData: {} });
+const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
 
+  // const [stepsState, setStepsState] = useState({ step: 0, formData: {} });
+
+  const [uiSchema, setUiSchema] = useState({});
+  const [formData, setFormData] = useState({});
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -33,7 +37,14 @@ const FormRender = ({ form, goBack, setAlert }) => {
     };
 
     fetchData();
+    setTemplate('controlledTabs', 'normal');
   }, []);
+
+  useEffect(() => {
+    if (form.uiSchema['ui:groups'][0]['ui:template'] === 'controlledTabs') {
+      setUiSchema(form.uiSchema)
+    }
+  }, [form.uiSchema['ui:groups'][0]['ui:template']]);
 
   function transformErrors(errors) {
     return errors.map(error => {
@@ -61,20 +72,9 @@ const FormRender = ({ form, goBack, setAlert }) => {
     //     16158088-1
 
     function isRut(searchKey) {
-      // Search if field is RUT
-      // for (let i = 0; i < form.length; ++i) {
-      //   for (
-      //     let j = 0;
-      //     j < Object.keys(form.schema.properties).length;
-      //     j++
-      //   ) {
-      //     if (Object.keys(form.schema.properties)[j] === searchKey) {
-      //       if (forms[i].schema.properties[searchKey].key === 'rut') {
-      //         return true;
-      //       }
-      //     }
-      //   }
-      // }
+      if (form.schema.properties[searchKey].key === 'rut') {
+        return true;
+      }
       return false;
     }
 
@@ -153,46 +153,49 @@ const FormRender = ({ form, goBack, setAlert }) => {
   };
 
   const onSubmit = ({ formData }) => {
-    let index = 0;
-    for (index; index <= form.length - 1; index++) {
-      if (stepsState.step === index) {
-        setStepsState({
-          step: index < form.length - 1 ? index + 1 : index,
-          formData: {
-            ...stepsState.formData,
-            ...formData
-          }
-        });
-      }
-    }
-    if (stepsState.step === form.length - 1) {
-      setAlert('Formulario Valido.', 'success');
-    }
+    // let index = 0;
+    // for (index; index <= form.length - 1; index++) {
+    //   if (stepsState.step === index) {
+    //     setStepsState({
+    //       step: index < form.length - 1 ? index + 1 : index,
+    //       formData: {
+    //         ...stepsState.formData,
+    //         ...formData
+    //       }
+    //     });
+    //   }
+    // }
+    // if (stepsState.step === form.length - 1) {
+    setFormData(formData)
+    setAlert('Formulario Valido.', 'success');
+    // }
   };
 
-  function getSteps() {
-    let step = form.find((step, index) => stepsState.step === index);
-    console.log(step);
-    return step;
+  const onChange = ({ formData }) => {
+    setFormData(formData)
   }
 
-  function prevForm() {
-    setStepsState({
-      ...stepsState,
-      step: stepsState.step - 1
-    });
-  }
+  // function getSteps() {
+  //   let step = form.find((step, index) => stepsState.step === index);
+  //   console.log(step);
+  //   return step;
+  // }
+
+  // function prevForm() {
+  //   setStepsState({
+  //     ...stepsState,
+  //     step: stepsState.step - 1
+  //   });
+  // }
 
   const emailAutocomplete = {
     emailAutocompleteWidget: EmailAutocomplete
   };
 
-  if ((Object.keys(form) && Object.keys(form).length < 1) || form.error) {
+  if ((Object.keys(form.schema.properties) && Object.keys(form.schema.properties).length < 1)) {
     return <Redirect to='/' />;
   }
 
-  // console.log(forms)
-  // console.log(forms.length)
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <div style={{ flex: '1', marginRight: '1rem' }}>
@@ -212,23 +215,24 @@ const FormRender = ({ form, goBack, setAlert }) => {
         </div>
         <Form
           schema={form.schema}
-          uiSchema={form.uiSchema}
+          uiSchema={uiSchema}
           formContext={{
             templates: Templates.GroupTemplates,
             schema: form
           }}
           {...UiTemplate}
-          FieldTemplate={CustomFieldTemplate}
+          // FieldTemplate={CustomFieldTemplate}
           onSubmit={onSubmit}
-          // formData={stepsState.formData}
+          formData={formData}
+          onChange={onChange}
           // liveValidate={true}
           widgets={emailAutocomplete}
           transformErrors={transformErrors}
           validate={validate}
-          showErrorList={false}
+          // showErrorList={false}
           noHtml5Validate={true}
         >
-          <div className='form-buttons'>
+          {/* <div className='form-buttons'>
             {stepsState.step === 0 ? (
               form.length > 1 ? (
                 <Fragment>
@@ -274,20 +278,22 @@ const FormRender = ({ form, goBack, setAlert }) => {
                 </button>
                   </Fragment>
                 )}
-          </div>
+          </div> */}
+          <div></div>
         </Form>
         <hr />
         <Link to={goBack} className='btn btn-default'>
           Volver
         </Link>
       </div>
-      <SchemaViewer form={stepsState.formData} />
+      <SchemaViewer form={formData} />
     </div>
   );
 };
 
 FormRender.propTypes = {
   form: PropTypes.object.isRequired,
+  setTemplate: PropTypes.func.isRequired,
   goBack: PropTypes.string.isRequired
 };
 
@@ -295,4 +301,4 @@ const mapStateToProps = state => ({
   form: state.form
 });
 
-export default connect(mapStateToProps, { setAlert })(FormRender);
+export default connect(mapStateToProps, { setAlert, setTemplate })(FormRender);
