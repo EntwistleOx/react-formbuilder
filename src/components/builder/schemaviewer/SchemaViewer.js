@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
-import JSONPretty from 'react-json-prettify';
-import { github } from 'react-json-prettify/dist/themes';
-// import { connect } from 'react-redux';
+import JSONPretty from 'react-json-pretty';
 import PropTypes from 'prop-types'
 
 const SchemaViewer = ({ form }) => {
@@ -10,8 +8,8 @@ const SchemaViewer = ({ form }) => {
         <Fragment>
             <div id="json-viewer" className="well">
                 <fieldset>
-                    <legend>JSON Schema</legend>
-                    <JSONPretty json={form} theme={github} padding={1} />
+                    <legend>Esquema JSON</legend>
+                    <JSONPretty id="json-pretty" data={form}></JSONPretty>
                 </fieldset>
             </div>
         </Fragment>
@@ -23,9 +21,4 @@ SchemaViewer.propTypes = {
     form: PropTypes.any.isRequired
 };
 
-// const mapStateToProps = (state) => ({
-//     form: state.form
-// });
-
-// export default connect(mapStateToProps)(SchemaViewer);
 export default SchemaViewer;
