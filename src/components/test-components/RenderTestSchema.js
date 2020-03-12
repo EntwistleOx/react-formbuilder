@@ -104,7 +104,6 @@ const groups = [
 const uiSchema = {
     "ui:groups": groups,
     "ui:template": ObjectFieldTemplate
-    // "ui:template": ObjectFieldTemplate
 }
 
 const TestSchema = () => {
@@ -122,7 +121,6 @@ const TestSchema = () => {
                     templates: Templates.GroupTemplates
                 }}
                 {...UiTemplate}
-                FieldTemplate={CustomFieldTemplate}
             // onChange={onChange}
             />
 
