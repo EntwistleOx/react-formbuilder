@@ -63,7 +63,7 @@ const ToolkitElement = ({ item, index, form }) => {
             {item.name}
           </div>
           {snapshot.isDragging && (
-            <div className='tolkit-item'>
+            <div className='clone'>
               <Icon />
               {item.name}
             </div>
