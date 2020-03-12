@@ -199,6 +199,7 @@ const EmailAutocomplete = props => {
           type='email'
           className='form-control'
           value={state.userInput}
+          // value={props.value}
           placeholder={props.placeholder}
           disabled={props.disabled}
           onChange={e => onChange(e.target.value, false)}
