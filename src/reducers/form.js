@@ -8,6 +8,7 @@ import {
   DELETE_ELEMENT,
   EDIT_ELEMENT,
   REORDER_ELEMENT,
+  MOVE_ELEMENT,
   ELEMENT_ERROR,
   GET_ELEMENT,
   SET_TEMPLATE,
@@ -203,6 +204,28 @@ export default function (state = initial_state, action) {
             {
               ...state.uiSchema[uiGroupsKey][0],
               [payload.destination.droppableId]: result
+            }
+          ]
+        }
+      };
+
+    case MOVE_ELEMENT:
+
+      const sourceClone = state.uiSchema[uiGroupsKey][0][payload.source.droppableId].slice();
+      const destClone = state.uiSchema[uiGroupsKey][0][payload.destination.droppableId].slice();
+      const [rremoved] = sourceClone.splice(payload.source.index, 1);
+      destClone.splice(payload.destination.index, 0, rremoved);
+
+      return {
+        ...state,
+        uiSchema: {
+          ...state.uiSchema,
+          [uiGroupsKey]: [
+            {
+              ...state.uiSchema[uiGroupsKey][0],
+              [payload.source.droppableId]: sourceClone,
+              [payload.destination.droppableId]: destClone
+
             }
           ]
         }

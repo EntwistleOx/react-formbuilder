@@ -5,6 +5,7 @@ export const ADD_UI_STEP = 'ADD_UI_STEP';
 export const ADD_UI_ORDER = 'ADD_UI_ORDER';
 export const ADD_WIDGET = 'ADD_WIDGET';
 export const REORDER_ELEMENT = 'REORDER_ELEMENT';
+export const MOVE_ELEMENT = 'MOVE_ELEMENT';
 export const DELETE_STEP = 'DELETE_STEP';
 export const DELETE_UI_ORDER = 'DELETE_UI_ORDER';
 export const DELETE_WIDGET = 'DELETE_WIDGET';

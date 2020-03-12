@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
   addElement,
-  reorderElement
+  reorderElement,
+  moveElement
 } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
 import SchemaViewer from './schemaviewer/SchemaViewer';
@@ -21,7 +22,8 @@ shortid.characters(
 const Formbuilder = ({
   form,
   addElement,
-  reorderElement
+  reorderElement,
+  moveElement
 }) => {
   const onDragEnd = result => {
     const { source, destination } = result;
@@ -35,7 +37,8 @@ const Formbuilder = ({
       case destination.droppableId:
         reorderElement(source.index, destination.index, source, destination);
         break;
-      case source.droppableId:
+      // case source.droppableId:
+      case 'ToolkitItems':
         // Source -> toolkit
         // All fields
         const title = toolkitSchema[source.index].name;
@@ -110,6 +113,7 @@ const Formbuilder = ({
         addElement(id, newElement, newWidget(), source, destination);
         break;
       default:
+        moveElement(source, destination)
         break;
     }
   };
@@ -130,6 +134,7 @@ const Formbuilder = ({
 Formbuilder.propTypes = {
   addElement: PropTypes.func.isRequired,
   reorderElement: PropTypes.func.isRequired,
+  moveElement: PropTypes.func.isRequired,
   form: PropTypes.object.isRequired
 };
 
@@ -139,5 +144,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   addElement,
-  reorderElement
+  reorderElement,
+  moveElement
 })(Formbuilder);

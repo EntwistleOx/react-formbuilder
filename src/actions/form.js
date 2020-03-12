@@ -5,6 +5,7 @@ import {
   ADD_UI_ORDER,
   ADD_WIDGET,
   REORDER_ELEMENT,
+  MOVE_ELEMENT,
   DELETE_STEP,
   DELETE_UI_ORDER,
   DELETE_WIDGET,
@@ -217,6 +218,24 @@ export const reorderElement = (sourceIndex, destinationIndex, source, destinatio
     dispatch({
       type: REORDER_ELEMENT,
       payload: { sourceIndex, destinationIndex, source, destination }
+    });
+  } catch (error) {
+    dispatch({
+      type: ELEMENT_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status
+      }
+    });
+  }
+};
+
+// reorder element
+export const moveElement = (source, destination) => dispatch => {
+  try {
+    dispatch({
+      type: MOVE_ELEMENT,
+      payload: { source, destination }
     });
   } catch (error) {
     dispatch({
