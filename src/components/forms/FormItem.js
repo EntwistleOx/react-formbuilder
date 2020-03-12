@@ -10,8 +10,8 @@ const FormItem = ({ form, index, deleteForm, setAlert }) => {
     <Fragment>
       <tr>
         <td>{index}</td>
-        <td>{form.title}</td>
-        <td>{form.description}</td>
+        <td>{form.schema.title}</td>
+        <td>{form.schema.description}</td>
         <td>
           <Link to={`/form-view/${form.id}`}>
             <i className='far fa-eye'></i>
