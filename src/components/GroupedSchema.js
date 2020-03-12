@@ -46,6 +46,7 @@ function doGrouping({ properties, groups, props }) {
                 const el = found[0];
                 return el.content;
             }
+
             return EXTRANEOUS;
         } else if (typeof g === "object") {
             const { templates } = props.formContext;
@@ -55,7 +56,7 @@ function doGrouping({ properties, groups, props }) {
             const _properties = Object.keys(g).reduce((acc, key) => {
 
                 const Name = () => {
-                    return <legend>{key}</legend>
+                    return <Fragment>{key}</Fragment>
                 }
 
                 const field = g[key];
