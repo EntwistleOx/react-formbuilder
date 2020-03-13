@@ -1,8 +1,3 @@
-/* 
- TODO:
- create one style form i icons, line 22 / 27
-*/
-
 /* FONT AWESOME STACKING ICONS */
 .fa-stack {
   margin-left: -4px;
@@ -14,39 +9,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2.1rem;
+  /* margin-top: 2.1rem; */
 }
 
-.bottom-buttons {
-  padding: 0 1rem;
-  margin-top: 1rem;
+.panel-notice {
+  border-style: dashed;
 }
 
-/* FORM STYLES */
-.form-wrap {
-  padding: 1rem;
-  margin: 1rem;
-  background: azure;
-  border: 1px solid #ddd;
-}
-.form-wrap hr {
-  margin-top: 21px;
-  margin-bottom: 0px;
+.light-well {
+  background: #fcfcfc;
 }
 
-.form-wrap .form-group {
-  padding: 0.55rem;
+.nav-tabs {
+  margin-bottom: 15px;
 }
 
-.form-wrap i {
+#formbuilder-canvas i {
   margin-left: 1rem;
   color: #333;
-}
-
-.form-wrap .well {
-  background: #fff;
-  border: 1px dashed #aaa;
-  padding: 0.9rem;
 }
 
 .form-list i {
@@ -60,11 +40,7 @@
   justify-content: space-between;
 }
 
-#formbuilder a {
-  text-decoration: none;
-}
-
-/* TOOLKIT */
+/* FORMBUILDER TOOLKIT */
 #formbuilder #formbuilder-toolkit {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -75,20 +51,27 @@
   position: fixed;
 }
 
-#formbuilder #formbuilder-toolkit .tolkit-item,
-#formbuilder #formbuilder-toolkit .clone {
-  background: #fff;
+#formbuilder #formbuilder-toolkit .btn-step {
+  /* margin-bottom: 0.5rem; */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: #ddd 1px solid;
-  border-radius: 3px;
-  padding: 0.5rem 0.8rem;
-  margin-bottom: 0.5rem;
-  user-select: none;
+  align-content: center;
 }
 
-#formbuilder #formbuilder-toolkit .clone + div {
+#formbuilder #formbuilder-toolkit .btn-item,
+#formbuilder #formbuilder-toolkit .btn-clone {
+  background: #fff;
+  color: #333;
+  border: #ddd 1px solid;
+  /* margin-bottom: 0.5rem; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+#formbuilder #formbuilder-toolkit .btn-clone + div {
   display: none !important;
 }
 
@@ -98,29 +81,37 @@
   margin-left: 200px;
 }
 
-/* Every Form Element in form canvas */
-#formbuilder-canvas .form-group {
-  border: #ddd 1px solid;
-  border-radius: 3px;
-  margin-bottom: 0.5rem;
-  background: #fff;
+#formbuilder #formbuilder-canvas .form-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
-#formbuilder-canvas .form-group p {
+#formbuilder #formbuilder-canvas .step-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+#formbuilder #formbuilder-canvas .step-icons {
+  display: flex;
+  font-size: 15px;
+}
+
+.panel-bottom:last-child {
+  margin-bottom: 0px;
+}
+
+/* Every Form Element in form canvas */
+#formbuilder .panel p {
   font-size: 1.2rem;
   text-align: justify;
+  margin-bottom: 0px;
 }
 
-#formbuilder-canvas .notice {
-  background: #fff;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  border: 1px dashed #aaa;
-  border-radius: 3px;
-  color: #aaa;
+#formrender .form-group p {
+  font-size: 1.3rem;
+  text-align: justify;
 }
 
 /* Edit element */
@@ -134,10 +125,11 @@
 #json-viewer {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
-  max-width: 250px;
+  /* max-width: 250px; */
 }
 
 #json-viewer pre {
-  font-size: 10px;
+  font-size: 9px;
   white-space: pre-wrap;
+  background: #fafafa;
 }

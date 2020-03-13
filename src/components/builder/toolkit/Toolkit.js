@@ -1,8 +1,8 @@
 import React from 'react';
-import { Droppable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
 import { createStep } from '../../../actions/form'
-import ToolkitElement from './ToolkitElement';
+import { Droppable } from 'react-beautiful-dnd';
+import ToolkitItems from './ToolkitItems';
 import PropTypes from 'prop-types';
 
 // TODO:
@@ -25,19 +25,13 @@ const Toolkit = ({ toolkitSchema, createStep }) => {
                     <a
                         onClick={onCreate}
                         href="#"
-                        style={{
-                            marginBottom: '0.5rem',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            alignContent: 'center',
-                            padding: '0.5rem 0.8rem'
-                        }}
-                        className="btn btn-default btn-block">
-                        <i className="fas fa-plus"></i> Agregar Paso</a>
+                        className="btn btn-default btn-sm btn-block btn-step"
+                    >
+                        <i className="fas fa-plus"></i> Agregar Paso
+                    </a>
 
                     {toolkitSchema.map((item, index) => (
-                        <ToolkitElement key={item.id} item={item} index={index} />
+                        <ToolkitItems key={item.id} item={item} index={index} />
                     ))}
                     {provided.placeholder}
                 </div>

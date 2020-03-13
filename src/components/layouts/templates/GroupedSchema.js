@@ -7,14 +7,14 @@ export function ObjectFieldTemplate(props) {
     return (
         <fieldset>
             {/* FORM TITLE */}
-            {(props.uiSchema["ui:title"] || props.title) && (
+            {/* {(props.uiSchema["ui:title"] || props.title) && (
                 <TitleField
                     id={`${props.idSchema.$id}__title`}
                     title={props.title || props.uiSchema["ui:title"]}
                     required={props.required}
                     formContext={props.formContext}
                 />
-            )}
+            )} */}
 
             {/* FORM DESCRIPTION */}
             {props.description && (

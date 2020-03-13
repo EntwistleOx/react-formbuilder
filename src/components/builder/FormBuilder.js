@@ -122,7 +122,7 @@ const Formbuilder = ({
           <ToolKit toolkitSchema={toolkitSchema} />
           <Canvas form={form} />
         </DragDropContext>
-        <JsonViewer form={form} />
+        <JsonViewer form={form} title={'Json Esquema'} css={{ maxWidth: "250px" }} />
       </div>
     </Fragment>
   );

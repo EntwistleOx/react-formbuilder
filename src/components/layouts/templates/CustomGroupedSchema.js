@@ -12,11 +12,7 @@ export function CustomObjectFieldTemplate(props) {
       {(props.uiSchema["ui:title"] || props.title) && (
         <Fragment>
           <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'baseline',
-            }}
+            className='form-title'
           >
             <TitleField
               id={`${props.idSchema.$id}__title`}
@@ -73,12 +69,14 @@ function doGrouping({ properties, groups, props }) {
           <Draggable index={index} key={g} draggableId={g}>
             {(provided, snapshot) => (
               <div
-                className='well'
+                className="panel panel-default panel-bottom"
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
               >
-                {el.content}
+                <div className="panel-body">
+                  {el.content}
+                </div>
               </div>
             )}
           </Draggable>
@@ -95,16 +93,11 @@ function doGrouping({ properties, groups, props }) {
       const _properties = Object.keys(g).reduce((acc, key) => {
 
         const Name = () => {
-          return <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
+          return <div className='step-title'>
             <legend>
               {key}
             </legend>
-            <div style={{ display: 'flex', fontSize: '15px' }}>
+            <div className='step-icons'>
               <Link to={`/formbuilder/step/${key}/`}>
                 <i className='fas fa-edit'></i>
               </Link>

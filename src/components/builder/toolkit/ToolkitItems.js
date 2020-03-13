@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // TODO:
 // dashed border in cloned element
 
-const ToolkitElement = ({ item, index, form }) => {
+const ToolkitItems = ({ item, index, form }) => {
 
   //TODO:
   // Checkear
@@ -54,7 +54,7 @@ const ToolkitElement = ({ item, index, form }) => {
       {(provided, snapshot) => (
         <Fragment>
           <div
-            className='tolkit-item'
+            className='btn-default btn-sm btn-block btn-item'
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -63,7 +63,7 @@ const ToolkitElement = ({ item, index, form }) => {
             {item.name}
           </div>
           {snapshot.isDragging && (
-            <div className='clone'>
+            <div className='btn-default btn-sm btn-block btn-clone'>
               <Icon />
               {item.name}
             </div>
@@ -74,7 +74,7 @@ const ToolkitElement = ({ item, index, form }) => {
   );
 };
 
-ToolkitElement.propTypes = {
+ToolkitItems.propTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   form: PropTypes.object.isRequired
@@ -84,4 +84,4 @@ const mapStateToProps = state => ({
   form: state.form
 });
 
-export default connect(mapStateToProps)(ToolkitElement);
+export default connect(mapStateToProps)(ToolkitItems);

@@ -170,48 +170,52 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <div style={{ flex: '1', marginRight: '1rem' }}>
-        <div className='page-header'>
-          <h1>{form.schema.title}</h1>
-        </div>
-        <div className='panel panel-primary'>
-          <div className='panel-heading'>
-            <h3 className='panel-title'>Datos del Cliente</h3>
+    <div id="formrender">
+
+      <JsonViewer form={formData} title={'Json Respuesta'} />
+
+      <div>
+        <div>
+          <div className='page-header'>
+            <h1>{form.schema.title}</h1>
           </div>
-          <div className='panel-body'>
-            <p>Nombre: {user.name}</p>
-            <p>Email: {user.email}</p>
-            <p>Celular: {user.cell}</p>
-            <p>Telefono: {user.phone}</p>
-          </div>
-        </div>
-        <Form
-          schema={form.schema}
-          uiSchema={uiSchema}
-          formContext={{
-            templates: Templates.GroupTemplates,
-            schema: form
-          }}
-          {...UiTemplate}
-          onSubmit={onSubmit}
-          formData={formData}
-          onChange={onChange}
-          widgets={emailAutocomplete}
-          transformErrors={transformErrors}
-          validate={validate}
-          // liveValidate={true}
-          // showErrorList={false}
-          noHtml5Validate={true}
-        >
-          <div></div>
-        </Form>
-        <hr />
-        <Link to={goBack} className='btn btn-default'>
-          Volver
+          {/* <div className='panel panel-primary'>
+            <div className='panel-heading'>
+              <h3 className='panel-title'>Datos del Cliente</h3>
+            </div>
+            <div className='panel-body'>
+              <p>Nombre: {user.name}</p>
+              <p>Email: {user.email}</p>
+              <p>Celular: {user.cell}</p>
+              <p>Telefono: {user.phone}</p>
+            </div>
+          </div> */}
+          <Form
+            schema={form.schema}
+            uiSchema={uiSchema}
+            formContext={{
+              templates: Templates.GroupTemplates,
+              schema: form
+            }}
+            {...UiTemplate}
+            onSubmit={onSubmit}
+            formData={formData}
+            onChange={onChange}
+            widgets={emailAutocomplete}
+            transformErrors={transformErrors}
+            validate={validate}
+            // liveValidate={true}
+            // showErrorList={false}
+            noHtml5Validate={true}
+          >
+            <div></div>
+          </Form>
+          <hr />
+          <Link to={goBack} className='btn btn-default'>
+            Volver
         </Link>
+        </div>
       </div>
-      <JsonViewer form={formData} />
     </div>
   );
 };

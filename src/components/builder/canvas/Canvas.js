@@ -41,46 +41,43 @@ const Canvas = props => {
 
   return (
     <div id='formbuilder-canvas'>
-      <div /*className='form-wrap'*/>
-        <div
-          className='well'
-          style={{
-            border: '1px solid #cccccc',
-            backgroundColor: 'rgb(248, 248, 248)',
-            boxShadow: 'none'
+      <div
+        className='well'
+      >
+        <Form
+          schema={form.schema}
+          uiSchema={form.uiSchema}
+          disabled={true}
+          formContext={{
+            templates: Templates.GroupTemplates,
+            schema: form,
+            fnClearForm: clearForm,
+            fnDeleteStep: deleteStep,
+            fnDeleteElement: deleteElement,
+            fnSetTemplate: setTemplate,
           }}
+          {...UiTemplate}
+          FieldTemplate={CustomFieldTemplate}
+          widgets={emailAutocomplete}
         >
-          <Form
-            schema={form.schema}
-            uiSchema={form.uiSchema}
-            disabled={true}
-            formContext={{
-              templates: Templates.GroupTemplates,
-              schema: form,
-              fnClearForm: clearForm,
-              fnDeleteStep: deleteStep,
-              fnDeleteElement: deleteElement,
-              fnSetTemplate: setTemplate,
-            }}
-            {...UiTemplate}
-            FieldTemplate={CustomFieldTemplate}
-            widgets={emailAutocomplete}
-          >
-            {Object.keys(form.uiSchema['ui:groups'][0]).length === 1 && (
-              <Fragment>
-                <div className='notice'>Debes agregar un paso para comenzar</div>
-              </Fragment>
-            )}
-            <div className='form-buttons bottom-buttons'>
-              <Link to='/formbuilder-render' className='btn btn-default'>
-                Probar
-                  </Link>
-              <button type='button' className='btn btn-primary' onClick={onSave}>
-                Guardar
-                  </button>
-            </div>
-          </Form>
-        </div>
+          {Object.keys(form.uiSchema['ui:groups'][0]).length === 1 && (
+            <Fragment>
+              <div className="panel panel-default text-center panel-notice">
+                <div className="panel-body text-muted">
+                  Debes agregar un paso para comenzar
+                  </div>
+              </div>
+            </Fragment>
+          )}
+          <div className='form-buttons bottom-buttons'>
+            <Link to='/formbuilder-render' className='btn btn-default'>
+              Probar
+            </Link>
+            <button type='button' className='btn btn-primary' onClick={onSave}>
+              Guardar
+            </button>
+          </div>
+        </Form>
       </div>
     </div>
   );
