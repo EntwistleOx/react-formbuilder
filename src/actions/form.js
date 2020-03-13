@@ -1,14 +1,9 @@
 import {
   CREATE_STEP,
   ADD_ELEMENT,
-  ADD_UI_STEP,
-  ADD_UI_ORDER,
-  ADD_WIDGET,
   REORDER_ELEMENT,
   MOVE_ELEMENT,
   DELETE_STEP,
-  DELETE_UI_ORDER,
-  DELETE_WIDGET,
   ELEMENT_ERROR,
   EDIT_ELEMENT,
   GET_ELEMENT,
@@ -158,60 +153,6 @@ export const addElement = (id, newElement, newWidget, source, destination) => di
   }
 };
 
-// add element order in ui schema
-export const addUiStep = (id, newElement, source, destination) => dispatch => {
-  try {
-    dispatch({
-      type: ADD_UI_STEP,
-      payload: { id, newElement, source, destination }
-    });
-  } catch (error) {
-    dispatch({
-      type: ELEMENT_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status
-      }
-    });
-  }
-};
-
-// add element order in ui schema
-export const addUiOrder = (id, newElement, source, destination) => dispatch => {
-  try {
-    dispatch({
-      type: ADD_UI_ORDER,
-      payload: { id, newElement, source, destination }
-    });
-  } catch (error) {
-    dispatch({
-      type: ELEMENT_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status
-      }
-    });
-  }
-};
-
-// add new widget if any
-export const addWidget = (id, newWidget, source, destination) => dispatch => {
-  try {
-    dispatch({
-      type: ADD_WIDGET,
-      payload: { id, newWidget, source, destination }
-    });
-  } catch (error) {
-    dispatch({
-      type: ELEMENT_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status
-      }
-    });
-  }
-};
-
 // reorder element
 export const reorderElement = (sourceIndex, destinationIndex, source, destination) => dispatch => {
   try {
@@ -254,42 +195,6 @@ export const deleteStep = (id) => dispatch => {
     dispatch({
       type: DELETE_STEP,
       payload: { id }
-    });
-  } catch (error) {
-    dispatch({
-      type: ELEMENT_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status
-      }
-    });
-  }
-};
-
-// delete ui order
-export const deleteUiOrder = (id, form) => dispatch => {
-  try {
-    dispatch({
-      type: DELETE_UI_ORDER,
-      payload: { id, form }
-    });
-  } catch (error) {
-    dispatch({
-      type: ELEMENT_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status
-      }
-    });
-  }
-};
-
-// delete widget
-export const deleteWidget = (id, form) => dispatch => {
-  try {
-    dispatch({
-      type: DELETE_WIDGET,
-      payload: { id, form }
     });
   } catch (error) {
     dispatch({

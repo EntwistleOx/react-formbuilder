@@ -1,21 +1,16 @@
 // Form
+export const LOAD_FORM = 'LOAD_FORM';
+export const CLEAR_FORM = 'CLEAR_FORM';
 export const CREATE_STEP = 'CREATE_STEP';
+export const DELETE_STEP = 'DELETE_STEP';
 export const ADD_ELEMENT = 'ADD_ELEMENT';
-export const ADD_UI_STEP = 'ADD_UI_STEP';
-export const ADD_UI_ORDER = 'ADD_UI_ORDER';
-export const ADD_WIDGET = 'ADD_WIDGET';
+export const DELETE_ELEMENT = 'DELETE_ELEMENT';
+export const EDIT_ELEMENT = 'EDIT_ELEMENT';
 export const REORDER_ELEMENT = 'REORDER_ELEMENT';
 export const MOVE_ELEMENT = 'MOVE_ELEMENT';
-export const DELETE_STEP = 'DELETE_STEP';
-export const DELETE_UI_ORDER = 'DELETE_UI_ORDER';
-export const DELETE_WIDGET = 'DELETE_WIDGET';
 export const GET_ELEMENT = 'GET_ELEMENT';
-export const EDIT_ELEMENT = 'EDIT_ELEMENT';
-export const ELEMENT_ERROR = 'ELEMENT_ERROR';
-export const CLEAR_FORM = 'CLEAR_FORM';
-export const LOAD_FORM = 'LOAD_FORM';
-export const DELETE_ELEMENT = 'DELETE_ELEMENT';
 export const SET_TEMPLATE = 'SET_TEMPLATE';
+export const ELEMENT_ERROR = 'ELEMENT_ERROR';
 
 // Forms
 export const ADD_FORM = 'ADD_FORM';
