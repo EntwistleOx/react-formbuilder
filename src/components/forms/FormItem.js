@@ -21,6 +21,12 @@ const FormItem = ({ form, index, deleteForm, setAlert }) => {
             <i className='fas fa-edit'></i>
           </Link>
 
+
+          <Link to='#!'>
+            {/* <i class="fas fa-copy"></i> */}
+            <i class="far fa-copy"></i>
+          </Link>
+
           <Link to='#!'>
             <i
               onClick={() => {
