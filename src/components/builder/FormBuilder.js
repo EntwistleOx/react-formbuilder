@@ -11,10 +11,7 @@ import Canvas from './canvas/Canvas';
 import ToolKit from './toolkit/Toolkit';
 import PropTypes from 'prop-types';
 import toolkitSchema from './toolkit/toolkitSchema';
-import shortid from 'shortid';
-shortid.characters(
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
-);
+import { getShortid } from '../../utils/shortId';
 
 // TODO:
 // use bootstrap boxes for elements and css
@@ -109,7 +106,7 @@ const Formbuilder = ({
           }
         };
 
-        const id = shortid.generate();
+        const id = getShortid();
         addElement(id, newElement, newWidget(), source, destination);
         break;
       default:

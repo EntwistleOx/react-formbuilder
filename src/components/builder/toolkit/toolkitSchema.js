@@ -1,12 +1,9 @@
-import shortid from 'shortid';
-shortid.characters(
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
-);
+import { getShortid } from '../../../utils/shortId';
 
 // Toolkit Schema
 const toolkitSchema = [
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'checkbox',
     name: 'Checkbox',
     type: 'boolean',
@@ -15,7 +12,7 @@ const toolkitSchema = [
     required: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'checkboxes',
     name: 'Checkboxes',
     type: 'array',
@@ -28,7 +25,7 @@ const toolkitSchema = [
     uniqueItems: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'email',
     name: 'Email',
     type: 'string',
@@ -37,7 +34,7 @@ const toolkitSchema = [
     required: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'date',
     name: 'Fecha',
     type: 'string',
@@ -46,7 +43,7 @@ const toolkitSchema = [
     required: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'number',
     name: 'Number',
     type: 'number',
@@ -54,7 +51,7 @@ const toolkitSchema = [
     required: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'paragraph',
     name: 'Parrafo',
     type: 'null',
@@ -64,7 +61,7 @@ const toolkitSchema = [
     icon: 'fas fa-paragraph'
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'radio',
     name: 'Radio',
     type: 'boolean',
@@ -74,7 +71,7 @@ const toolkitSchema = [
     enumNames: ['Opcion Si', 'Opcion No']
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'rut',
     name: 'Rut',
     type: 'string',
@@ -82,7 +79,7 @@ const toolkitSchema = [
     required: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'select',
     name: 'Select',
     type: 'string',
@@ -92,7 +89,7 @@ const toolkitSchema = [
     required: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'textarea',
     name: 'Textarea',
     type: 'string',
@@ -100,7 +97,7 @@ const toolkitSchema = [
     required: true
   },
   {
-    id: shortid.generate(),
+    id: getShortid(),
     key: 'text',
     name: 'Texto',
     type: 'string',

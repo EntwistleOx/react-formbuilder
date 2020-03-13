@@ -1,4 +1,3 @@
-import shortid from 'shortid';
 import {
   LOAD_FORM,
   CLEAR_FORM,
@@ -13,20 +12,16 @@ import {
   GET_ELEMENT,
   SET_TEMPLATE,
 } from '../actions/types';
-
+import { getShortid } from '../utils/shortId';
 import { CustomObjectFieldTemplate } from '../components/layouts/templates/CustomGroupedSchema'
 import { ObjectFieldTemplate } from "../components/layouts/templates/GroupedSchema";
-
-shortid.characters(
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
-);
 
 // TODO:
 // put short id in utils file
 // delete from array using splice
 
 const initial_state = {
-  id: shortid.generate(),
+  id: getShortid(),
   schema: {
     type: 'object',
     title: 'Titulo del Formulario',
@@ -53,7 +48,7 @@ export default function (state = initial_state, action) {
   switch (type) {
     case CLEAR_FORM:
       return {
-        id: shortid.generate(),
+        id: getShortid(),
         schema: {
           type: 'object',
           title: 'Titulo del Formulario',
@@ -80,7 +75,7 @@ export default function (state = initial_state, action) {
           [uiGroupsKey]: [
             {
               ...state.uiSchema[uiGroupsKey][0],
-              [`Paso_${shortid.generate()}`]: []
+              [`Paso_${getShortid()}`]: []
             }
           ]
         }

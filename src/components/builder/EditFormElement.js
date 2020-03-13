@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { editElement } from '../../actions/form';
 import { setAlert } from '../../actions/alert';
-
 import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
 

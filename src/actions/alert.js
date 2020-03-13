@@ -1,11 +1,8 @@
 import { SET_ALERT, REMOVE_ALERT } from './types';
-import shortid from 'shortid';
-shortid.characters(
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
-);
+import { getShortid } from '../utils/shortId';
 
 export const setAlert = (msg, alertType, timeout = 1000) => dispatch => {
-  const id = shortid.generate();
+  const id = getShortid();
   dispatch({
     type: SET_ALERT,
     payload: { msg, alertType, id }
