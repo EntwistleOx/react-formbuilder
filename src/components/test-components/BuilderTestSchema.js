@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Form from "react-jsonschema-form";
-import SchemaViewer from '../builder/schemaviewer/SchemaViewer'
+import JsonViewer from '../json-viewer/JsonViewer';
 // import * as Grouped from "./GroupedSchema"; => default object template
 import * as Templates from "./GroupedRegistry";
 import * as UiTemplate from "./UiTemplate";
@@ -92,8 +92,7 @@ const TestSchema = () => {
             // onChange={onChange}
             />
 
-            <SchemaViewer form={schema} />
-            {/* <SchemaViewer form={uiSchema} /> */}
+            <JsonViewer form={schema} />
         </div >
     )
 }

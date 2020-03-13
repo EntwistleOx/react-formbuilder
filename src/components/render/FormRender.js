@@ -4,11 +4,11 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import { setTemplate } from '../../actions/form';
-import SchemaViewer from '../builder/schemaviewer/SchemaViewer';
+import JsonViewer from '../json-viewer/JsonViewer';
 import EmailAutocomplete from '../custom-widgets/EmailAutocomplete';
 import axios from 'axios';
-import * as Templates from '../GroupedRegistry';
-import * as UiTemplate from '../UiTemplate';
+import * as Templates from '../layouts/templates/GroupedRegistry';
+import * as UiTemplate from '../layouts/templates/UiTemplate';
 import PropTypes from 'prop-types';
 
 // TODO:
@@ -211,7 +211,7 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
           Volver
         </Link>
       </div>
-      <SchemaViewer form={formData} />
+      <JsonViewer form={formData} />
     </div>
   );
 };

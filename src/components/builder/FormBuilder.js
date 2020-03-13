@@ -6,7 +6,7 @@ import {
   moveElement
 } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
-import SchemaViewer from './schemaviewer/SchemaViewer';
+import JsonViewer from '../json-viewer/JsonViewer';
 import Canvas from './canvas/Canvas';
 import ToolKit from './toolkit/Toolkit';
 import PropTypes from 'prop-types';
@@ -125,7 +125,7 @@ const Formbuilder = ({
           <ToolKit toolkitSchema={toolkitSchema} />
           <Canvas form={form} />
         </DragDropContext>
-        <SchemaViewer form={form} />
+        <JsonViewer form={form} />
       </div>
     </Fragment>
   );

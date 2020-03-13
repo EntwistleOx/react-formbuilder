@@ -14,8 +14,8 @@ import {
   SET_TEMPLATE,
 } from '../actions/types';
 
-import { CustomObjectFieldTemplate } from '../components/CustomGroupedSchema'
-import { ObjectFieldTemplate } from "../components/GroupedSchema";
+import { CustomObjectFieldTemplate } from '../components/layouts/templates/CustomGroupedSchema'
+import { ObjectFieldTemplate } from "../components/layouts/templates/GroupedSchema";
 
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'

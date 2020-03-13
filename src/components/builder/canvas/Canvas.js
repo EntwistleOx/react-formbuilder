@@ -4,9 +4,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../../actions/alert';
 import { addForm, updateForm, clearForm, getForm, deleteStep, deleteElement, setTemplate } from '../../../actions/form';
-import * as Templates from '../../GroupedRegistry';
-import * as UiTemplate from '../../UiTemplate';
-import CustomFieldTemplate from '../../FieldTemplate';
+import * as Templates from '../../layouts/templates/GroupedRegistry';
+import * as UiTemplate from '../../layouts/templates/UiTemplate';
+import CustomFieldTemplate from '../../layouts/templates/FieldTemplate';
 import EmailAutocomplete from '../../custom-widgets/EmailAutocomplete';
 import PropTypes from 'prop-types';
 
