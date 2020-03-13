@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import JSONPretty from 'react-json-pretty';
 import PropTypes from 'prop-types'
 
-const SchemaViewer = ({ form }) => {
+const JsonViewer = ({ form }) => {
 
     return (
         <Fragment>
@@ -17,8 +17,8 @@ const SchemaViewer = ({ form }) => {
 };
 
 
-SchemaViewer.propTypes = {
+JsonViewer.propTypes = {
     form: PropTypes.any.isRequired
 };
 
-export default SchemaViewer;
+export default JsonViewer;
