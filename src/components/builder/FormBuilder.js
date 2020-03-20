@@ -1,10 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import {
-  addElement,
-  reorderElement,
-  moveElement
-} from '../../actions/form';
+import { addElement, reorderElement, moveElement } from '../../actions/form';
 import { DragDropContext } from 'react-beautiful-dnd';
 import JsonViewer from '../json-viewer/JsonViewer';
 import Canvas from './canvas/Canvas';
@@ -16,12 +12,7 @@ import { getShortid } from '../../utils/shortId';
 // TODO:
 // use bootstrap boxes for elements and css
 
-const Formbuilder = ({
-  form,
-  addElement,
-  reorderElement,
-  moveElement
-}) => {
+const Formbuilder = ({ form, addElement, reorderElement, moveElement }) => {
   const onDragEnd = result => {
     const { source, destination } = result;
 
@@ -110,7 +101,7 @@ const Formbuilder = ({
         addElement(id, newElement, newWidget(), source, destination);
         break;
       default:
-        moveElement(source, destination)
+        moveElement(source, destination);
         break;
     }
   };
@@ -122,7 +113,7 @@ const Formbuilder = ({
           <ToolKit toolkitSchema={toolkitSchema} />
           <Canvas form={form} />
         </DragDropContext>
-        <JsonViewer form={form} title={'Json Esquema'} css={{ maxWidth: "250px" }} />
+        {/* <JsonViewer form={form} title={'Json Esquema'} css={{ maxWidth: "250px" }} /> */}
       </div>
     </Fragment>
   );
