@@ -17,7 +17,6 @@ import PropTypes from 'prop-types';
 // rellenar digito verificador esperado
 
 const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
-
   // const [stepsState, setStepsState] = useState({ step: 0, formData: {} });
 
   const [uiSchema, setUiSchema] = useState({});
@@ -29,7 +28,10 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
       const result = await axios('https://randomuser.me/api/?nat=es');
 
       setUser({
-        name: result.data.results[0].name.first + ' ' + result.data.results[0].name.last,
+        name:
+          result.data.results[0].name.first +
+          ' ' +
+          result.data.results[0].name.last,
         email: result.data.results[0].email,
         cell: result.data.results[0].cell,
         phone: result.data.results[0].phone
@@ -42,7 +44,7 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
 
   useEffect(() => {
     if (form.uiSchema['ui:groups'][0]['ui:template'] === 'controlledTabs') {
-      setUiSchema(form.uiSchema)
+      setUiSchema(form.uiSchema);
     }
   }, [form.uiSchema['ui:groups'][0]['ui:template']]);
 
@@ -78,7 +80,7 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
       return false;
     }
 
-    Object.keys(formData).forEach(function (item) {
+    Object.keys(formData).forEach(function(item) {
       const key = item;
       const val = formData[key];
       let isRutField = isRut(key);
@@ -153,25 +155,24 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
   };
 
   const onSubmit = ({ formData }) => {
-    setFormData(formData)
+    setFormData(formData);
     setAlert('Formulario Valido.', 'success');
   };
 
   const onChange = ({ formData }) => {
-    setFormData(formData)
-  }
+    setFormData(formData);
+  };
 
   const emailAutocomplete = {
     emailAutocompleteWidget: EmailAutocomplete
   };
 
-  if ((Object.keys(form.schema.properties) && Object.keys(form.schema.properties).length < 1)) {
-    return <Redirect to='/' />;
-  }
+  // if ((Object.keys(form.schema.properties) && Object.keys(form.schema.properties).length < 1)) {
+  //   return <Redirect to='/' />;
+  // }
 
   return (
-    <div id="formrender">
-
+    <div id='formrender'>
       <JsonViewer form={formData} title={'Json Respuesta'} />
 
       <div>
@@ -213,7 +214,7 @@ const FormRender = ({ form, goBack, setAlert, setTemplate }) => {
           <hr />
           <Link to={goBack} className='btn btn-default'>
             Volver
-        </Link>
+          </Link>
         </div>
       </div>
     </div>
