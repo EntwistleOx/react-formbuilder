@@ -3,7 +3,15 @@ import Form from 'react-jsonschema-form';
 import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setAlert } from '../../../actions/alert';
-import { addForm, updateForm, clearForm, getForm, deleteStep, deleteElement, setTemplate } from '../../../actions/form';
+import {
+  addForm,
+  updateForm,
+  clearForm,
+  getForm,
+  deleteStep,
+  deleteElement,
+  setTemplate
+} from '../../../actions/form';
 import * as Templates from '../../layouts/templates/GroupedRegistry';
 import * as UiTemplate from '../../layouts/templates/UiTemplate';
 import CustomFieldTemplate from '../../layouts/templates/FieldTemplate';
@@ -11,12 +19,22 @@ import EmailAutocomplete from '../../custom-widgets/EmailAutocomplete';
 import PropTypes from 'prop-types';
 
 const Canvas = props => {
-  const { form, forms, addForm, updateForm, clearForm, setAlert, deleteStep, deleteElement, setTemplate } = props;
+  const {
+    form,
+    forms,
+    addForm,
+    updateForm,
+    clearForm,
+    setAlert,
+    deleteStep,
+    deleteElement,
+    setTemplate
+  } = props;
 
   useEffect(() => {
     // Excecuted on first render
     setTemplate('well', 'custom');
-  }, [])
+  }, []);
 
   let history = useHistory();
 
@@ -41,9 +59,7 @@ const Canvas = props => {
 
   return (
     <div id='formbuilder-canvas'>
-      <div
-        className='well'
-      >
+      <div className='well'>
         <Form
           schema={form.schema}
           uiSchema={form.uiSchema}
@@ -54,7 +70,7 @@ const Canvas = props => {
             fnClearForm: clearForm,
             fnDeleteStep: deleteStep,
             fnDeleteElement: deleteElement,
-            fnSetTemplate: setTemplate,
+            fnSetTemplate: setTemplate
           }}
           {...UiTemplate}
           FieldTemplate={CustomFieldTemplate}
@@ -62,18 +78,21 @@ const Canvas = props => {
         >
           {Object.keys(form.uiSchema['ui:groups'][0]).length === 1 && (
             <Fragment>
-              <div className="panel panel-default text-center panel-notice">
-                <div className="panel-body text-muted">
+              <div className='panel panel-default text-center panel-notice'>
+                <div className='panel-body text-muted'>
                   Debes agregar un paso para comenzar
-                  </div>
+                </div>
               </div>
             </Fragment>
           )}
           <div className='form-buttons bottom-buttons'>
-            <Link to='/formbuilder-render' className='btn btn-default'>
+            <Link to='/formbuilder-render' className='btn btn-primary'>
               Probar
             </Link>
-            <button type='button' className='btn btn-primary' onClick={onSave}>
+            <Link to='/formbuilder-diagram' className='btn btn-warning'>
+              Flujo
+            </Link>
+            <button type='button' className='btn btn-success' onClick={onSave}>
               Guardar
             </button>
           </div>
@@ -90,7 +109,7 @@ Canvas.propTypes = {
   updateForm: PropTypes.func.isRequired,
   deleteStep: PropTypes.func.isRequired,
   deleteElement: PropTypes.func.isRequired,
-  setTemplate: PropTypes.func.isRequired,
+  setTemplate: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
