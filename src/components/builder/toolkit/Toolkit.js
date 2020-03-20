@@ -27,7 +27,7 @@ const Toolkit = ({ toolkitSchema, createStep }) => {
             href='#'
             className='btn btn-default btn-sm btn-block btn-step'
           >
-            <i class='far fa-file-alt'></i> Agregar Paso
+            <i className='far fa-file-alt'></i> Agregar Paso
           </a>
 
           {toolkitSchema.map((item, index) => (
