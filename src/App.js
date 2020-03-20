@@ -4,13 +4,15 @@ import Alert from './components/layouts/Alert';
 import Navbar from './components/layouts/Navbar';
 import FormBuilder from './components/builder/FormBuilder';
 import FormBuilderRender from './components/builder/FormBuilderRender';
+import FormBuilderDiagram from './components/builder/diagram/Diagram';
 import EditFormElement from './components/builder/EditFormElement';
 import Forms from './components/forms/Forms';
 import FormItemRender from './components/forms/FormItemRender';
 import FormEdit from './components/forms/FormEdit';
 import BuilderTestSchema from './components/test-components/BuilderTestSchema';
 import RenderTestSchema from './components/test-components/RenderTestSchema';
-import FlowDiagram from './components/test-components/FlowDiagram';
+import FlowChart from './components/test-components/FlowChart';
+import ReactDiagrams from './components/test-components/ReactDiagrams';
 
 // CSS
 import './App.css';
@@ -36,15 +38,29 @@ function App() {
             />
             <Route
               exact
+              path='/formbuilder-diagram'
+              component={FormBuilderDiagram}
+            />
+            <Route
+              exact
               path='/formbuilder-render'
               component={FormBuilderRender}
             />
             <Route exact path='/forms' component={Forms} />
             <Route exact path='/form-view/:id' component={FormItemRender} />
             <Route exact path='/form-edit/:id' component={FormEdit} />
-            <Route exact path='/builder-test-schema' component={BuilderTestSchema} />
-            <Route exact path='/render-test-schema' component={RenderTestSchema} />
-            <Route exact path='/flow-diagram' component={FlowDiagram} />
+            <Route
+              exact
+              path='/builder-test-schema'
+              component={BuilderTestSchema}
+            />
+            <Route
+              exact
+              path='/render-test-schema'
+              component={RenderTestSchema}
+            />
+            <Route exact path='/flow-chart' component={FlowChart} />
+            <Route exact path='/react-diagrams' component={ReactDiagrams} />
           </Switch>
         </div>
       </Router>
