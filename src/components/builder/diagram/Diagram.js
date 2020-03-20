@@ -16,117 +16,90 @@ import { faQuestionCircle, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import JsonViewer from '../../json-viewer/JsonViewer';
 
 const Diagram = ({ form }) => {
-  function getDefaultEngine() {
-    const engine = createEngine({ registerDefaultZoomCanvasAction: false });
-    let model = new DiagramModel();
-    engine.setModel(model);
-    return engine;
-  }
+  //1) setup the diagram engine
+  const engine = createEngine({ registerDefaultZoomCanvasAction: false });
 
-  const [engine, setEngine] = useState(getDefaultEngine());
-  const [reorder, setReorder] = useState();
-  const [jsonModel, setJsonModel] = useState();
+  //2) setup the diagram model
+  let model = new DiagramModel();
 
-  const buildEngine = () => {
-    //1) setup the diagram engine
-    // var engine = createEngine();
+  // START NODE
+  //3-A) create a default node
+  var nodeStart = new DefaultNodeModel('Start', '#2780e3;');
+  let portStart = nodeStart.addOutPort('Out');
+  nodeStart.setPosition(10, 10);
 
-    //2) setup the diagram model
-    var model = new DiagramModel();
+  // END NODE
+  //3-B) create another default node
+  var nodeEnd = new DefaultNodeModel('End', '#ff0039');
+  let portEnd = nodeEnd.addInPort('In');
+  nodeEnd.setPosition(500, 400);
 
-    //3-A) create a default node
-    // START NODE
-    var nodeStart = new DefaultNodeModel('Start', '#2780e3;');
-    let portStart = nodeStart.addOutPort('Out');
-    nodeStart.setPosition(10, 10);
+  //4) add the models to the root graph
+  model.addAll(nodeStart);
+  model.addAll(nodeEnd);
 
-    //3-B) create another default node
-    // END NODE
-    var nodeEnd = new DefaultNodeModel('End', '#ff0039');
-    let portEnd = nodeEnd.addInPort('In');
-    nodeEnd.setPosition(500, 400);
+  let newNode = [];
+  let newOutPort = [];
+  let newInPort = [];
+  let newInLink = [];
+  let newOutLink = [];
+  let nodeX = 0;
+  let nodeY = 0;
+  let groupsCopy = Object.assign({}, form.uiSchema['ui:groups'][0]);
+  delete groupsCopy['ui:template'];
+  const groupsSize = Object.keys(groupsCopy).length;
 
-    // link the ports
-    // let link1 = port1.link(port2);
-    // link1.getOptions().testName = 'Test';
-    // link1.addLabel('Hola Mundo!');
-
-    //4) add the models to the root graph
-    // model.addAll(nodeStart, nodeEnd, link1);
-    model.addAll(nodeStart);
-    model.addAll(nodeEnd);
-
-    let newNode = [];
-    let newLink = [];
-    let newOutPort = [];
-    let newInPort = [];
-    let newInLink = [];
-    let newOutLink = [];
-    let nodeX = 0;
-    let nodeY = 0;
-    let groupsCopy = Object.assign({}, form.uiSchema['ui:groups'][0]);
-    delete groupsCopy['ui:template'];
-    const groupsSize = Object.keys(groupsCopy).length;
-
-    // DYNAMIC NODES
-    // Came from redux form state
-    // Every group form is a node
-    //TODO:
-    // Improve ALL
-    Object.keys(groupsCopy).forEach((element, i) => {
-      newNode[i] = new DefaultNodeModel(element, 'yellow');
-      nodeX = nodeX + 100;
-      nodeY = nodeY + 80;
-      newNode[i].setPosition(nodeX, nodeY);
-      newInPort[i] = newNode[i].addInPort('In');
-      newOutPort[i] = newNode[i].addOutPort('Out');
-      model.addAll(newNode[i]);
-      if (i === 0) {
-        // First Element
-        newInLink[i] = portStart.link(newInPort[i]);
-        model.addAll(newInLink[i]);
-        if (i === groupsSize - 1) {
-          // If there are 1 element needs In and Out link
-          newOutLink[i] = newOutPort[i].link(portEnd);
-          model.addAll(newOutLink[i]);
-        }
-      } else if (i === groupsSize - 1) {
-        // Last Element
+  // DYNAMIC NODES
+  // Came from redux form state
+  // Every group form is a node
+  //TODO:
+  // Improve ALL
+  Object.keys(groupsCopy).forEach((element, i) => {
+    newNode[i] = new DefaultNodeModel(element, 'yellow');
+    nodeX = nodeX + 50;
+    nodeY = nodeY + 50;
+    newNode[i].setPosition(nodeX, nodeY);
+    newInPort[i] = newNode[i].addInPort('In');
+    newOutPort[i] = newNode[i].addOutPort('Out');
+    model.addAll(newNode[i]);
+    if (i === 0) {
+      // First Element
+      newInLink[i] = portStart.link(newInPort[i]);
+      model.addAll(newInLink[i]);
+      if (i === groupsSize - 1) {
+        // If there are 1 element needs In and Out link
         newOutLink[i] = newOutPort[i].link(portEnd);
         model.addAll(newOutLink[i]);
-
-        newInLink[i] = newInPort[i].link(newOutPort[i - 1]);
-        model.addAll(newInLink[i]);
-      } else if (i > 0) {
-        // All other in between Elements
-        newInLink[i] = newInPort[i].link(newOutPort[i - 1]);
-        model.addAll(newInLink[i]);
       }
-    });
+    } else if (i === groupsSize - 1) {
+      // Last Element
+      newOutLink[i] = newOutPort[i].link(portEnd);
+      model.addAll(newOutLink[i]);
 
-    //5) load model into engine
-    engine.setModel(model);
-    setEngine(engine);
-    setJsonModel(JSON.stringify(model.serialize()));
-  };
+      newInLink[i] = newInPort[i].link(newOutPort[i - 1]);
+      model.addAll(newInLink[i]);
+    } else if (i > 0) {
+      // All other in between Elements
+      newInLink[i] = newInPort[i].link(newOutPort[i - 1]);
+      model.addAll(newInLink[i]);
+    }
+  });
 
-  // const [, updateState] = useState();
-  // const forceUpdate = useCallback(()=>updateState({}),[]);
+  //5) load model into engine
+  engine.setModel(model);
 
-  useEffect(() => {
-    console.log('fx');
-    buildEngine();
-  }, []);
+  //!------------- SERIALIZING ------------------
+  var str = JSON.stringify(model.serialize());
+
+  //!------------- DESERIALIZING ----------------
+  let model2 = new DiagramModel();
+  model2.deserializeModel(JSON.parse(str), engine);
+  engine.setModel(model2);
 
   const onSave = () => {
-    // console.log(engine);
-    console.log(jsonModel);
-    let updateJsonModel = new DiagramModel();
-    updateJsonModel.addAll(...jsonModel);
-    engine.setModel(updateJsonModel);
-    engine.forceUpdate();
-    setJsonModel(JSON.stringify(updateJsonModel.serialize()));
-    console.log(jsonModel);
+    const jsonModel = model2.serialize();
+    console.log(jsonModel.layers[0].models);
+    console.log(jsonModel.layers[1].models);
   };
 
   //6) render the diagram!
@@ -134,12 +107,16 @@ const Diagram = ({ form }) => {
     <Fragment>
       <div id='diagram'>
         <div id='diagram-toolkit' className='well'>
-          <a href='#' className='btn btn-default btn-sm btn-block btn-item'>
+          <a href='#!' className='btn btn-default btn-sm btn-block btn-item'>
             <FontAwesomeIcon icon={faQuestionCircle} /> Agregar Pregunta
           </a>
 
-          {Object.keys(form.uiSchema['ui:groups'][0]).map((item, index) => (
-            <a href='#' className='btn btn-default btn-sm btn-block btn-item'>
+          {Object.keys(groupsCopy).map((item, index) => (
+            <a
+              href='#!'
+              key={index}
+              className='btn btn-default btn-sm btn-block btn-item'
+            >
               <FontAwesomeIcon icon={faFileAlt} /> {item}
             </a>
           ))}
