@@ -60,7 +60,8 @@
 }
 
 #formbuilder #formbuilder-toolkit .btn-item,
-#formbuilder #formbuilder-toolkit .btn-clone {
+#formbuilder #formbuilder-toolkit .btn-clone,
+#diagram #diagram-toolkit .btn-item {
   background: #fff;
   color: #333;
   border: #ddd 1px solid;
@@ -132,4 +133,20 @@
   font-size: 9px;
   white-space: pre-wrap;
   background: #fafafa;
+}
+
+/* DIAGRAM */
+#diagram {
+  display: flex;
+  justify-content: space-between;
+}
+
+#diagram #diagram-toolkit {
+  /* border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px; */
+  min-width: 200px;
+
+  /* Fixed toolkit */
+  /* overflow: hidden;
+  position: fixed; */
 }
