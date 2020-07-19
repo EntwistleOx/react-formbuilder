@@ -13,7 +13,7 @@
     "axios": "^0.19.2",
     "closest": "0.0.1",
     "dagre": "^0.8.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mathjs": "^6.6.1",
     "moment": "^2.24.0",
     "pathfinding": "^0.4.18",
